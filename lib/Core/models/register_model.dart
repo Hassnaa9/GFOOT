@@ -1,33 +1,35 @@
-class RegisterRequestModel {
-  static const String userType="IndividualUser";
-  final String displayName;
-  final String userName;
-  final String email;
-  final String password;
-  final String phoneNumber;
-  final String country;
-  final String city;
+// Core/models/register_model.dart
+class RegisterModel {
+  final String? token;
+  final String? userName;
+  final String? displayName;
+  final String? email;
+  final String? phoneNumber;
+  final String? country;
+  final String? city;
+  final String? userType;
 
-  RegisterRequestModel({
-    required this.displayName,
-    required this.userName,
-    required this.email,
-    required this.password,
-    required this.phoneNumber,
-    required this.country,
-    required this.city,
+  RegisterModel({
+    this.token,
+    this.userName,
+    this.displayName,
+    this.email,
+    this.phoneNumber,
+    this.country,
+    this.city,
+    this.userType,
   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      "userType": userType,
-      "displayName": displayName,
-      "userName": userName,
-      "email": email,
-      "password": password,
-      "phoneNumber": phoneNumber,
-      "country": country,
-      "city": city,
-    };
+  factory RegisterModel.fromJson(Map<String, dynamic> json) {
+    return RegisterModel(
+      token: json['token'],
+      userName: json['userName'],
+      displayName: json['displayName'],
+      email: json['email'],
+      phoneNumber: json['phoneNumber'],
+      country: json['country'],
+      city: json['city'],
+      userType: json['userType'],
+    );
   }
 }

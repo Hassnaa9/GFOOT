@@ -1,3 +1,4 @@
+// Core/models/login_model.dart
 class LoginRequestModel {
   final String email;
   final String password;
@@ -12,5 +13,22 @@ class LoginRequestModel {
       "email": email,
       "password": password,
     };
+  }
+}
+
+class LoginResponseModel {
+  final String? email;
+  final String? token;
+
+  LoginResponseModel({
+    this.email,
+    this.token,
+  });
+
+  factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
+    return LoginResponseModel(
+      email: json['email'],
+      token: json['token'],
+    );
   }
 }
