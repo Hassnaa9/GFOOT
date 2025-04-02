@@ -4,6 +4,9 @@ import 'package:graduation_project/Features/login&registration/presentation/view
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit_state.dart';
 import 'package:graduation_project/Features/login&registration/presentation/views/widgets/login_methods.dart';
 import 'package:graduation_project/constants.dart';
+import 'package:google_sign_in/google_sign_in.dart'; // Google Sign-In
+import 'package:firebase_auth/firebase_auth.dart'; // Firebase Auth
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart'; // Facebook Auth
 
 class LoginBody extends StatefulWidget {
   const LoginBody({super.key});
@@ -18,11 +21,57 @@ class _LoginBodyState extends State<LoginBody> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
 
+  // Initialize Google Sign-In and Firebase Auth
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email', 'https://www.googleapis.com/auth/userinfo.profile'],
+  );
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  // Google Sign-In Method
+  Future<void> _signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return; // User cancelled the sign-in
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      context.read<AuthCubit>().signInWithGoogle(userCredential.user!);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Google Sign-In Failed: $e')),
+      );
+    }
+  }
+
+  // Facebook Sign-In Method
+  Future<void> _signInWithFacebook() async {
+    try {
+      final LoginResult result = await FacebookAuth.instance.login();
+      if (result.status == LoginStatus.success) {
+        final OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
+        final UserCredential userCredential = await _auth.signInWithCredential(credential);
+        context.read<AuthCubit>().signInWithFacebook(userCredential.user!);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Facebook Sign-In Failed: ${result.message}')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Facebook Sign-In Failed: $e')),
+      );
+    }
   }
 
   @override
@@ -52,7 +101,7 @@ class _LoginBodyState extends State<LoginBody> {
             ),
             SizedBox(height: screenHeight * .02),
             BlocProvider(
-              create: (context) => AuthCubit(context.read())..login(_emailController.text, _passwordController.text),
+              create: (context) => AuthCubit(context.read()),
               child: BlocBuilder<AuthCubit, UserState>(
                 builder: (context, state) {
                   if (state is SignInLoading) {
@@ -206,6 +255,8 @@ class _LoginBodyState extends State<LoginBody> {
                         login_methods(
                           screenWidth: screenWidth,
                           screenHeight: screenHeight,
+                          onGoogleTap: _signInWithGoogle, // Pass Google callback
+                          onFacebookTap: _signInWithFacebook, // Pass Facebook callback
                         ),
                         SizedBox(height: screenHeight * .17),
                         TextButton(

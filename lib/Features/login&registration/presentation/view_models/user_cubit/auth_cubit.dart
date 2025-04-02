@@ -2,9 +2,11 @@ import 'package:bloc/bloc.dart';
 import 'package:graduation_project/Core/cache/cache_helper.dart';
 import 'package:graduation_project/Data/repository/auth_repository.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthCubit extends Cubit<UserState> {
   final AuthRepository authRepository;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   AuthCubit(this.authRepository) : super(UserInitial());
 
@@ -35,6 +37,34 @@ class AuthCubit extends Cubit<UserState> {
     }
   }
 
+  Future<void> signInWithGoogle(User user) async {
+    emit(SignInLoading());
+    try {
+      final idToken = await user.getIdToken();
+      await clearToken();
+      // Assuming authRepository can handle Firebase token
+      await authRepository.googleLogin(idToken!);
+      await CacheHelper().saveData(key: 'token', value: idToken);
+      emit(SignInSuccess());
+    } catch (e) {
+      emit(SignInFailure(errMessage: 'Google Sign-In Failed: $e'));
+    }
+  }
+
+  Future<void> signInWithFacebook(User user) async {
+    emit(SignInLoading());
+    try {
+      final idToken = await user.getIdToken();
+      await clearToken();
+      // Assuming authRepository can handle Firebase token
+      await authRepository.facebookLogin(idToken!);
+      await CacheHelper().saveData(key: 'token', value: idToken);
+      emit(SignInSuccess());
+    } catch (e) {
+      emit(SignInFailure(errMessage: 'Facebook Sign-In Failed: $e'));
+    }
+  }
+
   Future<void> register(
     String userName,
     String displayName,
@@ -59,7 +89,7 @@ class AuthCubit extends Cubit<UserState> {
       );
       emit(SignUpSuccess(message: 'Registration successful'));
     } catch (e) {
-      emit(SignUpFailure(errMessage: e.toString()));
+      emit(SignInFailure(errMessage: e.toString()));
     }
   }
 
@@ -84,6 +114,7 @@ class AuthCubit extends Cubit<UserState> {
   }
 
   Future<void> logout() async {
+    await _auth.signOut(); // Sign out from Firebase
     await clearToken();
     emit(UserInitial());
   }

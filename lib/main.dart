@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
@@ -16,9 +17,17 @@ import 'package:graduation_project/Features/login&registration/register.dart';
 import 'package:graduation_project/Features/questionnaire/questionnaire.dart';
 import 'package:graduation_project/Features/splash_screen/splash_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp();
+    print("Firebase initialized successfully");
+  } catch (e) {
+    print("Error initializing Firebase: $e");
+  }
   runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   @override

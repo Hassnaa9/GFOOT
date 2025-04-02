@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Features/login&registration/presentation/views/widgets/Social_Icon_button.dart';
-
-import '../../../../../Core/utils/assets.dart';
+import 'package:graduation_project/Core/utils/assets.dart';
 
 class login_methods extends StatelessWidget {
-  final double screenWidth,screenHeight;
+  final double screenWidth, screenHeight;
+  final VoidCallback? onGoogleTap; // Callback for Google login
+  final VoidCallback? onFacebookTap; // Callback for Facebook login
 
- const login_methods({
+  const login_methods({
     super.key,
-  required this.screenHeight,required this.screenWidth
+    required this.screenHeight,
+    required this.screenWidth,
+    this.onGoogleTap,
+    this.onFacebookTap,
   });
 
   @override
@@ -19,27 +23,26 @@ class login_methods extends StatelessWidget {
         Expanded(
           child: SocialSignInButton(
             iconPath: AssetsData.facebook,
-            width: screenWidth*.6,
-            onPressed: () {
-              // Facebook sign-in action
-            },
+            width: screenWidth * .6,
+            onPressed: onFacebookTap ?? () {}, // Use Facebook callback
           ),
         ),
         Expanded(
           child: SocialSignInButton(
-            iconPath: AssetsData.google, // Google icon path
-            width:screenWidth*.6,
-            onPressed: () {
-              // Google sign-in action
-            },
+            iconPath: AssetsData.google,
+            width: screenWidth * .6,
+            onPressed: onGoogleTap ?? () {}, // Use Google callback
           ),
         ),
         Expanded(
           child: SocialSignInButton(
-            iconPath: AssetsData.apple, // Google icon path
-            width: screenWidth*.6,
+            iconPath: AssetsData.apple,
+            width: screenWidth * .6,
             onPressed: () {
-              // Google sign-in action
+              // Apple sign-in action (not implemented here)
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Apple Sign-In not implemented')),
+              );
             },
           ),
         ),

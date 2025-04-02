@@ -4,6 +4,9 @@ static const String _baseUrl = "https://gfoot.runasp.net/api/";
   static String get baseUrl => _baseUrl;
 
   static String signIn = "${_baseUrl}Authentication/Login";
+  static const String googleSignIn = "${_baseUrl}Authentication/Login";
+  static const String facebookSignIn = "${_baseUrl}Authentication/Login";
+  static const String appleSignIn = "${_baseUrl}Authentication/Login";
   static String signUp = "${_baseUrl}Authentication/Register";
   static String forgotPassword = "${_baseUrl}Authentication/Forgot-Password";
   static String resetPassword = "${_baseUrl}Authentication/Reset-Password";
