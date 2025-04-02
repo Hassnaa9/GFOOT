@@ -1,7 +1,7 @@
-// Data/repository/auth_repository.dart
 import 'package:graduation_project/Core/api/api_consumer.dart';
 import 'package:graduation_project/Core/api/end_points.dart';
 import 'package:graduation_project/Core/cache/cache_helper.dart';
+import 'package:graduation_project/Core/errors/exceptions.dart';
 import 'package:graduation_project/Core/models/login_model.dart';
 import 'package:graduation_project/Core/models/register_model.dart';
 
@@ -13,9 +13,12 @@ class AuthRepository {
   // Login Method
   Future<LoginResponseModel> login(String email, String password) async {
     try {
-      final response = await apiConsumer.post(
+      final response = await apiConsumer.get( // Changed to GET as per backend requirement
         EndPoint.signIn,
-        data: LoginRequestModel(email: email, password: password).toJson(),
+        queryParameters: {
+          "email": email,
+          "password": password,
+        },
       );
 
       final loginResponse = LoginResponseModel.fromJson(response);
@@ -24,8 +27,10 @@ class AuthRepository {
       }
 
       return loginResponse;
+    } on ServerException catch (e) {
+      throw e.errModel.fullErrorMessage; // Throw the full error message
     } catch (e) {
-      rethrow;
+      throw e.toString();
     }
   }
 
@@ -61,8 +66,10 @@ class AuthRepository {
       }
 
       return registerModel;
+    } on ServerException catch (e) {
+      throw e.errModel.fullErrorMessage; // Throw the full error message
     } catch (e) {
-      rethrow;
+      throw e.toString();
     }
   }
 
@@ -75,8 +82,10 @@ class AuthRepository {
           "email": email,
         },
       );
+    } on ServerException catch (e) {
+      throw e.errModel.fullErrorMessage;
     } catch (e) {
-      rethrow;
+      throw e.toString();
     }
   }
 
@@ -90,8 +99,10 @@ class AuthRepository {
           "newPassword": newPassword,
         },
       );
+    } on ServerException catch (e) {
+      throw e.errModel.fullErrorMessage;
     } catch (e) {
-      rethrow;
+      throw e.toString();
     }
   }
 }
