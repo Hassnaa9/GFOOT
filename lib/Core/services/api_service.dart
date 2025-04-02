@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:graduation_project/Core/api/api_interceptors.dart';
 import 'package:graduation_project/Core/api/end_points.dart';
+import 'package:graduation_project/Core/errors/error_model.dart';
+import 'package:graduation_project/Core/errors/exceptions.dart'; // For ServerException
 
-// Create a Dio service class
 class ApiService {
   late Dio _dio;
-
-  // Base URL of your backend
   final String baseUrl = EndPoint.baseUrl;
 
   ApiService() {
@@ -18,17 +18,85 @@ class ApiService {
         'Accept': 'application/json',
       },
     ));
-
-    // Add interceptor for logging (optional)
     _dio.interceptors.add(LogInterceptor(
       request: true,
       requestBody: true,
       responseBody: true,
       responseHeader: false,
     ));
+    _dio.interceptors.add(ApiInterceptor()); // Add token handling
   }
 
-  // GET request example
+  Future<void> register({
+  required String email,
+  required String password,
+  required String userName,
+  required String displayName,
+  required String phoneNumber,
+  required String country,
+  required String city,
+}) async {
+  try {
+    final response = await _dio.post(
+      EndPoint.signUp, // "/Authentication/Register"
+      data: {
+        ApiKey.email: email,
+        ApiKey.password: password,
+        ApiKey.userName: userName,
+        ApiKey.displayName: displayName,
+        ApiKey.phoneNumber: phoneNumber,
+        ApiKey.country: country,
+        ApiKey.city: city,
+      },
+    );
+    // Assuming successful registration returns a token or success message
+    if (response.data is Map<String, dynamic> && response.data[ApiKey.token] != null) {
+      return; // Success
+    } else {
+      throw ServerException(
+        errModel: ErrorModel(
+          status: -1,
+          errorMessage: "Registration failed: No token received",
+        ),
+      );
+    }
+  } on DioException catch (e) {
+    throw _handleError(e);
+  }
+}
+
+  Future<String> login(String email, String password) async {
+    try {
+      final response = await _dio.get(
+        EndPoint.signIn,
+        queryParameters: {
+          ApiKey.email: email,
+          ApiKey.password: password,
+        },
+      );
+      if (response.data is Map<String, dynamic>) {
+        final token = response.data[ApiKey.token];
+        if (token == null) {
+          throw ServerException(
+            errModel: ErrorModel(status: -1, errorMessage: "No token received"),
+          );
+        }
+        return token;
+      } else if (response.data is String) {
+        return response.data;
+      } else {
+        throw ServerException(
+          errModel: ErrorModel(
+            status: -1,
+            errorMessage: "Unexpected response format",
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
   Future<Response> getData(String endpoint) async {
     try {
       final response = await _dio.get(endpoint);
@@ -38,7 +106,6 @@ class ApiService {
     }
   }
 
-  // POST request example
   Future<Response> postData(String endpoint, Map<String, dynamic> data) async {
     try {
       final response = await _dio.post(endpoint, data: data);
@@ -48,21 +115,43 @@ class ApiService {
     }
   }
 
-  // Error handling
-  Exception _handleError(DioException error) {
+  ServerException _handleError(DioException error) {
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
-        return Exception('Connection timeout');
       case DioExceptionType.sendTimeout:
-        return Exception('Send timeout');
       case DioExceptionType.receiveTimeout:
-        return Exception('Receive timeout');
+        return ServerException(
+          errModel: ErrorModel(
+            status: -1,
+            errorMessage: "Connection timed out. Please check your internet.",
+          ),
+        );
       case DioExceptionType.badResponse:
-        return Exception('Error: ${error.response?.statusCode} - ${error.response?.data}');
+        if (error.response != null) {
+          return ServerException(
+            errModel: error.response!.data != null &&
+                    error.response!.data is Map<String, dynamic>
+                ? ErrorModel.fromJson(error.response!.data)
+                : ErrorModel(
+                    status: error.response!.statusCode ?? -1,
+                    errorMessage: "Server error: ${error.response?.statusCode}",
+                  ),
+          );
+        }
+        return ServerException(
+          errModel: ErrorModel(status: -1, errorMessage: "No response from server"),
+        );
       case DioExceptionType.cancel:
-        return Exception('Request cancelled');
+        return ServerException(
+          errModel: ErrorModel(status: -1, errorMessage: "Request was cancelled"),
+        );
       default:
-        return Exception('Network error: ${error.message}');
+        return ServerException(
+          errModel: ErrorModel(
+            status: -1,
+            errorMessage: "Network error: ${error.message}",
+          ),
+        );
     }
   }
 }
