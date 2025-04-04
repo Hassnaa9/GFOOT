@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:graduation_project/Features/forget_password/presentation/views/widgets/otp_form_text.dart';
 import 'package:graduation_project/constants.dart';
 
-import 'otp_form_text.dart';
-
 class OtpForm extends StatefulWidget {
-  const OtpForm({super.key});
+  final Function(String) onOtpSubmitted; // Callback to send OTP to parent
+
+  const OtpForm({super.key, required this.onOtpSubmitted});
 
   @override
   _OtpFormState createState() => _OtpFormState();
@@ -13,31 +14,32 @@ class OtpForm extends StatefulWidget {
 
 class _OtpFormState extends State<OtpForm> {
   final _formKey = GlobalKey<FormState>();
-  final List<TextInputFormatter> otpTextInputFormatters = [
-    FilteringTextInputFormatter.digitsOnly,
-    LengthLimitingTextInputFormatter(1),
-  ];
-  late FocusNode _pin1Node;
-  late FocusNode _pin2Node;
-  late FocusNode _pin3Node;
-  late FocusNode _pin4Node;
+  late List<FocusNode> _focusNodes;
+  late List<TextEditingController> _controllers;
 
   @override
   void initState() {
     super.initState();
-    _pin1Node = FocusNode();
-    _pin2Node = FocusNode();
-    _pin3Node = FocusNode();
-    _pin4Node = FocusNode();
+    _focusNodes = List.generate(6, (_) => FocusNode());
+    _controllers = List.generate(6, (_) => TextEditingController());
   }
 
   @override
   void dispose() {
+    for (var node in _focusNodes) {
+      node.dispose();
+    }
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
     super.dispose();
-    _pin1Node.dispose();
-    _pin2Node.dispose();
-    _pin3Node.dispose();
-    _pin4Node.dispose();
+  }
+
+  void _submitOtp() {
+    if (_formKey.currentState!.validate()) {
+      final otp = _controllers.map((c) => c.text).join();
+      widget.onOtpSubmitted(otp);
+    }
   }
 
   @override
@@ -49,74 +51,41 @@ class _OtpFormState extends State<OtpForm> {
       child: Column(
         children: [
           Row(
-            children: [
-              Expanded(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(6, (index) {
+              return SizedBox(
+                width: screenWidth * 0.12,
                 child: OtpTextFormField(
-                  focusNode: _pin1Node,
+                  focusNode: _focusNodes[index],
+                  controller: _controllers[index],
                   onChanged: (value) {
-                    if (value.length == 1) _pin2Node.requestFocus();
+                    if (value.length == 1 && index < 5) {
+                      _focusNodes[index + 1].requestFocus();
+                    } else if (value.isEmpty && index > 0) {
+                      _focusNodes[index - 1].requestFocus();
+                    } else if (value.length == 1 && index == 5) {
+                      _focusNodes[index].unfocus();
+                      _submitOtp(); // Auto-submit on last digit
+                    }
                   },
-                  onSaved: (pin) {
-                    // Save it
-                  },
-                  autofocus: true,
+                  onSaved: (pin) {},
+                  autofocus: index == 0,
                 ),
-              ),
-              const SizedBox(width: 16.0),
-              Expanded(
-                child: OtpTextFormField(
-                  focusNode: _pin2Node,
-                  onChanged: (value) {
-                    if (value.length == 1) _pin3Node.requestFocus();
-                  },
-                  onSaved: (pin) {
-                    // Save it
-                  },
-                ),
-              ),
-              const SizedBox(width: 16.0),
-              Expanded(
-                child: OtpTextFormField(
-                  focusNode: _pin3Node,
-                  onChanged: (value) {
-                    if (value.length == 1) _pin4Node.requestFocus();
-                  },
-                  onSaved: (pin) {
-                    // Save it
-                  },
-                ),
-              ),
-              const SizedBox(width: 16.0),
-              Expanded(
-                child: OtpTextFormField(
-                  focusNode: _pin4Node,
-                  onChanged: (value) {
-                    if (value.length == 1) _pin4Node.unfocus();
-                  },
-                  onSaved: (pin) {
-                    // Save it
-                  },
-                ),
-              ),
-            ],
+              );
+            }),
           ),
-          const SizedBox(height: 20.0),
+          SizedBox(height: screenHeight * 0.03),
           ElevatedButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-                Navigator.pushReplacementNamed(context, '/ChangePass');
-              }
-            },
+            onPressed: _submitOtp,
             style: ElevatedButton.styleFrom(
-            elevation: 0,
-            backgroundColor: MyColors.kPrimaryColor,
-            foregroundColor: MyColors.white,
-            minimumSize: Size(screenWidth - 44, screenHeight * .086),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
+              elevation: 0,
+              backgroundColor: MyColors.kPrimaryColor,
+              foregroundColor: MyColors.white,
+              minimumSize: Size(screenWidth - 44, screenHeight * .086),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
             ),
-          ),
             child: const Text("Verify"),
           ),
         ],
@@ -124,6 +93,7 @@ class _OtpFormState extends State<OtpForm> {
     );
   }
 }
+
 const InputDecoration otpInputDecoration = InputDecoration(
   filled: false,
   border: UnderlineInputBorder(),

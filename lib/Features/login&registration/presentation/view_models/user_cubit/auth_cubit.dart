@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:graduation_project/Core/cache/cache_helper.dart';
 import 'package:graduation_project/Data/repository/auth_repository.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit_state.dart';
@@ -30,7 +31,7 @@ class AuthCubit extends Cubit<UserState> {
     emit(SignInLoading());
     try {
       await clearToken();
-      final loginResponse = await authRepository.login(email, password);
+      await authRepository.login(email, password);
       emit(SignInSuccess());
     } catch (e) {
       emit(SignInFailure(errMessage: e.toString()));
@@ -93,20 +94,21 @@ class AuthCubit extends Cubit<UserState> {
     }
   }
 
-  Future<void> forgotPassword(String email) async {
+  Future<void> forgotPassword(String email, BuildContext context) async {
     emit(SignInLoading());
     try {
       await authRepository.forgotPassword(email);
       emit(SignInSuccess());
+      Navigator.pushNamed(context, '/Verify', arguments: email);
     } catch (e) {
       emit(SignInFailure(errMessage: e.toString()));
     }
-  }
+}
 
   Future<void> resetPassword(String email, String newPassword) async {
     emit(SignInLoading());
     try {
-      await authRepository.resetPassword(email, newPassword);
+      await authRepository.resetPassword(email, newPassword, null);
       emit(SignInSuccess());
     } catch (e) {
       emit(SignInFailure(errMessage: e.toString()));
@@ -118,4 +120,16 @@ class AuthCubit extends Cubit<UserState> {
     await clearToken();
     emit(UserInitial());
   }
+
+  Future<void> verifyOtp(String email, String otp, BuildContext context) async {
+  emit(SignInLoading());
+  try {
+    // Temporarily store email and OTP for reset password step
+    await authRepository.verifyOtp(email, otp); // Placeholder password
+    emit(SignInSuccess());
+    Navigator.pushNamed(context, '/ChangePass', arguments: email);
+  } catch (e) {
+    emit(SignInFailure(errMessage: e.toString()));
+  }
+}
 }

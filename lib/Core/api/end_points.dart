@@ -4,16 +4,16 @@ static const String _baseUrl = "https://gfoot.runasp.net/api/";
   static String get baseUrl => _baseUrl;
 
   static String signIn = "${_baseUrl}Authentication/Login";
-  static const String googleSignIn = "${_baseUrl}Authentication/Login";
-  static const String facebookSignIn = "${_baseUrl}Authentication/Login";
-  static const String appleSignIn = "${_baseUrl}Authentication/Login";
+  static const String googleSignIn = "${_baseUrl}Authentication/social-login";
+  static const String facebookSignIn = "${_baseUrl}Authentication/social-login";
+  static const String appleSignIn = "${_baseUrl}Authentication/social-login";
   static String signUp = "${_baseUrl}Authentication/Register";
   static String forgotPassword = "${_baseUrl}Authentication/Forgot-Password";
   static String resetPassword = "${_baseUrl}Authentication/Reset-Password";
   static String activity = "${_baseUrl}Individual/log-activity";
   static String getRank = "${_baseUrl}Individual/rank";
-  static String confirmEmail = "${_baseUrl}Authentication/Confirm-Email";
   static String refreshToken = "${_baseUrl}Authentication/Refresh-Token";
+  static String verifyOtp = "${_baseUrl}Authentication/Confirm-Email";
   
 
 }
@@ -26,6 +26,7 @@ class ApiKey {
   static const String userName = "userName";
   static const String email = "email";
   static const String password = "password";
+  static const String otp = "otp";
   static const String phoneNumber = "phoneNumber";
   static const String country = "country";
   static const String city = "city";

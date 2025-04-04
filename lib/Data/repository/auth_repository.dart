@@ -12,28 +12,27 @@ class AuthRepository {
 
   // Login Method
   Future<LoginResponseModel> login(String email, String password) async {
-    try {
-      final response = await apiConsumer.get( // Changed to GET as per backend requirement
-        EndPoint.signIn,
-        queryParameters: {
-          "email": email,
-          "password": password,
-        },
-      );
-
-      final loginResponse = LoginResponseModel.fromJson(response);
-      if (loginResponse.token != null) {
-        await CacheHelper().saveData(key: 'token', value: loginResponse.token!);
-      }
-
-      return loginResponse;
-    } on ServerException catch (e) {
-      throw e.errModel.fullErrorMessage; // Throw the full error message
-    } catch (e) {
-      throw e.toString();
+  try {
+    final response = await apiConsumer.post(
+      EndPoint.signIn,
+      queryParameters: {
+        ApiKey.email: email,
+        ApiKey.password: password,
+      },
+      data: null, // Explicitly no body
+      isFromData: false, // Ensure not multipart/form-data
+    );
+    final loginResponse = LoginResponseModel.fromJson(response);
+    if (loginResponse.token != null) {
+      await CacheHelper().saveData(key: 'token', value: loginResponse.token!);
     }
+    return loginResponse;
+  } on ServerException catch (e) {
+    throw e.errModel.fullErrorMessage;
+  } catch (e) {
+    throw e.toString();
   }
-
+}
   Future<LoginResponseModel> googleLogin(String googleAccessToken) async {
     try {
       final response = await apiConsumer.post(
@@ -141,37 +140,54 @@ class AuthRepository {
       throw e.toString();
     }
   }
-
-  // Forgot Password Method
-  Future<void> forgotPassword(String email) async {
-    try {
-      await apiConsumer.post(
-        EndPoint.forgotPassword,
-        data: {
-          "email": email,
-        },
-      );
-    } on ServerException catch (e) {
-      throw e.errModel.fullErrorMessage;
-    } catch (e) {
-      throw e.toString();
-    }
+// forgot password Method
+Future<void> forgotPassword(String email) async {
+  try {
+    await apiConsumer.post(
+      EndPoint.forgotPassword,
+      data: {
+        "email": email,
+      },
+    );
+  } on ServerException catch (e) {
+    throw e.errModel.fullErrorMessage;
+  } catch (e) {
+    throw e.toString();
   }
+}
 
   // Reset Password Method
-  Future<void> resetPassword(String email, String newPassword) async {
-    try {
-      await apiConsumer.post(
-        EndPoint.resetPassword,
-        data: {
-          "email": email,
-          "newPassword": newPassword,
-        },
-      );
-    } on ServerException catch (e) {
-      throw e.errModel.fullErrorMessage;
-    } catch (e) {
-      throw e.toString();
-    }
+  Future<void> resetPassword(String email, String newPassword, String? otp) async {
+  try {
+    await apiConsumer.post(
+      EndPoint.resetPassword,
+      data: {
+        "email": email,
+        "newPassword": newPassword,
+        "otp": otp, // Include OTP in the request
+      },
+    );
+  } on ServerException catch (e) {
+    throw e.errModel.fullErrorMessage;
+  } catch (e) {
+    throw e.toString();
   }
+}
+
+Future<void> verifyOtp(String email, String otp) async {
+  try {
+    await apiConsumer.post(
+      EndPoint.verifyOtp, // Adjust endpoint
+      queryParameters: {
+        "email": email,
+        "otp": otp,
+      },
+      data: null,
+    );
+  } on ServerException catch (e) {
+    throw e.errModel.fullErrorMessage;
+  } catch (e) {
+    throw e.toString();
+  }
+}
 }

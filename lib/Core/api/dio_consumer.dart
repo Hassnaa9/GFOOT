@@ -74,21 +74,48 @@ class DioConsumer extends ApiConsumer {
   }
 
   @override
-  Future post(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    bool isFromData = false,
-  }) async {
-    try {
-      final response = await dio.post(
-        path,
-        data: isFromData ? FormData.fromMap(data) : data,
-        queryParameters: queryParameters,
-      );
-      return response.data;
-    } on DioException catch (e) {
-      handleDioExceptions(e);
-    }
+Future post(
+  String path, {
+  dynamic data,
+  Map<String, dynamic>? queryParameters,
+  bool isFromData = false,
+}) async {
+  try {
+    final response = await dio.post(
+      path,
+      data: isFromData ? FormData.fromMap(data) : data,
+      queryParameters: queryParameters,
+      options: Options(
+        contentType: data == null ? null : 'application/json',
+        headers: data == null ? {} : null, // Clear headers if no body
+      ),
+    );
+    return response.data;
+  } on DioException catch (e) {
+    handleDioExceptions(e);
   }
+}
+
+  @override
+Future put(
+  String path, {
+  Object? data,
+  Map<String, dynamic>? queryParameters,
+  bool isFromData = false,
+}) async {
+  try {
+    final response = await dio.put(
+      path,
+      data: isFromData && data != null ? FormData.fromMap(data as Map<String, dynamic>) : data,
+      queryParameters: queryParameters,
+      options: Options(
+        contentType: data == null ? null : (isFromData ? 'multipart/form-data' : 'application/json'),
+        headers: data == null ? {} : null, // Clear headers if no body
+      ),
+    );
+    return response.data;
+  } on DioException catch (e) {
+    handleDioExceptions(e);
+  }
+}
 }

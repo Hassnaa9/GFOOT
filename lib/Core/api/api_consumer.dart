@@ -8,7 +8,7 @@ abstract class ApiConsumer {
     String path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
-    bool isFromData = false,
+    bool isFromData = false, // Likely "isFormData" for multipart/form-data
   });
   Future<dynamic> patch(
     String path, {
@@ -17,6 +17,12 @@ abstract class ApiConsumer {
     bool isFromData = false,
   });
   Future<dynamic> delete(
+    String path, {
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    bool isFromData = false,
+  });
+  Future<dynamic> put(
     String path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
