@@ -8,7 +8,7 @@ class ErrorModel {
   ErrorModel({
     required this.status,
     required this.errorMessage,
-    this.errors,
+    this.errors, required String message,
   });
 
   factory ErrorModel.fromJson(Map<String, dynamic> jsonData) {

@@ -45,7 +45,6 @@ class SignUpFailure extends UserState {
   List<Object?> get props => [errMessage];
 }
 
-// Optional: Add a state for authenticated user if needed
 class UserAuthenticated extends UserState {
   final UserModel user;
 
@@ -54,3 +53,5 @@ class UserAuthenticated extends UserState {
   @override
   List<Object?> get props => [user];
 }
+class ForgotPasswordSuccess extends UserState {}
+class OtpStored extends UserState {}

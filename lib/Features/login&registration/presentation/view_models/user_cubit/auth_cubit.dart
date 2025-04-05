@@ -8,6 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthCubit extends Cubit<UserState> {
   final AuthRepository authRepository;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? _email; // Store email temporarily
+  String? _otp;   // Store OTP temporarily
 
   AuthCubit(this.authRepository) : super(UserInitial());
 
@@ -30,7 +32,6 @@ class AuthCubit extends Cubit<UserState> {
   Future<void> login(String email, String password) async {
     emit(SignInLoading());
     try {
-      await clearToken();
       await authRepository.login(email, password);
       emit(SignInSuccess());
     } catch (e) {
@@ -98,20 +99,32 @@ class AuthCubit extends Cubit<UserState> {
     emit(SignInLoading());
     try {
       await authRepository.forgotPassword(email);
-      emit(SignInSuccess());
+      _email = email; // Store email temporarily
+      emit(ForgotPasswordSuccess());
       Navigator.pushNamed(context, '/Verify', arguments: email);
     } catch (e) {
       emit(SignInFailure(errMessage: e.toString()));
     }
 }
+  void storeOtp(String otp) {
+    _otp = otp; // Store OTP
+    emit(OtpStored()); // Trigger navigation to ChangePassword
+  }
 
-  Future<void> resetPassword(String email, String newPassword) async {
+ Future<void> resetPassword(String newPassword) async {
+    if (_email == null || _otp == null) {
+      emit(SignInFailure(errMessage: 'Email or OTP missing'));
+      return;
+    }
     emit(SignInLoading());
     try {
-      await authRepository.resetPassword(email, newPassword, null);
+      await authRepository.resetPassword(_email!, newPassword, _otp!);
       emit(SignInSuccess());
     } catch (e) {
       emit(SignInFailure(errMessage: e.toString()));
+    } finally {
+      _email = null; // Clear stored data
+      _otp = null;
     }
   }
 
@@ -121,15 +134,15 @@ class AuthCubit extends Cubit<UserState> {
     emit(UserInitial());
   }
 
-  Future<void> verifyOtp(String email, String otp, BuildContext context) async {
-  emit(SignInLoading());
-  try {
-    // Temporarily store email and OTP for reset password step
-    await authRepository.verifyOtp(email, otp); // Placeholder password
-    emit(SignInSuccess());
-    Navigator.pushNamed(context, '/ChangePass', arguments: email);
-  } catch (e) {
-    emit(SignInFailure(errMessage: e.toString()));
+  
+Future<void> resendOtp(String email, BuildContext context) async {
+    emit(SignInLoading());
+    try {
+      await authRepository.resendOtp(email);
+      _email = email; // Update stored email
+      emit(ForgotPasswordSuccess());
+    } catch (e) {
+      emit(SignInFailure(errMessage: e.toString()));
+    }
   }
-}
 }
