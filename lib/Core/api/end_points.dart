@@ -13,7 +13,7 @@ static const String _baseUrl = "https://gfoot.runasp.net/api/";
   static String activity = "${_baseUrl}Individual/log-activity";
   static String getRank = "${_baseUrl}Individual/rank";
   static String refreshToken = "${_baseUrl}Authentication/Refresh-Token";
-  static String verifyOtp = "${_baseUrl}Authentication/Confirm-Email";
+  static String resendOtp = "${_baseUrl}Authentication/Resend-PasswordReset-Otp";
   
 
 }

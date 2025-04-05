@@ -16,11 +16,12 @@ class AuthRepository {
     final response = await apiConsumer.post(
       EndPoint.signIn,
       queryParameters: {
-        ApiKey.email: email,
-        ApiKey.password: password,
       },
-      data: null, // Explicitly no body
-      isFromData: false, // Ensure not multipart/form-data
+      data: {
+        ApiKey.email: email,
+        ApiKey.password: password, 
+      },
+      isFromData: false,
     );
     final loginResponse = LoginResponseModel.fromJson(response);
     if (loginResponse.token != null) {
@@ -157,14 +158,14 @@ Future<void> forgotPassword(String email) async {
 }
 
   // Reset Password Method
-  Future<void> resetPassword(String email, String newPassword, String? otp) async {
+  Future<void> resetPassword(String email, String newPassword, String otp) async {
   try {
-    await apiConsumer.post(
+    await apiConsumer.put(
       EndPoint.resetPassword,
       data: {
-        "email": email,
-        "newPassword": newPassword,
-        "otp": otp, // Include OTP in the request
+        ApiKey.email: email,
+        ApiKey.newPassword: newPassword,
+        ApiKey.otp: otp, 
       },
     );
   } on ServerException catch (e) {
@@ -174,15 +175,13 @@ Future<void> forgotPassword(String email) async {
   }
 }
 
-Future<void> verifyOtp(String email, String otp) async {
+
+  // Resend OTP Method
+Future<void> resendOtp(String email) async {
   try {
     await apiConsumer.post(
-      EndPoint.verifyOtp, // Adjust endpoint
-      queryParameters: {
-        "email": email,
-        "otp": otp,
-      },
-      data: null,
+      EndPoint.resendOtp,
+      data: {ApiKey.email: email},
     );
   } on ServerException catch (e) {
     throw e.errModel.fullErrorMessage;

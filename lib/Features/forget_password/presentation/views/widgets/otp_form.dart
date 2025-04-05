@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:graduation_project/Features/forget_password/presentation/views/widgets/otp_form_text.dart';
 import 'package:graduation_project/constants.dart';
 
@@ -38,7 +37,7 @@ class _OtpFormState extends State<OtpForm> {
   void _submitOtp() {
     if (_formKey.currentState!.validate()) {
       final otp = _controllers.map((c) => c.text).join();
-      widget.onOtpSubmitted(otp);
+      widget.onOtpSubmitted(otp); // Fixed the typo: onOtpsubmitted -> onOtpSubmitted
     }
   }
 

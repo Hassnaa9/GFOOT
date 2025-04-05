@@ -41,7 +41,7 @@ class _ForgetPasswordBodyState extends State<ForgetPasswordBody> {
           logo: AssetsData.forgotPassImg,
           title: 'Forgot Password?',
           subText:
-              "Don’t worry! It happens. Please enter your email address, and we will send the OTP to your phone number.",
+              "Don’t worry! It happens. Please enter your email address, and we will send the OTP to your email .",
           children: [
             Form(
               key: _formKey,

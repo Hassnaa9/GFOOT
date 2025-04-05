@@ -30,8 +30,6 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final String email = ModalRoute.of(context)?.settings.arguments as String? ?? "";
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     return BlocConsumer<AuthCubit, UserState>(
       listener: (context, state) {
@@ -54,8 +52,8 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
               child: Column(
                 children: [
                   SizedBox(
-                    width: screenWidth - 44,
-                    height: screenHeight * .086,
+                    width: size.width - 44,
+                    height: size.height * 0.086,
                     child: TextFormField(
                       controller: _passwordController,
                       obscureText: !_isPasswordVisible,
@@ -79,8 +77,8 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Password cannot be empty';
-                        } else if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
+                        } else if (value.length < 8) {
+                          return 'Password must be at least 8 characters';
                         }
                         return null;
                       },
@@ -88,8 +86,8 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
                   ),
                   SizedBox(height: size.height * 0.02),
                   SizedBox(
-                    width: screenWidth - 44,
-                    height: screenHeight * .086,
+                    width: size.width - 44,
+                    height: size.height * 0.086,
                     child: TextFormField(
                       controller: _confirmPasswordController,
                       obscureText: !_isPasswordVisible,
@@ -127,17 +125,14 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
                   ? null
                   : () {
                       if (_formKey.currentState!.validate()) {
-                        context.read<AuthCubit>().resetPassword(
-                              email,
-                              _passwordController.text,
-                            );
+                        context.read<AuthCubit>().resetPassword(_passwordController.text);
                       }
                     },
               style: ElevatedButton.styleFrom(
                 elevation: 0,
                 backgroundColor: MyColors.kPrimaryColor,
                 foregroundColor: MyColors.white,
-                minimumSize: Size(screenWidth - 44, screenHeight * .086),
+                minimumSize: Size(size.width - 44, size.height * 0.086),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
