@@ -21,5 +21,11 @@ class AssetsData {
   static const profile ='assets/icons/profile.png';
   static const questionnaire='assets/images/questionnaire.png';
   static const arrow='assets/icons/arrow.png';
+  static const questionMark='assets/icons/ask.png';
+  static const logout='assets/icons/logout.png';
+  static const bell ='assets/icons/notification-bell.png';
+  static const user ='assets/icons/user.png';
+  static const settings ='assets/icons/settings.png';
+  static const egyptFlag ='assets/icons/flag.png';
 
 }
