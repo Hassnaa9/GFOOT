@@ -34,7 +34,9 @@ class ProfileViewBody extends StatelessWidget {
             ProfileMenu(
               text: "Notifications",
               icon: AssetsData.bell,
-              press: () {},
+              press: () {
+                Navigator.pushNamed(context, "/Notifications");
+              },
             ),
             ProfileMenu(
               text: "Settings",
