@@ -23,7 +23,7 @@ class ErrorModel {
       errorMessage: jsonData[ApiKey.errorMessage] is String
           ? jsonData[ApiKey.errorMessage]
           : (jsonData['message'] ?? 'Unknown error'),
-      errors: errorsList,
+      errors: errorsList, message: '',
     );
   }
 
