@@ -1,0 +1,16 @@
+[33m8e21db6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{0}: reset: moving to 8e21db6
+[33mdefafae[m HEAD@{1}: commit: create setting features
+[33m8e21db6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{2}: commit: create notifications screen
+[33m2202b13[m HEAD@{3}: commit: create edit account screen and add permissions to uploa the profile photo
+[33m5cdba64[m HEAD@{4}: commit: add profile feature
+[33mf44ff49[m HEAD@{5}: commit: add some animations for splash and logOrReg screens
+[33m43292e7[m HEAD@{6}: commit: update api consumer
+[33m1bcb2ff[m HEAD@{7}: commit: handle otp verification with backend changes
+[33m21dc5be[m HEAD@{8}: commit: handle otp logic
+[33mec09e94[m HEAD@{9}: commit: activate login methods
+[33m76d6741[m HEAD@{10}: commit: Enhance error handling and display in RegisterBody
+[33m1d5ee41[m HEAD@{11}: commit: update error model
+[33m898722f[m HEAD@{12}: commit: Enhance error handling for robustness and debugging
+[33m7668b7f[m HEAD@{13}: commit: manage auth with backend
+[33m2b62918[m HEAD@{14}: commit: create user , login, register models
+[33me5d8fc7[m HEAD@{15}: commit (initial): handle some conflicts

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Core/utils/assets.dart';
+import 'package:graduation_project/Features/home/statistics.dart';
+import 'package:graduation_project/Features/profile/setting.dart';
 
 class CustomServices extends StatelessWidget {
   final double screenWidth;
@@ -32,7 +34,10 @@ class CustomServices extends StatelessWidget {
               asset: AssetsData.statistics,
               label: "Statistics",
               onPressed: () {
-                print("Statistics pressed");
+                 Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Statistics()),
+        );
               },
             ),
           ],

@@ -11,7 +11,7 @@ void handleDioExceptions(DioException e) {
   // Default error model for cases where response is null
   final fallbackError = ErrorModel(
     status: -1,
-    errorMessage: _getFallbackMessage(e.type),
+    errorMessage: _getFallbackMessage(e.type), message: '',
   );
 
   switch (e.type) {

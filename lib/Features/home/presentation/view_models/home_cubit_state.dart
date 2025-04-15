@@ -8,13 +8,13 @@ class HomeLoading extends HomeState {}
 class HomeLoaded extends HomeState {
   final double carbonValue;
 
-  HomeLoaded({required this.carbonValue});
+  HomeLoaded( {required this.carbonValue});
 }
 
 class HomeError extends HomeState {
   final String errorMessage;
 
-  HomeError({required this.errorMessage});
+  HomeError(String string, {required this.errorMessage});
 }
 class HomeStatisticsLoaded extends HomeState {
   final Map<String, dynamic> statistics;

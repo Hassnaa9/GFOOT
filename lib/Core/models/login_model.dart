@@ -17,18 +17,29 @@ class LoginRequestModel {
 }
 
 class LoginResponseModel {
-  final String? email;
-  final String? token;
+  final String? accessToken;
+  final String? refreshToken;
+  final String? message;
 
   LoginResponseModel({
-    this.email,
-    this.token,
+    this.accessToken,
+    this.refreshToken,
+    this.message,
   });
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
     return LoginResponseModel(
-      email: json['email'],
-      token: json['token'],
+      accessToken: json['AccessToken'] as String?,
+      refreshToken: json['RefreshToken'] as String?,
+      message: json['message'] as String?,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'AccessToken': accessToken,
+      'RefreshToken': refreshToken,
+      'message': message,
+    };
   }
 }

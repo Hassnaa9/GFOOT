@@ -3,7 +3,15 @@ import 'package:graduation_project/constants.dart';
 
 class CustomQuestionOption extends StatefulWidget {
   final List<String> options;
-  const CustomQuestionOption({super.key, required this.options});
+  final Function(String, String) onSelected; // Update to take keyName and value
+  final String keyName; // Add keyName to pass to onSelected
+
+  const CustomQuestionOption({
+    super.key,
+    required this.options,
+    required this.onSelected,
+    required this.keyName, // Add keyName parameter
+  });
 
   @override
   _CustomQuestionOptionState createState() => _CustomQuestionOptionState();
@@ -15,8 +23,8 @@ class _CustomQuestionOptionState extends State<CustomQuestionOption> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      shrinkWrap: true, // Allows it to be inside a Column
-      physics: const NeverScrollableScrollPhysics(), // Prevents nested scrolling
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: widget.options.length,
       itemBuilder: (context, index) {
         return Container(
@@ -29,7 +37,10 @@ class _CustomQuestionOptionState extends State<CustomQuestionOption> {
             value: index,
             groupValue: _selectedOption,
             onChanged: (value) {
-              setState(() => _selectedOption = value);
+              setState(() {
+                _selectedOption = value;
+                widget.onSelected(widget.keyName, widget.options[index]); // Pass keyName and value
+              });
             },
             title: Text(
               widget.options[index],

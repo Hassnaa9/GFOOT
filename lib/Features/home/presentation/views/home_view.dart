@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_project/Core/utils/assets.dart';
-import 'package:graduation_project/Features/home/home.dart';
+import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
+import 'package:graduation_project/Features/home/presentation/view_models/home_cubit_state.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/custom_carbon_result.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/custom_services.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/gradient_indicator.dart';
-
-import '../../../../constants.dart';
+import 'package:graduation_project/Features/login&registration/login.dart';
+import 'package:graduation_project/Features/profile/notifications.dart';
+import 'package:graduation_project/Features/profile/profile.dart';
+import 'package:graduation_project/Features/profile/setting.dart';
+import 'package:graduation_project/constants.dart';
 
 class HomeViewBody extends StatefulWidget {
-  const HomeViewBody({super.key});
+  final Map<String, dynamic> userAnswers;
+
+  const HomeViewBody({super.key, required this.userAnswers});
 
   @override
   _HomeViewBodyState createState() => _HomeViewBodyState();
@@ -17,36 +24,36 @@ class HomeViewBody extends StatefulWidget {
 class _HomeViewBodyState extends State<HomeViewBody> {
   int _selectedIndex = 0;
 
-  // Function to navigate to the appropriate screen
+  @override
+  void initState() {
+    super.initState();
+    // Only call logActivity if userAnswers is not empty
+    if (widget.userAnswers.isNotEmpty) {
+      context.read<HomeCubit>().logActivity(queryParameters: widget.userAnswers);
+    }
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
 
-    // Navigate to the appropriate screen based on the selected index
     switch (index) {
       case 0:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Home()),
-        );
         break;
       case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Home()),
-        );
+        // TODO: Navigate to learn page
         break;
       case 2:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const Home()),
+          MaterialPageRoute(builder: (context) => const Setting()),
         );
         break;
       case 3:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const Home()),
+          MaterialPageRoute(builder: (context) => const Profile()),
         );
         break;
     }
@@ -67,8 +74,12 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             child: CircleAvatar(
               backgroundColor: const Color(0xffD4E0EB),
               child: TextButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(elevation: 10),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Notifications()),
+                  );
+                },
                 child: Image.asset(
                   AssetsData.notify,
                   width: screenWidth * 0.2,
@@ -85,42 +96,83 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 6,),
+              const SizedBox(height: 6),
               const Text(
                 "See your carbon footprint today!",
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
               SizedBox(height: screenHeight * .02),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  SizedBox(
-                    width: screenWidth * .25,
-                    height: screenWidth * .25,
-                    child: GradientCircularProgressIndicator(
-                      value: 0.6,
-                      size: screenWidth * .7,
-                      strokeWidth: 10.0,
-                    ),
-                  ),
-                  const CustomCarbonResult(),
-                ],
+              BlocBuilder<HomeCubit, HomeState>(
+                builder: (context, state) {
+                  if (state is HomeLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is HomeLoaded) {
+                    final normalizedValue = (state.carbonValue / 5000).clamp(0.0, 1.0);
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          width: screenWidth * .25,
+                          height: screenWidth * .25,
+                          child: GradientCircularProgressIndicator(
+                            value: normalizedValue,
+                            size: screenWidth * .7,
+                            strokeWidth: 10.0,
+                          ),
+                        ),
+                        CustomCarbonResult(carbonFootprint: state.carbonValue),
+                      ],
+                    );
+                  } else if (state is HomeError) {
+                    print('HomeViewBody: Error state - ${state.errorMessage}');
+                    if (state.errorMessage.contains('Please log in to continue')) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SignInScreen()),
+                        );
+                      });
+                      return const Center(child: Text('Redirecting to login...'));
+                    }
+                    return Column(
+                      children: [
+                        Text('Error! ${state.errorMessage}'),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (widget.userAnswers.isNotEmpty) {
+                              context.read<HomeCubit>().logActivity(queryParameters: widget.userAnswers);
+                            }
+                          },
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    );
+                  }
+                  return const Text(
+                    'Please complete the questionnaire to see your carbon footprint.',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  );
+                },
               ),
-              SizedBox(height: screenHeight*.02),
+              SizedBox(height: screenHeight * .02),
               const Text(
                 "Good job!",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
-              SizedBox(height: screenHeight*.01),
+              SizedBox(height: screenHeight * .01),
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "My Services",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: MyColors.black),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: MyColors.black,
+                  ),
                 ),
               ),
-              SizedBox(height: screenHeight*.02),
-              CustomServices(screenHeight: screenHeight,screenWidth:screenWidth),
+              SizedBox(height: screenHeight * .02),
+              CustomServices(screenHeight: screenHeight, screenWidth: screenWidth),
             ],
           ),
         ),
@@ -130,7 +182,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
         selectedItemColor: MyColors.kPrimaryColor,
         unselectedItemColor: Colors.grey,
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,  // Handle item tap and navigation
+        onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(
             icon: ImageIcon(AssetImage(AssetsData.home)),

@@ -34,4 +34,6 @@ class ErrorModel {
     }
     return '$errorMessage: ${errors!.join(" ")}';
   }
+
+  get message => null;
 }

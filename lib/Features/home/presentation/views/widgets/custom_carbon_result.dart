@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class CustomCarbonResult extends StatelessWidget {
+  final double? carbonFootprint;
   const CustomCarbonResult({
-    super.key,
+    super.key, this.carbonFootprint,
+
   });
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
@@ -19,7 +21,7 @@ class CustomCarbonResult extends StatelessWidget {
           ),
         ),
         Text(
-          "148kg",
+          "${carbonFootprint?.toStringAsFixed(2) ?? '0.00'} kg",
           style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

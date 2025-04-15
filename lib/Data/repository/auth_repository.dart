@@ -1,58 +1,105 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graduation_project/Core/api/api_consumer.dart';
 import 'package:graduation_project/Core/api/end_points.dart';
-import 'package:graduation_project/Core/cache/cache_helper.dart';
+import 'package:graduation_project/Core/errors/error_model.dart';
 import 'package:graduation_project/Core/errors/exceptions.dart';
 import 'package:graduation_project/Core/models/login_model.dart';
 import 'package:graduation_project/Core/models/register_model.dart';
 
 class AuthRepository {
   final ApiConsumer apiConsumer;
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   AuthRepository({required this.apiConsumer});
 
   // Login Method
   Future<LoginResponseModel> login(String email, String password) async {
-  try {
-    final response = await apiConsumer.post(
-      EndPoint.signIn,
-      queryParameters: {
-      },
-      data: {
-        ApiKey.email: email,
-        ApiKey.password: password, 
-      },
-      isFromData: false,
-    );
-    final loginResponse = LoginResponseModel.fromJson(response);
-    if (loginResponse.token != null) {
-      await CacheHelper().saveData(key: 'token', value: loginResponse.token!);
-    }
-    return loginResponse;
-  } on ServerException catch (e) {
-    throw e.errModel.fullErrorMessage;
-  } catch (e) {
-    throw e.toString();
-  }
-}
-  Future<LoginResponseModel> googleLogin(String googleAccessToken) async {
     try {
       final response = await apiConsumer.post(
-        EndPoint.googleSignIn, // Add this endpoint to your EndPoints class
+        EndPoint.signIn,
+        queryParameters: {},
         data: {
-          "accessToken": googleAccessToken,
+          ApiKey.email: email,
+          ApiKey.password: password,
         },
+        isFromData: false,
       );
 
       final loginResponse = LoginResponseModel.fromJson(response);
-      if (loginResponse.token != null) {
-        await CacheHelper().saveData(key: 'token', value: loginResponse.token!);
+      if (loginResponse.accessToken != null && loginResponse.refreshToken != null) {
+        await secureStorage.write(key: 'accessToken', value: loginResponse.accessToken!);
+        await secureStorage.write(key: 'refreshToken', value: loginResponse.refreshToken!);
+        print('AuthRepository: Tokens saved - AccessToken: ${loginResponse.accessToken}, RefreshToken: ${loginResponse.refreshToken}');
+      } else {
+        throw ServerException(
+          errModel: ErrorModel(
+            status: 400,
+            errorMessage: 'Missing tokens in response',
+            message: 'Login response did not contain required tokens',
+          ),
+        );
       }
-
       return loginResponse;
     } on ServerException catch (e) {
-      throw e.errModel.fullErrorMessage;
+      throw ServerException(
+        errModel: ErrorModel(
+          status: e.errModel.status,
+          errorMessage: e.errModel.errorMessage,
+          message: e.errModel.message,
+        ),
+      );
     } catch (e) {
-      throw e.toString();
+      throw ServerException(
+        errModel: ErrorModel(
+          status: 500,
+          errorMessage: e.toString(),
+          message: 'An unexpected error occurred during login',
+        ),
+      );
+    }
+  }
+
+  // Google Login Method
+  Future<LoginResponseModel> googleLogin(String googleAccessToken) async {
+    try {
+      final response = await apiConsumer.post(
+        EndPoint.googleSignIn,
+        data: {
+          "accessToken": googleAccessToken,
+        }, isFromData: false,
+      );
+
+      final loginResponse = LoginResponseModel.fromJson(response);
+      if (loginResponse.accessToken != null && loginResponse.refreshToken != null) {
+        await secureStorage.write(key: 'accessToken', value: loginResponse.accessToken!);
+        await secureStorage.write(key: 'refreshToken', value: loginResponse.refreshToken!);
+        print('AuthRepository: Google Tokens saved - AccessToken: ${loginResponse.accessToken}, RefreshToken: ${loginResponse.refreshToken}');
+      } else {
+        throw ServerException(
+          errModel: ErrorModel(
+            status: 400,
+            errorMessage: 'Missing tokens in response',
+            message: 'Google login response did not contain required tokens',
+          ),
+        );
+      }
+      return loginResponse;
+    } on ServerException catch (e) {
+      throw ServerException(
+        errModel: ErrorModel(
+          status: e.errModel.status,
+          errorMessage: e.errModel.errorMessage,
+          message: e.errModel.message,
+        ),
+      );
+    } catch (e) {
+      throw ServerException(
+        errModel: ErrorModel(
+          status: 500,
+          errorMessage: e.toString(),
+          message: 'An unexpected error occurred during Google login',
+        ),
+      );
     }
   }
 
@@ -60,22 +107,43 @@ class AuthRepository {
   Future<LoginResponseModel> facebookLogin(String facebookAccessToken) async {
     try {
       final response = await apiConsumer.post(
-        EndPoint.facebookSignIn, // Add this endpoint to your EndPoints class
+        EndPoint.facebookSignIn,
         data: {
           "accessToken": facebookAccessToken,
-        },
+        }, isFromData: false,
       );
 
       final loginResponse = LoginResponseModel.fromJson(response);
-      if (loginResponse.token != null) {
-        await CacheHelper().saveData(key: 'token', value: loginResponse.token!);
+      if (loginResponse.accessToken != null && loginResponse.refreshToken != null) {
+        await secureStorage.write(key: 'accessToken', value: loginResponse.accessToken!);
+        await secureStorage.write(key: 'refreshToken', value: loginResponse.refreshToken!);
+        print('AuthRepository: Facebook Tokens saved - AccessToken: ${loginResponse.accessToken}, RefreshToken: ${loginResponse.refreshToken}');
+      } else {
+        throw ServerException(
+          errModel: ErrorModel(
+            status: 400,
+            errorMessage: 'Missing tokens in response',
+            message: 'Facebook login response did not contain required tokens',
+          ),
+        );
       }
-
       return loginResponse;
     } on ServerException catch (e) {
-      throw e.errModel.fullErrorMessage;
+      throw ServerException(
+        errModel: ErrorModel(
+          status: e.errModel.status,
+          errorMessage: e.errModel.errorMessage,
+          message: e.errModel.message,
+        ),
+      );
     } catch (e) {
-      throw e.toString();
+      throw ServerException(
+        errModel: ErrorModel(
+          status: 500,
+          errorMessage: e.toString(),
+          message: 'An unexpected error occurred during Facebook login',
+        ),
+      );
     }
   }
 
@@ -83,25 +151,45 @@ class AuthRepository {
   Future<LoginResponseModel> appleLogin(String appleIdToken) async {
     try {
       final response = await apiConsumer.post(
-        EndPoint.appleSignIn, // Add this endpoint to your EndPoints class
+        EndPoint.appleSignIn,
         data: {
           "idToken": appleIdToken,
-        },
+        }, isFromData: false,
       );
 
       final loginResponse = LoginResponseModel.fromJson(response);
-      if (loginResponse.token != null) {
-        await CacheHelper().saveData(key: 'token', value: loginResponse.token!);
+      if (loginResponse.accessToken != null && loginResponse.refreshToken != null) {
+        await secureStorage.write(key: 'accessToken', value: loginResponse.accessToken!);
+        await secureStorage.write(key: 'refreshToken', value: loginResponse.refreshToken!);
+        print('AuthRepository: Apple Tokens saved - AccessToken: ${loginResponse.accessToken}, RefreshToken: ${loginResponse.refreshToken}');
+      } else {
+        throw ServerException(
+          errModel: ErrorModel(
+            status: 400,
+            errorMessage: 'Missing tokens in response',
+            message: 'Apple login response did not contain required tokens',
+          ),
+        );
       }
-
       return loginResponse;
     } on ServerException catch (e) {
-      throw e.errModel.fullErrorMessage;
+      throw ServerException(
+        errModel: ErrorModel(
+          status: e.errModel.status,
+          errorMessage: e.errModel.errorMessage,
+          message: e.errModel.message,
+        ),
+      );
     } catch (e) {
-      throw e.toString();
+      throw ServerException(
+        errModel: ErrorModel(
+          status: 500,
+          errorMessage: e.toString(),
+          message: 'An unexpected error occurred during Apple login',
+        ),
+      );
     }
   }
-
 
   // Register Method
   Future<RegisterModel> register(
@@ -126,67 +214,192 @@ class AuthRepository {
           "country": country,
           "city": city,
           "userType": userType,
-        },
+        }, isFromData: false,
       );
 
       final registerModel = RegisterModel.fromJson(response);
-      if (registerModel.token != null) {
-        await CacheHelper().saveData(key: 'token', value: registerModel.token!);
+      if (registerModel.accessToken != null && registerModel.refreshToken != null) {
+        await secureStorage.write(key: 'accessToken', value: registerModel.accessToken!);
+        await secureStorage.write(key: 'refreshToken', value: registerModel.refreshToken!);
+        print('AuthRepository: Register Tokens saved - AccessToken: ${registerModel.accessToken}, RefreshToken: ${registerModel.refreshToken}');
+      } else {
+        throw ServerException(
+          errModel: ErrorModel(
+            status: 400,
+            errorMessage: 'Missing tokens in response',
+            message: 'Register response did not contain required tokens',
+          ),
+        );
       }
-
       return registerModel;
     } on ServerException catch (e) {
-      throw e.errModel.fullErrorMessage; // Throw the full error message
+      throw ServerException(
+        errModel: ErrorModel(
+          status: e.errModel.status,
+          errorMessage: e.errModel.errorMessage,
+          message: e.errModel.message,
+        ),
+      );
     } catch (e) {
-      throw e.toString();
+      throw ServerException(
+        errModel: ErrorModel(
+          status: 500,
+          errorMessage: e.toString(),
+          message: 'An unexpected error occurred during registration',
+        ),
+      );
     }
   }
-// forgot password Method
-Future<void> forgotPassword(String email) async {
-  try {
-    await apiConsumer.post(
-      EndPoint.forgotPassword,
-      data: {
-        "email": email,
-      },
-    );
-  } on ServerException catch (e) {
-    throw e.errModel.fullErrorMessage;
-  } catch (e) {
-    throw e.toString();
+
+  // Forgot Password Method
+  Future<void> forgotPassword(String email) async {
+    try {
+      await apiConsumer.post(
+        EndPoint.forgotPassword,
+        data: {
+          "email": email,
+        }, isFromData: false,
+      );
+    } on ServerException catch (e) {
+      throw ServerException(
+        errModel: ErrorModel(
+          status: e.errModel.status,
+          errorMessage: e.errModel.errorMessage,
+          message: e.errModel.message,
+        ),
+      );
+    } catch (e) {
+      throw ServerException(
+        errModel: ErrorModel(
+          status: 500,
+          errorMessage: e.toString(),
+          message: 'An unexpected error occurred during forgot password',
+        ),
+      );
+    }
   }
-}
 
   // Reset Password Method
   Future<void> resetPassword(String email, String newPassword, String otp) async {
-  try {
-    await apiConsumer.put(
-      EndPoint.resetPassword,
-      data: {
-        ApiKey.email: email,
-        ApiKey.newPassword: newPassword,
-        ApiKey.otp: otp, 
-      },
-    );
-  } on ServerException catch (e) {
-    throw e.errModel.fullErrorMessage;
-  } catch (e) {
-    throw e.toString();
+    try {
+      await apiConsumer.put(
+        EndPoint.resetPassword,
+        data: {
+          ApiKey.email: email,
+          ApiKey.newPassword: newPassword,
+          ApiKey.otp: otp,
+        },
+      );
+    } on ServerException catch (e) {
+      throw ServerException(
+        errModel: ErrorModel(
+          status: e.errModel.status,
+          errorMessage: e.errModel.errorMessage,
+          message: e.errModel.message,
+        ),
+      );
+    } catch (e) {
+      throw ServerException(
+        errModel: ErrorModel(
+          status: 500,
+          errorMessage: e.toString(),
+          message: 'An unexpected error occurred during reset password',
+        ),
+      );
+    }
   }
-}
-
 
   // Resend OTP Method
-Future<void> resendOtp(String email) async {
-  try {
-    await apiConsumer.post(
-      EndPoint.resendOtp,
-      data: {ApiKey.email: email},
-    );
-  } on ServerException catch (e) {
-    throw e.errModel.fullErrorMessage;
-  } catch (e) {
-    throw e.toString();
+  Future<void> resendOtp(String email) async {
+    try {
+      await apiConsumer.post(
+        EndPoint.resendOtp,
+        data: {ApiKey.email: email}, isFromData: false,
+      );
+    } on ServerException catch (e) {
+      throw ServerException(
+        errModel: ErrorModel(
+          status: e.errModel.status,
+          errorMessage: e.errModel.errorMessage,
+          message: e.errModel.message,
+        ),
+      );
+    } catch (e) {
+      throw ServerException(
+        errModel: ErrorModel(
+          status: 500,
+          errorMessage: e.toString(),
+          message: 'An unexpected error occurred during resend OTP',
+        ),
+      );
+    }
   }
-}
+
+  // Refresh Token Method
+  Future<String> refreshToken(String refreshToken) async {
+    try {
+      print('AuthRepository: Refreshing token with refreshToken: $refreshToken');
+      final response = await apiConsumer.post(
+        EndPoint.refreshToken,
+        data: {
+          'refreshToken': refreshToken,
+        }, isFromData: false,
+      );
+      print('AuthRepository: Refresh token response: $response');
+      final newAccessToken = response['AccessToken'] as String;
+      final newRefreshToken = response['RefreshToken'] as String;
+
+      await secureStorage.write(key: 'accessToken', value: newAccessToken);
+      await secureStorage.write(key: 'refreshToken', value: newRefreshToken);
+      print('AuthRepository: Tokens saved - AccessToken: $newAccessToken, RefreshToken: $newRefreshToken');
+
+      return newAccessToken;
+    } on ServerException catch (e) {
+      print('AuthRepository: ServerException during token refresh: ${e.errModel.fullErrorMessage}');
+      throw ServerException(
+        errModel: ErrorModel(
+          status: e.errModel.status,
+          errorMessage: e.errModel.errorMessage,
+          message: e.errModel.message,
+        ),
+      );
+    } catch (e) {
+      print('AuthRepository: General error during token refresh: $e');
+      throw ServerException(
+        errModel: ErrorModel(
+          status: 500,
+          errorMessage: e.toString(),
+          message: 'An unexpected error occurred during token refresh',
+        ),
+      );
+    }
+  }
+
+  // Logout Method (Uncomment if needed)
+  // Future<void> logout() async {
+  //   try {
+  //     await apiConsumer.post(
+  //       EndPoint.logout,
+  //       data: {},
+  //     );
+  //     await secureStorage.delete(key: 'accessToken');
+  //     await secureStorage.delete(key: 'refreshToken');
+  //   } on ServerException catch (e) {
+  //     throw ServerException(
+  //       errModel: ErrorModel(
+  //         status: e.errModel.status,
+  //         errorMessage: e.errModel.errorMessage,
+  //         message: e.errModel.message,
+  //       ),
+  //     );
+  //   } catch (e) {
+  //     throw ServerException(
+  //       errModel: ErrorModel(
+  //         status: 500,
+  //         errorMessage: e.toString(),
+  //         message: 'An unexpected error occurred during logout',
+  //       ),
+  //     );
+  //   }
+  // }
 }
