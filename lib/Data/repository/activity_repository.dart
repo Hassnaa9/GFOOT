@@ -4,6 +4,7 @@ import 'package:graduation_project/Core/api/api_consumer.dart';
 import 'package:graduation_project/Core/api/end_points.dart';
 import 'package:graduation_project/Core/errors/error_model.dart';
 import 'package:graduation_project/Core/errors/exceptions.dart';
+import 'package:graduation_project/Core/models/rank_model.dart';
 import 'package:graduation_project/Core/models/recommendations_model.dart';
 import 'package:graduation_project/Core/models/statistics_model.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -209,6 +210,12 @@ Future<List<Recommendation>> getRecommendations(String token) async {
   );
   return (response as List).map((e) => Recommendation.fromJson(e)).toList();
 }
-
+Future<RankModel> getRanks(String token) async {
+  final response = await apiConsumer.get(
+    EndPoint.getRank, // Replace with your actual endpoint (e.g., 'api/ranks')
+    headers: {'Authorization': 'Bearer $token'},
+  );
+  return RankModel.fromJson(response);
+}
 
 }

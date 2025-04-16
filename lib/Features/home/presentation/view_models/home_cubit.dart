@@ -68,5 +68,14 @@ class HomeCubit extends Cubit<HomeState> {
     emit(HomeError(e.toString(), errorMessage: 'Failed to load recommendations'));
   }
 }
-
+Future<void> fetchRanks() async {
+  emit(HomeLoading());
+  try {
+    final token = await secureStorage.read(key: 'accessToken');
+    final rank = await activityRepository.getRanks(token!);
+    emit(HomeRanksLoaded(rank: rank));
+  } catch (e) {
+    emit(HomeError(e.toString(), errorMessage: 'Failed to load rankings'));
+  }
+}
 }

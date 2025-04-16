@@ -6,6 +6,6 @@ class Rank extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RankViewBody(cityRank: 1, countryRank: 4, globalRank: 88,);
+    return RankViewBody();
   }
 }

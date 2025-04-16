@@ -1,4 +1,5 @@
 
+import 'package:graduation_project/Core/models/rank_model.dart';
 import 'package:graduation_project/Core/models/recommendations_model.dart';
 import 'package:graduation_project/Core/models/statistics_model.dart';
 
@@ -34,4 +35,8 @@ class HomeRecommendationsLoaded extends HomeState {
   final List<Recommendation> recommendations;
 
   HomeRecommendationsLoaded({required this.recommendations});
+}
+class HomeRanksLoaded extends HomeState {
+  final RankModel rank;
+  HomeRanksLoaded({required this.rank});
 }
