@@ -79,4 +79,4 @@ assets/: Images, fonts, and other static resources.
 License
 This project is licensed under the MIT License. See the LICENSE file for details.
 Contact
-For questions or support, contact the project maintainer at [your-email@example.com] or open an issue on GitHub.
+For questions or support, contact the project maintainer at [mhassna727@gmail.com]  or open an issue on GitHub.
