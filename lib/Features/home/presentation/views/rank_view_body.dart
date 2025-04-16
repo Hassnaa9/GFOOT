@@ -80,7 +80,7 @@ class _RankViewBodyState extends State<RankViewBody> with SingleTickerProviderSt
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Text(
-                            '1', // Replace with dynamic user rank if available
+                            '1', 
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
