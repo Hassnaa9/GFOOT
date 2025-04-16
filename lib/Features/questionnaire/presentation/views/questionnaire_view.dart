@@ -26,49 +26,87 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
   {
     'text': '🏋️‍♀️ What is your body type?',
     'type': 'multiple_choice',
-    'options': ['⚖️ overweight', '⚖️ obese', '⚖️ underweight', '⚖️ normal'],
+    'options': [
+      {'display': '⚖️ Obese', 'value': 'obese'},
+      {'display': '⚖️ Overweight', 'value': 'overweight'},
+      {'display': '⚖️ Underweight', 'value': 'underweight'},
+      {'display': '⚖️ Normal', 'value': 'normal'},
+    ],
     'key': 'body_type'
   },
   {
     'text': '👤 What is your gender?',
     'type': 'multiple_choice',
-    'options': ['♂️ male', '♀️ female'],
+    'options': [
+      {'display': '♀️ Female', 'value': 'female'},
+      {'display': '♂️ Male', 'value': 'male'},
+    ],
     'key': 'sex'
   },
   {
     'text': '🍽️ What is your diet type?',
     'type': 'multiple_choice',
-    'options': ['🐟 pescatarian', '🥗 vegetarian', '🍖 omnivore', '🌱 vegan'],
+    'options': [
+      {'display': '🍖 Omnivore', 'value': 'omnivore'},
+      {'display': '🥗 Vegetarian', 'value': 'vegetarian'},
+      {'display': '🌱 Vegan', 'value': 'vegan'},
+      {'display': '🐟 Pescatarian', 'value': 'pescatarian'},
+    ],
     'key': 'diet'
   },
   {
     'text': '🚿 How frequently do you shower?',
     'type': 'multiple_choice',
-    'options': ['📅 daily', '⏳ less frequently', '⏰ more frequently', '🕒 twice a day'],
+    'options': [
+      {'display': '🕒 Twice a day', 'value': 'twice a day'},
+      {'display': '📅 Daily', 'value': 'daily'},
+      {'display': '⏳ Less frequently', 'value': 'less frequently'},
+      {'display': '⏰ More frequently', 'value': 'more frequently'},
+    ],
     'key': 'how_often_shower'
   },
   {
     'text': '🔥 What is your home’s primary heating energy source?',
     'type': 'multiple_choice',
-    'options': ['🪨 coal', '💨 natural gas', '🪵 wood', '⚡ electricity'],
+    'options': [
+      {'display': '🪨 Coal', 'value': 'coal'},
+      {'display': '💨 Natural gas', 'value': 'natural gas'},
+      {'display': '🪵 Wood', 'value': 'wood'},
+      {'display': '⚡ Electricity', 'value': 'electricity'},
+    ],
     'key': 'heating_energy_source'
   },
   {
     'text': '🚗 What is your primary mode of transportation?',
     'type': 'multiple_choice',
-    'options': ['🚌 public', '🚶‍♂️ walk/bicycle', '🚘 private'],
+    'options': [
+      {'display': '🚘 Private', 'value': 'private'},
+      {'display': '🚌 Public', 'value': 'public'},
+      {'display': '🚶‍♂️ Walk/Bicycle', 'value': 'walk/bicycle'},
+    ],
     'key': 'transport'
   },
   {
     'text': '🚙 What type of vehicle you use?',
     'type': 'multiple_choice',
-    'options': ['❓ NaN', '⛽ petrol', '🛢️ diesel', '🔋 hybrid', '💧 lpg', '⚡ electric'],
+    'options': [
+      {'display': '🔋 Hybrid', 'value': 'hybrid'},
+      {'display': '⛽ Petrol', 'value': 'petrol'},
+      {'display': '🛢️ Diesel', 'value': 'diesel'},
+      {'display': '💧 LPG', 'value': 'lpg'},
+      {'display': '⚡ Electric', 'value': 'electric'},
+      {'display': '❓ NaN', 'value': 'NaN'},
+    ],
     'key': 'vehicle_type_detailed'
   },
   {
     'text': '🎉 How often do you participate in social activities?',
     'type': 'multiple_choice',
-    'options': ['🥳 often', '🚫 never', '🤷‍♂️ sometimes'],
+    'options': [
+      {'display': '🤷‍♂️ Sometimes', 'value': 'sometimes'},
+      {'display': '🥳 Often', 'value': 'often'},
+      {'display': '🚫 Never', 'value': 'never'},
+    ],
     'key': 'social_activity'
   },
   {
@@ -79,7 +117,12 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
   {
     'text': '✈️ How often did you travel by air?',
     'type': 'multiple_choice',
-    'options': ['🚫 never', '🌟 rarely', '🛫 frequently', '✈️ very frequently'],
+    'options': [
+      {'display': '🚫 Never', 'value': 'never'},
+      {'display': '🌟 Rarely', 'value': 'rarely'},
+      {'display': '🛫 Frequently', 'value': 'frequently'},
+      {'display': '✈️ Very frequently', 'value': 'very frequently'},
+    ],
     'key': 'frequency_of_traveling_by_air'
   },
   {
@@ -90,7 +133,11 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
   {
     'text': '🗑️ What is the size of your garbage bag?',
     'type': 'multiple_choice',
-    'options': ['📏 small', '📏 medium', '📏 large'],
+    'options': [
+      {'display': '📏 Medium', 'value': 'medium'},
+      {'display': '📏 Small', 'value': 'small'},
+      {'display': '📏 Large', 'value': 'large'},
+    ],
     'key': 'waste_bag_size'
   },
   {
@@ -116,11 +163,15 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
   {
     'text': '💡 Do you actively seek out energy-efficient appliances?',
     'type': 'multiple_choice',
-    'options': ['✅ Yes', '🤔 Sometimes', '❌ No'],
+    'options': [
+      {'display': '✅ Yes', 'value': 'Yes'},
+      {'display': '🤔 Sometimes', 'value': 'Sometimes'},
+      {'display': '❌ No', 'value': 'No'},
+    ],
     'key': 'energy_efficiency'
   },
 ];
-  @override
+@override
   void initState() {
     super.initState();
     _buttonAnimationController = AnimationController(
@@ -200,23 +251,23 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
 
     // Format responses using ApiKey with API-friendly formatting
     final queryParameters = {
-      ApiKey.bodyType: _responses['body_type'].toString().toLowerCase(),
-      ApiKey.sex: _responses['sex'].toString().toLowerCase(),
-      ApiKey.diet: _responses['diet'].toString().toLowerCase(),
-      ApiKey.shower: _responses['how_often_shower'].toString().toLowerCase(),
-      ApiKey.heatSrs: _responses['heating_energy_source'].toString().toLowerCase(),
-      ApiKey.transport: _responses['transport'].toString().toLowerCase(),
-      ApiKey.vehicleType: _responses['vehicle_type_detailed'].toString().toLowerCase(),
-      ApiKey.socialActivity: _responses['social_activity'].toString().toLowerCase(),
-      ApiKey.groceryBill: double.parse(_responses['monthly_grocery_bill'].toString()),
-      ApiKey.travelFreq: _responses['frequency_of_traveling_by_air'].toString().toLowerCase(),
-      ApiKey.vehicleDist: double.parse(_responses['vehicle_monthly_distance_km'].toString()),
-      ApiKey.wastedBag: _responses['waste_bag_size'].toString().toLowerCase(),
-      ApiKey.wastedBagCnt: int.parse(_responses['waste_bag_weekly_count'].toString()),
-      ApiKey.dailyTv: int.parse(_responses['how_long_tv_pc_daily_hour'].toString()),
-      ApiKey.dailyInternet: int.parse(_responses['how_long_internet_daily_hour'].toString()),
-      ApiKey.monthlyCloth: int.parse(_responses['how_many_new_clothes_monthly'].toString()),
-      ApiKey.energyEff: _responses['energy_efficiency'].toString(),
+      ApiKey.bodyType:_responses['body_type'].toString().toLowerCase(),
+      ApiKey.sex:_responses['sex'].toString().toLowerCase(),
+      ApiKey.diet:_responses['diet'].toString().toLowerCase(),
+      ApiKey.shower:_responses['how_often_shower'].toString().toLowerCase(),
+      ApiKey.heatSrs:_responses['heating_energy_source'].toString().toLowerCase(),
+      ApiKey.transport:_responses['transport'].toString().toLowerCase(),
+      ApiKey.vehicleType:_responses['vehicle_type_detailed'].toString().toLowerCase(),
+      ApiKey.socialActivity:_responses['social_activity'].toString().toLowerCase(),
+      ApiKey.groceryBill:double.parse(_responses['monthly_grocery_bill'].toString()),
+      ApiKey.travelFreq:_responses['frequency_of_traveling_by_air'].toString().toLowerCase(),
+      ApiKey.vehicleDist:double.parse(_responses['vehicle_monthly_distance_km'].toString()),
+      ApiKey.wastedBag:_responses['waste_bag_size'].toString().toLowerCase(),
+      ApiKey.wastedBagCnt:int.parse(_responses['waste_bag_weekly_count'].toString()),
+      ApiKey.dailyTv:int.parse(_responses['how_long_tv_pc_daily_hour'].toString()),
+      ApiKey.dailyInternet:int.parse(_responses['how_long_internet_daily_hour'].toString()),
+      ApiKey.monthlyCloth:int.parse(_responses['how_many_new_clothes_monthly'].toString()),
+      ApiKey.energyEff:_responses['energy_efficiency'].toString(),
     };
 
     print('Submitting queryParameters: $queryParameters');

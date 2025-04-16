@@ -5,7 +5,7 @@ import 'package:graduation_project/constants.dart';
 class QuestionCard extends StatefulWidget {
   final String question;
   final String type;
-  final List<String>? options;
+  final List<Map<String,dynamic>>? options;
   final String keyName;
   final Function(String, dynamic) onChanged;
 

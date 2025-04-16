@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graduation_project/Core/api/api_consumer.dart';
@@ -39,11 +38,11 @@ class ActivityRepository {
 
       final response = await apiConsumer.post(
         EndPoint.activity,
-        data: queryParameters,
+        queryParameters: queryParameters,
         headers: {
           'Authorization': 'Bearer $token',
         },
-        isUrlEncoded: true, isFromData: false,
+         isFromData: false,
       );
 
       print('ActivityRepository: LogActivity response: $response');
@@ -113,7 +112,7 @@ class ActivityRepository {
       );
 
       print('ActivityRepository: GetFootprint response: $response');
-      final carbonValue = (response['CarbonEmission'] as num?)?.toDouble() ?? 0.0;
+      final carbonValue = double.tryParse(response.toString()) ?? 0.0;
       return carbonValue;
     } on DioException catch (e) {
       if (e.response != null) {

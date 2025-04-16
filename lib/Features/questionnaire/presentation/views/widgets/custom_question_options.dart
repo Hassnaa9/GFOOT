@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graduation_project/constants.dart';
 
 class CustomQuestionOption extends StatefulWidget {
-  final List<String> options;
+  final List<Map<String , dynamic>> options;
   final Function(String, String) onSelected; // Update to take keyName and value
   final String keyName; // Add keyName to pass to onSelected
 
@@ -38,12 +38,15 @@ class _CustomQuestionOptionState extends State<CustomQuestionOption> {
             groupValue: _selectedOption,
             onChanged: (value) {
               setState(() {
-                _selectedOption = value;
-                widget.onSelected(widget.keyName, widget.options[index]); // Pass keyName and value
+              _selectedOption = value;
+              widget.onSelected(
+                widget.keyName,
+                widget.options[index]['value'] as String, // Extract the 'value' field
+              );
               });
             },
             title: Text(
-              widget.options[index],
+              widget.options[index]['value'],
               style: const TextStyle(color: Colors.white),
             ),
             activeColor: Colors.white,
