@@ -4,6 +4,8 @@ import 'package:graduation_project/Core/api/api_consumer.dart';
 import 'package:graduation_project/Core/api/end_points.dart';
 import 'package:graduation_project/Core/errors/error_model.dart';
 import 'package:graduation_project/Core/errors/exceptions.dart';
+import 'package:graduation_project/Core/models/recommendations_model.dart';
+import 'package:graduation_project/Core/models/statistics_model.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class ActivityRepository {
@@ -189,4 +191,24 @@ class ActivityRepository {
       );
     }
   }
+
+  Future<StatisticsModel> getStatistics(String token) async {
+  final response = await apiConsumer.get(
+    EndPoint.activityStatistics,
+    headers: {
+      'Authorization': 'Bearer $token',
+    },
+  );
+  return StatisticsModel.fromJson(response);
+}
+
+Future<List<Recommendation>> getRecommendations(String token) async {
+  final response = await apiConsumer.get(
+    EndPoint.getRecommendations,
+    headers: {'Authorization': 'Bearer $token'},
+  );
+  return (response as List).map((e) => Recommendation.fromJson(e)).toList();
+}
+
+
 }

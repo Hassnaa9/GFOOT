@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graduation_project/Core/models/recommendations_model.dart';
+import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
+import 'package:graduation_project/Features/home/presentation/view_models/home_cubit_state.dart';
 import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/notification_card.dart';
-
 
 class RecommendationsViewBody extends StatefulWidget {
   const RecommendationsViewBody({super.key});
@@ -14,70 +17,6 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
-
-  // Sample list of notifications (replace with real data from backend or local storage)
-  final List<NotificationModel> _notifications = [
-  NotificationModel(
-    title: "Log Your Daily Activity",
-    description: "Don't forget to log your travel and meals to track your carbon footprint!",
-    timestamp: DateTime.now().subtract(const Duration(hours: 1)),
-    icon: Icons.directions_car,
-  ),
-  NotificationModel(
-    title: "Great Job!",
-    description: "You've reduced your carbon footprint by 5% this week. Keep it up!",
-    timestamp: DateTime.now().subtract(const Duration(days: 1)),
-    icon: Icons.eco,
-  ),
-  NotificationModel(
-    title: "Sustainable Tip",
-    description: "Try walking or biking instead of driving to reduce emissions.",
-    timestamp: DateTime.now().subtract(const Duration(days: 2)),
-    icon: Icons.lightbulb_outline,
-  ),
-  NotificationModel(
-    title: "High Carbon Alert!",
-    description: "Your recent flight has significantly increased your carbon footprint. Consider offsetting with a sustainable action.",
-    timestamp: DateTime.now().subtract(const Duration(hours: 3)),
-    icon: Icons.flight,
-  ),
-  NotificationModel(
-    title: "Milestone Achieved!",
-    description: "Congratulations! You've offset 1 ton of CO2 through your sustainable choices this month!",
-    timestamp: DateTime.now().subtract(const Duration(days: 3)),
-    icon: Icons.star,
-  ),
-  NotificationModel(
-    title: "Energy Saving Tip",
-    description: "Turn off lights and unplug devices when not in use to lower your energy consumption.",
-    timestamp: DateTime.now().subtract(const Duration(days: 4)),
-    icon: Icons.power_off,
-  ),
-  NotificationModel(
-    title: "Challenge Accepted!",
-    description: "You've joined the 'Meatless Monday' challenge. Log your plant-based meals to earn points!",
-    timestamp: DateTime.now().subtract(const Duration(days: 5)),
-    icon: Icons.restaurant_menu,
-  ),
-  NotificationModel(
-    title: "Community Update",
-    description: "Your city just launched a new recycling program. Check it out to reduce waste!",
-    timestamp: DateTime.now().subtract(const Duration(days: 6)),
-    icon: Icons.recycling,
-  ),
-  NotificationModel(
-    title: "Water Conservation Tip",
-    description: "Shorten your showers to save water and reduce your environmental impact.",
-    timestamp: DateTime.now().subtract(const Duration(days: 7)),
-    icon: Icons.water_drop,
-  ),
-  NotificationModel(
-    title: "Monthly Summary",
-    description: "Your carbon footprint for this month is 1.2 tons. Aim for 1 ton next month with small changes!",
-    timestamp: DateTime.now().subtract(const Duration(days: 8)),
-    icon: Icons.analytics,
-  ),
-];
 
   @override
   void initState() {
@@ -99,6 +38,8 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
       CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
 
+    // Fetch recommendations when the widget is initialized
+    context.read<HomeCubit>().fetchRecommendations();
     _controller.forward();
   }
 
@@ -128,31 +69,86 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: _notifications.isEmpty
-            ? const Center(
-                child: Text(
-                  "No Recommendations yet!",
-                  style: TextStyle(fontSize: 18, color: Colors.grey),
-                ),
-              )
-            : ListView.builder(
-                itemCount: _notifications.length,
+        child: BlocBuilder<HomeCubit, HomeState>(
+          builder: (context, state) {
+            if (state is HomeLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is HomeRecommendationsLoaded) {
+              final recommendations = state.recommendations;
+              if (recommendations.isEmpty) {
+                return const Center(
+                  child: Text(
+                    "No Recommendations yet!",
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  ),
+                );
+              }
+              return ListView.builder(
+                itemCount: recommendations.length,
                 itemBuilder: (context, index) {
-                  final notification = _notifications[index];
+                  final recommendation = recommendations[index];
+                  // Convert Recommendation to NotificationModel for NotificationCard
+                  final notification = NotificationModel(
+                    title: recommendation.title,
+                    description: recommendation.description,
+                    timestamp: recommendation.timestamp,
+                    icon: _getIconForRecommendation(recommendation),
+                  );
                   return FadeTransition(
                     opacity: _fadeAnimation,
                     child: SlideTransition(
                       position: _slideAnimation,
-                      child: NotificationCard(notification: notification,),
+                      child: NotificationCard(notification: notification),
                     ),
                   );
                 },
+              );
+            } else if (state is HomeError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      state.errorMessage,
+                      style: const TextStyle(fontSize: 18, color: Colors.red),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<HomeCubit>().fetchRecommendations();
+                      },
+                      child: const Text("Retry"),
+                    ),
+                  ],
+                ),
+              );
+            }
+            return const Center(
+              child: Text(
+                "No Recommendations yet!",
+                style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
+            );
+          },
+        ),
       ),
     );
   }
 
-  
+  // Helper method to map recommendation categories to icons
+  IconData _getIconForRecommendation(Recommendation recommendation) {
+    switch (recommendation.category.toLowerCase()) {
+      case 'food':
+        return Icons.restaurant_menu;
+      case 'clothing':
+        return Icons.checkroom;
+      case 'general':
+        return Icons.info;
+      default:
+        return Icons.info;
+    }
+  }
+
   String _formatTimestamp(DateTime timestamp) {
     final now = DateTime.now();
     final difference = now.difference(timestamp);

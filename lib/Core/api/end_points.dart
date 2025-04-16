@@ -16,8 +16,8 @@ static const String _baseUrl = "https://gfoot.runasp.net/api/";
   static String refreshToken = "${_baseUrl}Authentication/Refresh-Token";
   static String resendOtp = "${_baseUrl}Authentication/Resend-PasswordReset-Otp";
   static String period = "${_baseUrl}Individual/period";
-  static String activityStatistics = "${_baseUrl}Individual/statistics";
-  
+  static String activityStatistics = "${_baseUrl}Individual/visualization";
+  static String getRecommendations = "${_baseUrl}Individual/recommendations";
 
 }
 

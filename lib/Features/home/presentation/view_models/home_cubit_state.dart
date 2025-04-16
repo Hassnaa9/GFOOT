@@ -1,4 +1,7 @@
 
+import 'package:graduation_project/Core/models/recommendations_model.dart';
+import 'package:graduation_project/Core/models/statistics_model.dart';
+
 abstract class HomeState {}
 
 class HomeInitial extends HomeState {}
@@ -17,12 +20,18 @@ class HomeError extends HomeState {
   HomeError(String string, {required this.errorMessage});
 }
 class HomeStatisticsLoaded extends HomeState {
-  final Map<String, dynamic> statistics;
+  final List<EmissionEntry> statistics;
 
   HomeStatisticsLoaded({required this.statistics});
 }
 class HomeStatisticsError extends HomeState {
   final String message;
 
-  HomeStatisticsError({required this.message});
+  HomeStatisticsError(String string, {required this.message});
+  
+}
+class HomeRecommendationsLoaded extends HomeState {
+  final List<Recommendation> recommendations;
+
+  HomeRecommendationsLoaded({required this.recommendations});
 }
