@@ -187,13 +187,13 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
                 alignment: Alignment.center,
                 children: [
                   CircleAvatar(
-                    radius: 50,
+                    radius: 70,
                     backgroundColor: Colors.grey,
                     backgroundImage: _profileImage != null
                         ? FileImage(_profileImage!)
                         : null,
                     child: _profileImage == null
-                        ? const Icon(Icons.person, size: 50, color: Colors.white)
+                        ? const Icon(Icons.person, size: 70, color: Colors.white)
                         : null,
                   ),
                   Positioned(

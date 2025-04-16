@@ -16,8 +16,8 @@ class RankViewBody extends StatelessWidget {
             children: [
               const SizedBox(height: 16),
               const CircleAvatar(
-                radius: 40,
-                backgroundImage: AssetImage(AssetsData.profile),
+                radius: 70,
+                backgroundImage: AssetImage(AssetsData.otpImg),
               ),
               const SizedBox(height: 8),
               Container(

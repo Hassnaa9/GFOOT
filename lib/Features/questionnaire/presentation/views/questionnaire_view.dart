@@ -22,105 +22,104 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
   late AnimationController _buttonAnimationController;
   late Animation<double> _buttonScaleAnimation;
 
-  final List<Map<String, dynamic>> questions = [
-    {
-      'text': 'What is your body type?',
-      'type': 'multiple_choice',
-      'options': ['overweight', 'obese', 'underweight', 'normal'],
-      'key': 'body_type'
-    },
-    {
-      'text': 'What is your gender?',
-      'type': 'multiple_choice',
-      'options': ['male', 'female'],
-      'key': 'sex'
-    },
-    {
-      'text': 'What is your diet type?',
-      'type': 'multiple_choice',
-      'options': ['pescatarian', 'vegetarian', 'omnivore', 'vegan'],
-      'key': 'diet'
-    },
-    {
-      'text': 'How frequently do you shower?',
-      'type': 'multiple_choice',
-      'options': ['daily', 'less frequently', 'more frequently', 'twice a day'],
-      'key': 'how_often_shower'
-    },
-    {
-      'text': 'What is your home’s primary heating energy source?',
-      'type': 'multiple_choice',
-      'options': ['coal', 'natural gas', 'wood', 'electricity'],
-      'key': 'heating_energy_source'
-    },
-    {
-      'text': 'What is your primary mode of transportation?',
-      'type': 'multiple_choice',
-      'options': ['public', 'walk/bicycle', 'private'],
-      'key': 'transport'
-    },
-    {
-      'text': 'What type of vehicle you use?',
-      'type': 'multiple_choice',
-      'options': ['NaN', 'petrol', 'diesel', 'hybrid', 'lpg', 'electric'],
-      'key': 'vehicle_type_detailed'
-    },
-    {
-      'text': 'How often do you participate in social activities?',
-      'type': 'multiple_choice',
-      'options': ['often', 'never', 'sometimes'],
-      'key': 'social_activity'
-    },
-    {
-      'text': 'What is your average monthly grocery bill (in your local currency)?',
-      'type': 'numeric',
-      'key': 'monthly_grocery_bill'
-    },
-    {
-      'text': 'How often did you travel by air?',
-      'type': 'multiple_choice',
-      'options': ['never', 'rarely', 'frequently', 'very frequently'],
-      'key': 'frequency_of_traveling_by_air'
-    },
-    {
-      'text': 'How many kilometers do you drive per month?',
-      'type': 'numeric',
-      'key': 'vehicle_monthly_distance_km'
-    },
-    {
-      'text': 'What is the size of your garbage bag?',
-      'type': 'multiple_choice',
-      'options': ['small', 'medium', 'large'],
-      'key': 'waste_bag_size'
-    },
-    {
-      'text': 'On average, how many garbage bags did your household use weekly?',
-      'type': 'numeric',
-      'key': 'waste_bag_weekly_count'
-    },
-    {
-      'text': 'On average, how many hours do you spend daily watching TV or using a PC?',
-      'type': 'numeric',
-      'key': 'how_long_tv_pc_daily_hour'
-    },
-    {
-      'text': 'On average, how many hours do you spend online daily?',
-      'type': 'numeric',
-      'key': 'how_long_internet_daily_hour'
-    },
-    {
-      'text': 'On average, how many new clothes do you buy per month?',
-      'type': 'numeric',
-      'key': 'how_many_new_clothes_monthly'
-    },
-    {
-      'text': 'Do you actively seek out energy-efficient appliances?',
-      'type': 'multiple_choice',
-      'options': ['Yes', 'Sometimes', 'No'],
-      'key': 'energy_efficiency'
-    },
-  ];
-
+ final List<Map<String, dynamic>> questions = [
+  {
+    'text': '🏋️‍♀️ What is your body type?',
+    'type': 'multiple_choice',
+    'options': ['⚖️ overweight', '⚖️ obese', '⚖️ underweight', '⚖️ normal'],
+    'key': 'body_type'
+  },
+  {
+    'text': '👤 What is your gender?',
+    'type': 'multiple_choice',
+    'options': ['♂️ male', '♀️ female'],
+    'key': 'sex'
+  },
+  {
+    'text': '🍽️ What is your diet type?',
+    'type': 'multiple_choice',
+    'options': ['🐟 pescatarian', '🥗 vegetarian', '🍖 omnivore', '🌱 vegan'],
+    'key': 'diet'
+  },
+  {
+    'text': '🚿 How frequently do you shower?',
+    'type': 'multiple_choice',
+    'options': ['📅 daily', '⏳ less frequently', '⏰ more frequently', '🕒 twice a day'],
+    'key': 'how_often_shower'
+  },
+  {
+    'text': '🔥 What is your home’s primary heating energy source?',
+    'type': 'multiple_choice',
+    'options': ['🪨 coal', '💨 natural gas', '🪵 wood', '⚡ electricity'],
+    'key': 'heating_energy_source'
+  },
+  {
+    'text': '🚗 What is your primary mode of transportation?',
+    'type': 'multiple_choice',
+    'options': ['🚌 public', '🚶‍♂️ walk/bicycle', '🚘 private'],
+    'key': 'transport'
+  },
+  {
+    'text': '🚙 What type of vehicle you use?',
+    'type': 'multiple_choice',
+    'options': ['❓ NaN', '⛽ petrol', '🛢️ diesel', '🔋 hybrid', '💧 lpg', '⚡ electric'],
+    'key': 'vehicle_type_detailed'
+  },
+  {
+    'text': '🎉 How often do you participate in social activities?',
+    'type': 'multiple_choice',
+    'options': ['🥳 often', '🚫 never', '🤷‍♂️ sometimes'],
+    'key': 'social_activity'
+  },
+  {
+    'text': '🛒 What is your average monthly grocery bill (in your local currency)?',
+    'type': 'numeric',
+    'key': 'monthly_grocery_bill'
+  },
+  {
+    'text': '✈️ How often did you travel by air?',
+    'type': 'multiple_choice',
+    'options': ['🚫 never', '🌟 rarely', '🛫 frequently', '✈️ very frequently'],
+    'key': 'frequency_of_traveling_by_air'
+  },
+  {
+    'text': '🛣️ How many kilometers do you drive per month?',
+    'type': 'numeric',
+    'key': 'vehicle_monthly_distance_km'
+  },
+  {
+    'text': '🗑️ What is the size of your garbage bag?',
+    'type': 'multiple_choice',
+    'options': ['📏 small', '📏 medium', '📏 large'],
+    'key': 'waste_bag_size'
+  },
+  {
+    'text': '♻️ On average, how many garbage bags did your household use weekly?',
+    'type': 'numeric',
+    'key': 'waste_bag_weekly_count'
+  },
+  {
+    'text': '📺 On average, how many hours do you spend daily watching TV or using a PC?',
+    'type': 'numeric',
+    'key': 'how_long_tv_pc_daily_hour'
+  },
+  {
+    'text': '🌐 On average, how many hours do you spend online daily?',
+    'type': 'numeric',
+    'key': 'how_long_internet_daily_hour'
+  },
+  {
+    'text': '👕 On average, how many new clothes do you buy per month?',
+    'type': 'numeric',
+    'key': 'how_many_new_clothes_monthly'
+  },
+  {
+    'text': '💡 Do you actively seek out energy-efficient appliances?',
+    'type': 'multiple_choice',
+    'options': ['✅ Yes', '🤔 Sometimes', '❌ No'],
+    'key': 'energy_efficiency'
+  },
+];
   @override
   void initState() {
     super.initState();
@@ -306,14 +305,15 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (_currentPage > 0)
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                       if (_currentPage > 0)
                       ScaleTransition(
                         scale: _buttonScaleAnimation,
                         child: ElevatedButton(
-                          onPressed: () {
+                           onPressed: () {
                             _buttonAnimationController.forward().then((_) => _buttonAnimationController.reverse());
                             _pageController.previousPage(
                               duration: const Duration(milliseconds: 500),
@@ -322,36 +322,41 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0x44FBFBF7),
+                            minimumSize: Size(screenWidth * 0.28, 41),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(26),
                             ),
                           ),
-                          child: const Icon(Icons.arrow_back, color: Colors.black),
+                          child:  Image.asset(
+                                  AssetsData.left_arrow,
+                                  height: 20,
+                                ),
                         ),
                       ),
-                    ScaleTransition(
-                      scale: _buttonScaleAnimation,
-                      child: ElevatedButton(
-                        onPressed: _nextPage,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0x44FBFBF7),
-                          minimumSize: Size(screenWidth * 0.28, 41),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(26),
+                      ScaleTransition(
+                        scale: _buttonScaleAnimation,
+                        child: ElevatedButton(
+                          onPressed: _nextPage,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0x44FBFBF7),
+                            minimumSize: Size(screenWidth * 0.28, 41),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(26),
+                            ),
                           ),
+                          child: _currentPage == questions.length - 1
+                              ? const Text(
+                                  'Submit',
+                                  style: TextStyle(color: MyColors.questions, fontSize: 20),
+                                )
+                              : Image.asset(
+                                  AssetsData.arrow,
+                                  height: 20,
+                                ),
                         ),
-                        child: _currentPage == questions.length - 1
-                            ? const Text(
-                                'Submit',
-                                style: TextStyle(color: MyColors.questions, fontSize: 20),
-                              )
-                            : Image.asset(
-                                AssetsData.arrow,
-                                height: 20,
-                              ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

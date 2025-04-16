@@ -41,7 +41,9 @@ class ProfileViewBody extends StatelessWidget {
             ProfileMenu(
               text: "Settings",
               icon: AssetsData.settings,
-              press: () {},
+              press: () {
+                Navigator.pushNamed(context, "/Settings");
+              },
             ),
             ProfileMenu(
               text: "Help Center",
@@ -51,7 +53,13 @@ class ProfileViewBody extends StatelessWidget {
             ProfileMenu(
               text: "Log Out",
               icon: AssetsData.logout,
-              press: () {},
+              press: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/SignIn',
+                  (route) => false,
+                );
+              },
             ),
           ],
         ),

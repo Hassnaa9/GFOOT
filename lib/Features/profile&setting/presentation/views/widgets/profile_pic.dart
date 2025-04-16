@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:graduation_project/Core/utils/assets.dart';
-import 'package:graduation_project/Features/profile&setting/presentation/views/profile_view_body.dart';
 
 class ProfilePic extends StatelessWidget {
   const ProfilePic({
@@ -11,15 +9,15 @@ class ProfilePic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 115,
-      width: 115,
+      height: 160,
+      width: 160,
       child: Stack(
         fit: StackFit.expand,
         clipBehavior: Clip.none,
         children: [
           const CircleAvatar(
             backgroundImage:
-                AssetImage(AssetsData.user),
+                AssetImage(AssetsData.otpImg),
           ),
           Positioned(
             right: -16,
