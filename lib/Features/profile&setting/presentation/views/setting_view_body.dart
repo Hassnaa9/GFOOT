@@ -227,7 +227,7 @@ class _SettingsScreenState extends State<SettingViewBody>
                   title: "Edit Profile",
                   icon: Icons.person,
                   onTap: () {
-                    Navigator.pushNamed(context, '/edit_profile');
+                    Navigator.pushNamed(context, '/Profile');
                   },
                 ),
               ),

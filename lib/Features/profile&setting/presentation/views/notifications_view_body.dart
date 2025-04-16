@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/Features/profile/presentation/views/widgets/notification_card.dart';
+import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/notification_card.dart';
 
 
 class NotificationsViewBody extends StatefulWidget {

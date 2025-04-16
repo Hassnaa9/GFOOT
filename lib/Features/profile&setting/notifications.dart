@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/Features/profile/presentation/views/notifications_view_body.dart';
+import 'package:graduation_project/Features/profile&setting/presentation/views/notifications_view_body.dart';
 
 class Notifications extends StatelessWidget {
   const Notifications({super.key});

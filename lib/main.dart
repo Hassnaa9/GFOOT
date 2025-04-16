@@ -11,14 +11,17 @@ import 'package:graduation_project/Features/forget_password/forget_password.dart
 import 'package:graduation_project/Features/forget_password/OTP_verification.dart';
 import 'package:graduation_project/Features/forget_password/password_changed.dart';
 import 'package:graduation_project/Features/home/home.dart';
+import 'package:graduation_project/Features/home/learn.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
 import 'package:graduation_project/Features/home/presentation/views/statistics_view_body.dart';
+import 'package:graduation_project/Features/home/rank.dart';
+import 'package:graduation_project/Features/home/recommendations.dart';
 import 'package:graduation_project/Features/login&registration/login.dart';
 import 'package:graduation_project/Features/login&registration/login_or_reg.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit.dart';
 import 'package:graduation_project/Features/login&registration/register.dart';
-import 'package:graduation_project/Features/profile/account.dart';
-import 'package:graduation_project/Features/profile/profile.dart';
+import 'package:graduation_project/Features/profile&setting/account.dart';
+import 'package:graduation_project/Features/profile&setting/profile.dart';
 import 'package:graduation_project/Features/questionnaire/questionnaire.dart';
 import 'package:graduation_project/Features/splash_screen/splash_screen.dart';
 
@@ -84,6 +87,9 @@ class MyApp extends StatelessWidget {
             '/Statistics': (context) => const StatisticsViewBody(),
             '/Profile': (context) => const Profile(),
             '/Account': (context) => const Account(),
+            '/Rank': (context) => const Rank(),
+            '/Learn': (context) => const Learn(),
+            '/Recommendations': (context) => const Recommendations(),
           },
         ),
       ),

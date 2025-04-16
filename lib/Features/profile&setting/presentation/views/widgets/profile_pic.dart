@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:graduation_project/Core/utils/assets.dart';
-import 'package:graduation_project/Features/profile/presentation/views/profile_view_body.dart';
+import 'package:graduation_project/Features/profile&setting/presentation/views/profile_view_body.dart';
 
 class ProfilePic extends StatelessWidget {
   const ProfilePic({

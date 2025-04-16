@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/Features/profile/presentation/views/widgets/gender_field.dart';
-import 'package:graduation_project/Features/profile/presentation/views/widgets/phone_field.dart';
-import 'package:graduation_project/Features/profile/presentation/views/widgets/custom_text_field.dart';
+import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/gender_field.dart';
+import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/phone_field.dart';
+import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/custom_text_field.dart';
 import 'package:graduation_project/constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';

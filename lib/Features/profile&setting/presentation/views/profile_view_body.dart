@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Core/utils/assets.dart';
-import 'package:graduation_project/Features/profile/presentation/views/widgets/profile_menu.dart';
-import 'package:graduation_project/Features/profile/presentation/views/widgets/profile_pic.dart';
+import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/profile_menu.dart';
+import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/profile_pic.dart';
 
 class ProfileViewBody extends StatelessWidget {
   const ProfileViewBody({super.key});

@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_project/Core/utils/assets.dart';
+import 'package:graduation_project/Features/home/learn.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit_state.dart';
+import 'package:graduation_project/Features/home/presentation/views/learn_view_body.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/custom_carbon_result.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/custom_services.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/gradient_indicator.dart';
+import 'package:graduation_project/Features/home/recommendations.dart';
 import 'package:graduation_project/Features/login&registration/login.dart';
-import 'package:graduation_project/Features/profile/notifications.dart';
-import 'package:graduation_project/Features/profile/profile.dart';
-import 'package:graduation_project/Features/profile/setting.dart';
+import 'package:graduation_project/Features/profile&setting/notifications.dart';
+import 'package:graduation_project/Features/profile&setting/profile.dart';
+import 'package:graduation_project/Features/profile&setting/setting.dart';
 import 'package:graduation_project/constants.dart';
 
 class HomeViewBody extends StatefulWidget {
@@ -42,7 +45,8 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       case 0:
         break;
       case 1:
-        // TODO: Navigate to learn page
+         Navigator.push(context, 
+         MaterialPageRoute(builder: (context)=>const Learn()));
         break;
       case 2:
         Navigator.push(
@@ -150,7 +154,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   }
                   return const Text(
                     'Please complete the questionnaire to see your carbon footprint.',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
                   );
                 },
               ),

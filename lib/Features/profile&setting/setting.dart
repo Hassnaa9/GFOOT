@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/Features/profile/presentation/views/setting_view_body.dart';
+import 'package:graduation_project/Features/profile&setting/presentation/views/setting_view_body.dart';
 
 class Setting extends StatelessWidget {
   const Setting({super.key});

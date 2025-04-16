@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Core/utils/assets.dart';
 import 'package:graduation_project/Features/home/statistics.dart';
-import 'package:graduation_project/Features/profile/setting.dart';
 
 class CustomServices extends StatelessWidget {
   final double screenWidth;
@@ -22,7 +21,7 @@ class CustomServices extends StatelessWidget {
         _buildServiceRow(
           items: [
             _ServiceItem(
-              color: const Color.fromARGB(255, 4, 42, 78),
+              color: const Color(0xffD4E0EB),
               asset: AssetsData.calcs,
               label: "Calculations",
               onPressed: () {
@@ -47,19 +46,20 @@ class CustomServices extends StatelessWidget {
         _buildServiceRow(
           items: [
             _ServiceItem(
-              color: const Color(0xFFD4E0EB), // Updated Color
+              color: const Color(0xFFD4E0EB), 
               asset: AssetsData.learn,
-              label: "Learn",
+              label: "Recommendation",
               onPressed: () {
-                print("Learn pressed");
+                Navigator.pushNamed(context, '/Recommendations');
               },
+              
             ),
             _ServiceItem(
-              color: const Color(0xFFD4E0EB), // Updated Color
+              color: const Color(0xFFD4E0EB), 
               asset: AssetsData.rank,
               label: "Rank",
               onPressed: () {
-                print("Rank pressed");
+                Navigator.pushNamed(context, '/Rank');
               },
             ),
           ],
@@ -98,7 +98,7 @@ class CustomServices extends StatelessWidget {
             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
             child: Container(
               width: double.infinity,
-              height: screenHeight * 0.18, // Adaptive size
+              height: screenHeight * 0.2, // Adaptive size
               decoration: const BoxDecoration(
                 color: Color(0xffD4E0EB),
                 borderRadius: BorderRadius.vertical(top: Radius.circular(12)),

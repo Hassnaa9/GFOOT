@@ -27,5 +27,11 @@ class AssetsData {
   static const user ='assets/icons/user.png';
   static const settings ='assets/icons/settings.png';
   static const egyptFlag ='assets/icons/flag.png';
+  static const cityRank ='assets/icons/city_rank.png';
+  static const countryRank ='assets/icons/country_rank.png';
+  static const globalRank ='assets/icons/global_rank.png';
+  static const what_its_this ='assets/icons/what_is_this.png';
+  static const benifits ='assets/icons/benifits.png';
+  static const co2 ='assets/icons/co2.png';
 
 }
