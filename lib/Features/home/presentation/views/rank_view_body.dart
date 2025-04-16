@@ -74,13 +74,13 @@ class _RankViewBodyState extends State<RankViewBody> with SingleTickerProviderSt
                         ),
                         const SizedBox(height: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           decoration: BoxDecoration(
                             color: MyColors.kPrimaryColor,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Text(
-                            '1', 
+                          child: Text(
+                            '${rank.cityRank}', 
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
