@@ -90,7 +90,7 @@ class _RankViewBodyState extends State<RankViewBody> with SingleTickerProviderSt
                         ),
                         const SizedBox(height: 4),
                         const Text(
-                          'Hassnaa Mohamed', // Replace with dynamic user name if available
+                          'Hassnaa Mohamed', 
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                         const SizedBox(height: 32),
