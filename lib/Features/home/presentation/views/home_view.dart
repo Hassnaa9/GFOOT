@@ -4,11 +4,9 @@ import 'package:graduation_project/Core/utils/assets.dart';
 import 'package:graduation_project/Features/home/learn.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit_state.dart';
-import 'package:graduation_project/Features/home/presentation/views/learn_view_body.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/custom_carbon_result.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/custom_services.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/gradient_indicator.dart';
-import 'package:graduation_project/Features/home/recommendations.dart';
 import 'package:graduation_project/Features/login&registration/login.dart';
 import 'package:graduation_project/Features/profile&setting/notifications.dart';
 import 'package:graduation_project/Features/profile&setting/profile.dart';
@@ -30,7 +28,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   @override
   void initState() {
     super.initState();
-    // Only call logActivity if userAnswers is not empty
+    // Check for existing footprint
+    context.read<HomeCubit>().getCarbonFootprint();
+    // Log new activity only if userAnswers is not empty
     if (widget.userAnswers.isNotEmpty) {
       context.read<HomeCubit>().logActivity(queryParameters: widget.userAnswers);
     }
@@ -45,20 +45,13 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       case 0:
         break;
       case 1:
-         Navigator.push(context, 
-         MaterialPageRoute(builder: (context)=>const Learn()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Learn()));
         break;
       case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Setting()),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Setting()));
         break;
       case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Profile()),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile()));
         break;
     }
   }
@@ -109,7 +102,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               BlocBuilder<HomeCubit, HomeState>(
                 builder: (context, state) {
                   if (state is HomeLoading) {
-                    return const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor,));
+                    return const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor));
                   } else if (state is HomeLoaded) {
                     final normalizedValue = (state.carbonValue / 5000).clamp(0.0, 1.0);
                     return Stack(
@@ -127,6 +120,28 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         CustomCarbonResult(carbonFootprint: state.carbonValue),
                       ],
                     );
+                  } else if (state is HomeNoData) {
+                    return Column(
+                      children: [
+                        const Text(
+                          'Please complete the questionnaire to see your carbon footprint.',
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/Questionnaire'); // Replace with your questionnaire route
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: MyColors.kPrimaryColor,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          ),
+                          child: const Text('Take Questionnaire'),
+                        ),
+                      ],
+                    );
                   } else if (state is HomeError) {
                     print('HomeViewBody: Error state - ${state.errorMessage}');
                     if (state.errorMessage.contains('Please log in to continue')) {
@@ -140,12 +155,10 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                     }
                     return Column(
                       children: [
-                        Text('Error! ${state.errorMessage}'),
+                        Text('Error: ${state.errorMessage}'),
                         ElevatedButton(
                           onPressed: () {
-                            if (widget.userAnswers.isNotEmpty) {
-                              context.read<HomeCubit>().logActivity(queryParameters: widget.userAnswers);
-                            }
+                            context.read<HomeCubit>().getCarbonFootprint();
                           },
                           child: const Text('Retry'),
                         ),
@@ -161,7 +174,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               SizedBox(height: screenHeight * .02),
               const Text(
                 "Good job!",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600,color: MyColors.kPrimaryColor),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: MyColors.kPrimaryColor),
               ),
               SizedBox(height: screenHeight * .01),
               const Align(

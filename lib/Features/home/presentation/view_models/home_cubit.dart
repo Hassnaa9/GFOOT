@@ -30,6 +30,16 @@ class HomeCubit extends Cubit<HomeState> {
       emit(HomeError(e.toString(), errorMessage: 'An error occurred while logging activity'));
     }
   }
+  Future<void> getCarbonFootprint() async {
+    emit(HomeLoading());
+
+    try {
+      final carbonValue = await activityRepository.getFootprint();
+      emit(HomeLoaded(carbonValue: carbonValue));
+    } catch (e) {
+      emit(HomeError(e.toString(), errorMessage: 'Failed to fetch carbon footprint'));
+    }
+  }
  Future<void> fetchStatistics(String type) async {
     emit(HomeLoading());
 

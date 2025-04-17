@@ -12,7 +12,7 @@ class HomeLoading extends HomeState {}
 class HomeLoaded extends HomeState {
   final double carbonValue;
 
-  HomeLoaded( {required this.carbonValue});
+  HomeLoaded(  {required this.carbonValue});
 }
 
 class HomeError extends HomeState {
@@ -39,4 +39,8 @@ class HomeRecommendationsLoaded extends HomeState {
 class HomeRanksLoaded extends HomeState {
   final RankModel rank;
   HomeRanksLoaded({required this.rank});
+}
+class HomeNoData extends HomeState {
+  final String message;
+  HomeNoData({this.message = 'No carbon footprint data available'});
 }
