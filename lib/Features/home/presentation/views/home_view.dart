@@ -103,25 +103,25 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               const SizedBox(height: 6),
               const Text(
                 "See your carbon footprint today!",
-                style: TextStyle(fontSize: 18, color: Colors.grey),
+                style: TextStyle(fontSize: 18, color: MyColors.kPrimaryColor),
               ),
               SizedBox(height: screenHeight * .02),
               BlocBuilder<HomeCubit, HomeState>(
                 builder: (context, state) {
                   if (state is HomeLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor,));
                   } else if (state is HomeLoaded) {
                     final normalizedValue = (state.carbonValue / 5000).clamp(0.0, 1.0);
                     return Stack(
                       alignment: Alignment.center,
                       children: [
                         SizedBox(
-                          width: screenWidth * .25,
-                          height: screenWidth * .25,
+                          width: screenWidth * .30,
+                          height: screenWidth * .30,
                           child: GradientCircularProgressIndicator(
                             value: normalizedValue,
-                            size: screenWidth * .7,
-                            strokeWidth: 10.0,
+                            size: screenWidth * .6,
+                            strokeWidth: 13.0,
                           ),
                         ),
                         CustomCarbonResult(carbonFootprint: state.carbonValue),
@@ -161,7 +161,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               SizedBox(height: screenHeight * .02),
               const Text(
                 "Good job!",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600,color: MyColors.kPrimaryColor),
               ),
               SizedBox(height: screenHeight * .01),
               const Align(
@@ -171,7 +171,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: MyColors.black,
+                    color: MyColors.kPrimaryColor,
                   ),
                 ),
               ),

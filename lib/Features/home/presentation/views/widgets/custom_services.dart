@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:graduation_project/Core/utils/assets.dart';
 import 'package:graduation_project/Features/home/statistics.dart';
+import 'package:graduation_project/constants.dart';
 
 class CustomServices extends StatelessWidget {
   final double screenWidth;
@@ -14,57 +16,67 @@ class CustomServices extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // First Row of Services
-        _buildServiceRow(
-          items: [
-            _ServiceItem(
-              color: const Color(0xffD4E0EB),
-              asset: AssetsData.calcs,
-              label: "Calculations",
-              onPressed: () {
-                Navigator.pushNamed(context, '/Calculations');
-              },
+    return AnimationLimiter(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: AnimationConfiguration.toStaggeredList(
+          duration: const Duration(milliseconds: 600),
+          childAnimationBuilder: (widget) => SlideAnimation(
+            verticalOffset: 50.0,
+            child: FadeInAnimation(
+              child: widget,
             ),
-            _ServiceItem(
-              color: const Color(0xFFD4E0EB), // Updated Color
-              asset: AssetsData.statistics,
-              label: "Statistics",
-              onPressed: () {
-                 Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Statistics()),
-        );
-              },
+          ),
+          children: [
+            // First Row of Services
+            _buildServiceRow(
+              items: [
+                _ServiceItem(
+                  color: MyColors.serviceCard,
+                  asset: AssetsData.calcs,
+                  label: "Calculations",
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/Calculations');
+                  },
+                ),
+                _ServiceItem(
+                  color: MyColors.kPrimaryColor,
+                  asset: AssetsData.statistics,
+                  label: "Statistics",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Statistics()),
+                    );
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            // Second Row of Services
+            _buildServiceRow(
+              items: [
+                _ServiceItem(
+                  color: MyColors.serviceCard,
+                  asset: AssetsData.learn,
+                  label: "Recommendation",
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/Recommendations');
+                  },
+                ),
+                _ServiceItem(
+                  color: MyColors.kPrimaryColor,
+                  asset: AssetsData.rank,
+                  label: "Rank",
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/Rank');
+                  },
+                ),
+              ],
             ),
           ],
         ),
-        const SizedBox(height: 20),
-        // Second Row of Services
-        _buildServiceRow(
-          items: [
-            _ServiceItem(
-              color: const Color(0xFFD4E0EB), 
-              asset: AssetsData.learn,
-              label: "Recommendation",
-              onPressed: () {
-                Navigator.pushNamed(context, '/Recommendations');
-              },
-              
-            ),
-            _ServiceItem(
-              color: const Color(0xFFD4E0EB), 
-              asset: AssetsData.rank,
-              label: "Rank",
-              onPressed: () {
-                Navigator.pushNamed(context, '/Rank');
-              },
-            ),
-          ],
-        ),
-      ],
+      ),
     );
   }
 
@@ -72,65 +84,108 @@ class CustomServices extends StatelessWidget {
   Widget _buildServiceRow({required List<_ServiceItem> items}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: items.map((item) {
-        return SizedBox(
-          width: screenWidth * 0.3, // Ensures equal card sizes
-          child: _buildServiceCard(item),
+      children: items.asMap().entries.map((entry) {
+        final index = entry.key;
+        final item = entry.value;
+        return AnimationConfiguration.staggeredList(
+          position: index,
+          duration: const Duration(milliseconds: 600),
+          child: SlideAnimation(
+            verticalOffset: 50.0,
+            child: FadeInAnimation(
+              child: SizedBox(
+                width: screenWidth * 0.3, // Ensures equal card sizes
+                child: _AnimatedServiceCard(item: item, screenHeight: screenHeight),
+              ),
+            ),
+          ),
         );
       }).toList(),
     );
   }
+}
 
-  // Builds an individual service card
-  Widget _buildServiceCard(_ServiceItem item) {
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      color: item.color, // Updated Background Color
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // White container for the icon wrapped with InkWell for click functionality
-          InkWell(
-            onTap: item.onPressed, // Handle the tap event
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Container(
-              width: double.infinity,
-              height: screenHeight * 0.2, // Adaptive size
-              decoration: const BoxDecoration(
-                color: Color(0xffD4E0EB),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-              ),
-              child: Center(
-                child: Image.asset(
-                  item.asset,
-                  fit: BoxFit.contain,
-                  height: screenHeight * 0.08, // Icon size
+// Animated service card with tap and hover effects
+class _AnimatedServiceCard extends StatefulWidget {
+  final _ServiceItem item;
+  final double screenHeight;
+
+  const _AnimatedServiceCard({
+    required this.item,
+    required this.screenHeight,
+  });
+
+  @override
+  _AnimatedServiceCardState createState() => _AnimatedServiceCardState();
+}
+
+class _AnimatedServiceCardState extends State<_AnimatedServiceCard> {
+  bool _isTapped = false;
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _isTapped = true),
+        onTapUp: (_) {
+          setState(() => _isTapped = false);
+          widget.item.onPressed();
+        },
+        onTapCancel: () => setState(() => _isTapped = false),
+        child: AnimatedScale(
+          scale: _isTapped ? 0.95 : _isHovered ? 1.05 : 1.0,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          child: Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            color: widget.item.color,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Icon container
+                Container(
+                  width: double.infinity,
+                  height: widget.screenHeight * 0.16,
+                  decoration: const BoxDecoration(
+                    color: MyColors.serviceCard,
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      widget.item.asset,
+                      fit: BoxFit.contain,
+                      height: widget.screenHeight * 0.08,
+                    ),
+                  ),
                 ),
-              ),
+                // Text container
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
+                  ),
+                  child: Text(
+                    widget.item.label,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: MyColors.serviceCard,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          // Text below the container
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: const BoxDecoration(
-              color: Colors.white, // Background color for the text
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
-            ),
-            child: Text(
-              item.label,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.black, // Text color
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

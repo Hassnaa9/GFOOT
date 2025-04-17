@@ -6,4 +6,5 @@ class MyColors{
   static const white = Color(0xffFFFFFF);
   static const black = Color(0xff1E232C);
   static const questions = Color(0xff394E69);
+  static const serviceCard = Color(0xff8FBC8B);
 }

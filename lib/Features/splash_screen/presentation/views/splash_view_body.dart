@@ -59,13 +59,7 @@ class _SplashViewBodyState extends State<SplashViewBody>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    void navigateToLoginOrReg() {
-      Navigator.pushReplacementNamed(context, '/SigninOrSignup');
-    }
-
-    return GestureDetector(
-      onTap: navigateToLoginOrReg,
-      child: Stack(
+    return Stack(
         fit: StackFit.expand,
         children: [
           // Background Image
@@ -105,7 +99,6 @@ class _SplashViewBodyState extends State<SplashViewBody>
             ),
           ),
         ],
-      ),
-    );
+      );
   }
 }

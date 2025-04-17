@@ -33,9 +33,9 @@ class CustomCarbonResult extends StatelessWidget {
         Text(
           "Today",
           style: TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w400,
-              color: Color(0xff153f33)),
+              color: Colors.grey[600]),
         ),
       ],
     );
