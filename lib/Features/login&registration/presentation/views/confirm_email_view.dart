@@ -8,14 +8,14 @@ import 'package:graduation_project/Features/login&registration/presentation/view
 import 'package:graduation_project/Core/utils/assets.dart';
 import 'package:graduation_project/constants.dart';
 
-class VerificationScreen extends StatefulWidget {
-  const VerificationScreen({super.key});
+class ConfirmEmailViewBody extends StatefulWidget {
+  const ConfirmEmailViewBody({super.key});
 
   @override
-  State<VerificationScreen> createState() => _VerificationScreenState();
+  State<ConfirmEmailViewBody> createState() => _ConfirmEmailViewBodyState();
 }
 
-class _VerificationScreenState extends State<VerificationScreen> {
+class _ConfirmEmailViewBodyState extends State<ConfirmEmailViewBody> {
   int _resendCooldown = 0;
   Timer? _timer;
 
@@ -58,9 +58,16 @@ class _VerificationScreenState extends State<VerificationScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.errMessage)),
             );
-          } else if (state is OtpStored) {
-            print('OtpStored state received, navigating to /ChangePassword'); // Debug print
-            Navigator.pushNamed(context, '/ChangePass', arguments: email);
+          } else if (state is OtpVerificationSuccess) {
+            print('OTP verification successful, navigating to /SignIn'); // Debug print
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Email verified successfully!')),
+            );
+            Navigator.pushReplacementNamed(context, '/SignIn');
+          } else if (state is OtpVerificationFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.errMessage)),
+            );
           } else if (state is ForgotPasswordSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('OTP resent successfully')),
@@ -76,9 +83,14 @@ class _VerificationScreenState extends State<VerificationScreen> {
               SizedBox(height: MediaQuery.of(context).size.height * 0.04),
               OtpForm(
                 onOtpSubmitted: (otp) {
-                  print('OTP Submitted: $otp'); // Debug print
-                  context.read<AuthCubit>().storeOtp(otp); // Store OTP and trigger navigation
-                },
+  if (otp.length == 6 && RegExp(r'^\d{6}$').hasMatch(otp)) {
+    context.read<AuthCubit>().verifyConfirmEmailOtp(email, otp);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please enter a valid 6-digit OTP')),
+    );
+  }
+},
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
               Row(
@@ -93,7 +105,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         ? null
                         : () {
                             print('Resending OTP for email: $email'); // Debug print
-                            context.read<AuthCubit>().resendResetPasswordOtp(email, context);
+                            context.read<AuthCubit>().resendResetConfirmEmailOtp(email, context);
                             _startResendTimer();
                           },
                     child: Text(

@@ -16,6 +16,7 @@ import 'package:graduation_project/Features/home/presentation/view_models/home_c
 import 'package:graduation_project/Features/home/presentation/views/statistics_view_body.dart';
 import 'package:graduation_project/Features/home/rank.dart';
 import 'package:graduation_project/Features/home/recommendations.dart';
+import 'package:graduation_project/Features/login&registration/confirm_email.dart';
 import 'package:graduation_project/Features/login&registration/login.dart';
 import 'package:graduation_project/Features/login&registration/login_or_reg.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit.dart';
@@ -94,6 +95,7 @@ class MyApp extends StatelessWidget {
             '/Settings': (context) => const Setting(),
             '/Notifications': (context) => const Notifications(),
             '/Recommendations': (context) => const Recommendations(),
+            '/ConfirmEmail': (context) => const ConfirmEmail(),
           },
         ),
       ),

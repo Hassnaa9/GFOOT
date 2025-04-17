@@ -28,16 +28,15 @@ class SignInFailure extends UserState {
 class SignUpLoading extends UserState {}
 
 class SignUpSuccess extends UserState {
-  final String message;
+  final String? message;
 
   SignUpSuccess({required this.message});
-
   @override
   List<Object?> get props => [message];
 }
 
 class SignUpFailure extends UserState {
-  final String errMessage;
+  final String? errMessage;
 
   SignUpFailure({required this.errMessage});
 
@@ -55,3 +54,12 @@ class UserAuthenticated extends UserState {
 }
 class ForgotPasswordSuccess extends UserState {}
 class OtpStored extends UserState {}
+class OtpVerificationSuccess extends UserState {
+  final String message;
+  OtpVerificationSuccess({this.message = 'OTP verified successfully', required String errMessage});
+}
+
+class OtpVerificationFailure extends UserState {
+  final String errMessage;
+  OtpVerificationFailure({required this.errMessage});
+}

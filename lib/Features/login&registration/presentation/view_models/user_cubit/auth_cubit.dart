@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Core/cache/cache_helper.dart';
+import 'package:graduation_project/Core/errors/exceptions.dart';
 import 'package:graduation_project/Data/repository/auth_repository.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -67,33 +68,43 @@ class AuthCubit extends Cubit<UserState> {
     }
   }
 
-  Future<void> register(
-    String userName,
-    String displayName,
-    String email,
-    String password,
-    String phoneNumber,
-    String country,
-    String city,
-    String userType,
-  ) async {
-    emit(SignUpLoading());
-    try {
-      final registerResponse = await authRepository.register(
-        userName,
-        displayName,
-        email,
-        password,
-        phoneNumber,
-        country,
-        city,
-        userType,
-      );
-      emit(SignUpSuccess(message: 'Registration successful'));
-    } catch (e) {
-      emit(SignInFailure(errMessage: e.toString()));
+  // In auth_cubit.dart
+
+Future<void> register(
+  String userName,
+  String displayName,
+  String email,
+  String password,
+  String phoneNumber,
+  String country,
+  String city,
+  String userType,
+) async {
+  emit(SignUpLoading());
+  try {
+    await authRepository.register(
+      userName,
+      displayName,
+      email,
+      password,
+      phoneNumber,
+      country,
+      city,
+      userType,
+    );
+    _email = email; // Store email for OTP verification
+    emit(SignUpSuccess(message: 'Registration successful! Please verify your email.'));
+  } catch (e) {
+    String errorMessage = 'An unexpected error occurred';
+    if (e is ServerException) {
+      errorMessage = e.errModel.errorMessage ?? 'Registration failed';
+      if (errorMessage.contains('email')) {
+        errorMessage = 'This email is already registered. Please use a different email.';
+      }
     }
+    emit(SignUpFailure(errMessage: errorMessage));
   }
+}
 
   Future<void> forgotPassword(String email, BuildContext context) async {
     emit(SignInLoading());
@@ -108,7 +119,7 @@ class AuthCubit extends Cubit<UserState> {
 }
   void storeOtp(String otp) {
     _otp = otp; // Store OTP
-    emit(OtpStored()); // Trigger navigation to ChangePassword
+    emit(OtpStored()); 
   }
 
  Future<void> resetPassword(String newPassword) async {
@@ -135,14 +146,44 @@ class AuthCubit extends Cubit<UserState> {
   }
 
   
-Future<void> resendOtp(String email, BuildContext context) async {
+Future<void> resendResetConfirmEmailOtp(String email, BuildContext context) async {
     emit(SignInLoading());
     try {
-      await authRepository.resendOtp(email);
+      await authRepository.resendResetConfirmEmailOtp(email);
+      _email = email; // Update stored email
+      emit(OtpVerificationFailure(errMessage: 'OTP is not valid'));
+    } catch (e) {
+      emit(OtpVerificationSuccess(errMessage: e.toString()));
+    }
+  }
+  Future<void> resendResetPasswordOtp(String email, BuildContext context) async {
+    emit(SignInLoading());
+    try {
+      await authRepository.resendResetPasswordOtp(email);
       _email = email; // Update stored email
       emit(ForgotPasswordSuccess());
     } catch (e) {
       emit(SignInFailure(errMessage: e.toString()));
+    }
+  }
+
+Future<void> verifyConfirmEmailOtp(String email, String otp) async {
+    emit(SignInLoading());
+    try {
+      await authRepository.verifyConfirmEmailOtp(email, otp);
+      emit(OtpVerificationSuccess(errMessage: 'OTP verified successfully'));
+    } catch (e) {
+      emit(OtpVerificationFailure(errMessage: e.toString()));
+    }
+  }
+
+  Future<void> verifyResetPasswordOtp(String email, String otp,String newPasswod) async {
+    emit(SignInLoading());
+    try {
+      await authRepository.verifyResetPasswordOtp(email, otp,newPasswod);
+      emit(OtpVerificationSuccess(errMessage: 'OTP verified successfully'));
+    } catch (e) {
+      emit(OtpVerificationFailure(errMessage: e.toString()));
     }
   }
 }

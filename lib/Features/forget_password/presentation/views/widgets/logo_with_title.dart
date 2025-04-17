@@ -27,7 +27,7 @@ class LogoWithTitle extends StatelessWidget {
                   child: Image.asset(
                     logo,
                     fit: BoxFit.contain,
-                    width: size.width * 0.3, // Explicit width instead of FractionallySizedBox
+                    width: size.width * 0.6, // Explicit width instead of FractionallySizedBox
                     errorBuilder: (context, error, stackTrace) =>
                     const Icon(Icons.error, size: 50, color: Colors.red),
                   ),

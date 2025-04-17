@@ -37,9 +37,10 @@ class _OtpFormState extends State<OtpForm> {
   void _submitOtp() {
     if (_formKey.currentState!.validate()) {
       final otp = _controllers.map((c) => c.text).join();
-      widget.onOtpSubmitted(otp); // Fixed the typo: onOtpsubmitted -> onOtpSubmitted
+      widget.onOtpSubmitted(otp); 
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {

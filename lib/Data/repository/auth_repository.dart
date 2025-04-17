@@ -192,64 +192,71 @@ class AuthRepository {
   }
 
   // Register Method
-  Future<RegisterModel> register(
-    String userName,
-    String displayName,
-    String email,
-    String password,
-    String phoneNumber,
-    String country,
-    String city,
-    String userType,
-  ) async {
-    try {
-      final response = await apiConsumer.post(
-        EndPoint.signUp,
-        data: {
-          "userName": userName,
-          "displayName": displayName,
-          "email": email,
-          "password": password,
-          "phoneNumber": phoneNumber,
-          "country": country,
-          "city": city,
-          "userType": userType,
-        }, isFromData: false,
-      );
+  // In auth_repository.dart
 
-      final registerModel = RegisterModel.fromJson(response);
-      if (registerModel.accessToken != null && registerModel.refreshToken != null) {
-        await secureStorage.write(key: 'accessToken', value: registerModel.accessToken!);
+Future<RegisterModel> register(
+  String userName,
+  String displayName,
+  String email,
+  String password,
+  String phoneNumber,
+  String country,
+  String city,
+  String userType,
+) async {
+  try {
+    final response = await apiConsumer.post(
+      EndPoint.signUp,
+      data: {
+        "userName": userName,
+        "displayName": displayName,
+        "email": email,
+        "password": password,
+        "phoneNumber": phoneNumber,
+        "country": country,
+        "city": city,
+        "userType": userType,
+      },
+      isFromData: false,
+    );
+
+    final registerModel = RegisterModel.fromJson(response);
+    if (registerModel.accessToken != null) {
+      await secureStorage.write(key: 'accessToken', value: registerModel.accessToken!);
+      if (registerModel.refreshToken != null) {
         await secureStorage.write(key: 'refreshToken', value: registerModel.refreshToken!);
-        print('AuthRepository: Register Tokens saved - AccessToken: ${registerModel.accessToken}, RefreshToken: ${registerModel.refreshToken}');
       } else {
-        throw ServerException(
-          errModel: ErrorModel(
-            status: 400,
-            errorMessage: 'Missing tokens in response',
-            message: 'Register response did not contain required tokens',
-          ),
-        );
+        print('AuthRepository: RefreshToken is null, proceeding without it');
       }
-      return registerModel;
-    } on ServerException catch (e) {
+      print('AuthRepository: Register Tokens saved - AccessToken: ${registerModel.accessToken}, RefreshToken: ${registerModel.refreshToken}');
+    } else {
       throw ServerException(
         errModel: ErrorModel(
-          status: e.errModel.status,
-          errorMessage: e.errModel.errorMessage,
-          message: e.errModel.message,
-        ),
-      );
-    } catch (e) {
-      throw ServerException(
-        errModel: ErrorModel(
-          status: 500,
-          errorMessage: e.toString(),
-          message: 'An unexpected error occurred during registration',
+          status: 400,
+          errorMessage: 'Missing access token in response',
+          message: 'Register response did not contain required access token',
         ),
       );
     }
+    return registerModel;
+  } on ServerException catch (e) {
+    throw ServerException(
+      errModel: ErrorModel(
+        status: e.errModel.status,
+        errorMessage: e.errModel.errorMessage,
+        message: e.errModel.message,
+      ),
+    );
+  } catch (e) {
+    throw ServerException(
+      errModel: ErrorModel(
+        status: 500,
+        errorMessage: e.toString(),
+        message: 'An unexpected error occurred during registration',
+      ),
+    );
   }
+}
 
   // Forgot Password Method
   Future<void> forgotPassword(String email) async {
@@ -310,10 +317,35 @@ class AuthRepository {
   }
 
   // Resend OTP Method
-  Future<void> resendOtp(String email) async {
+  Future<void> resendResetPasswordOtp(String email) async {
     try {
       await apiConsumer.post(
         EndPoint.resendOtp,
+        data: {ApiKey.email: email}, isFromData: false,
+      );
+    } on ServerException catch (e) {
+      throw ServerException(
+        errModel: ErrorModel(
+          status: e.errModel.status,
+          errorMessage: e.errModel.errorMessage,
+          message: e.errModel.message,
+        ),
+      );
+    } catch (e) {
+      throw ServerException(
+        errModel: ErrorModel(
+          status: 500,
+          errorMessage: e.toString(),
+          message: 'An unexpected error occurred during resend OTP',
+        ),
+      );
+    }
+  }
+
+  Future<void> resendResetConfirmEmailOtp(String email) async {
+    try {
+      await apiConsumer.post(
+        EndPoint.sendConfirmationEmailOtp,
         data: {ApiKey.email: email}, isFromData: false,
       );
     } on ServerException catch (e) {
@@ -402,4 +434,68 @@ class AuthRepository {
   //     );
   //   }
   // }
+
+  // In auth_repository.dart
+
+Future<void> verifyConfirmEmailOtp(String email, String otp) async {
+  try {
+     await apiConsumer.post(
+      EndPoint.confirmEmail, 
+      queryParameters: {
+        ApiKey.email: email,
+        ApiKey.otp: otp,
+      },
+      isFromData: false,
+    );
+    print('AuthRepository: OTP verified successfully for email: $email');
+  } on ServerException catch (e) {
+    throw ServerException(
+      errModel: ErrorModel(
+        status: e.errModel.status,
+        errorMessage: e.errModel.errorMessage,
+        message: e.errModel.message,
+      ),
+    );
+  } catch (e) {
+    throw ServerException(
+      errModel: ErrorModel(
+        status: 500,
+        errorMessage: e.toString(),
+        message: 'An unexpected error occurred during OTP verification',
+      ),
+    );
+  }
+}
+
+Future<void> verifyResetPasswordOtp(String email, String otp,String newPassword) async {
+  try {
+     await apiConsumer.post(
+      EndPoint.resetPassword, 
+      data: {
+        ApiKey.email: email,
+        ApiKey.otp: otp,
+        ApiKey.newPassword:newPassword,
+      },
+      isFromData: false,
+    );
+    print('AuthRepository: OTP verified successfully for email: $email');
+  } on ServerException catch (e) {
+    throw ServerException(
+      errModel: ErrorModel(
+        status: e.errModel.status,
+        errorMessage: e.errModel.errorMessage,
+        message: e.errModel.message,
+      ),
+    );
+  } catch (e) {
+    throw ServerException(
+      errModel: ErrorModel(
+        status: 500,
+        errorMessage: e.toString(),
+        message: 'An unexpected error occurred during OTP verification',
+      ),
+    );
+  }
+}
+
 }
