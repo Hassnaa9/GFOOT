@@ -52,6 +52,7 @@ dependencies:
   permission_handler: ^12.0.0+1
   jwt_decoder: ^2.0.1
   flutter_staggered_animations: ^1.1.1
+  flutter_launcher_icons: ^0.14.3
   # shared_preferences: ^2.5.3
 
 dev_dependencies:
@@ -64,6 +65,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/G-FOOT-LOGO-green-and-white.png"  # your actual path
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -109,3 +115,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+
