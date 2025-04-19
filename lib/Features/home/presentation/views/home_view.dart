@@ -133,7 +133,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                               strokeWidth: 15.0,
                             ),
                           ),
-                          CustomCarbonResult(carbonFootprint: state.carbonValue),
+                          CustomCarbonResult(carbonFootprint: carbonFootprint),
                         ],
                       );
                     } else if (state is HomeNoData) {

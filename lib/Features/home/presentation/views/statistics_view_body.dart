@@ -48,7 +48,13 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
           } else if (state is HomeStatisticsLoaded) {
             final List<EmissionEntry> stats = state.statistics;
             final statistics = stats.map((e) => e.carbonEmission).toList();
-            final todayEmission = statistics.isNotEmpty ? statistics.last : 0.0;
+            double sum = 0.0;
+            if (statistics.isNotEmpty) {
+              for (var el in statistics) {
+                sum += el;
+              }
+            }
+            final todayEmission = statistics.isNotEmpty ? sum / statistics.length : 0.0;
             final progress = (todayEmission / 2500).clamp(0.0, 1.0);
 
             return SingleChildScrollView(
