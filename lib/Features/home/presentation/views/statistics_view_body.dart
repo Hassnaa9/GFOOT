@@ -42,7 +42,7 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           if (state is HomeLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor,));
           } else if (state is HomeStatisticsError) {
             return Center(child: Text(state.message));
           } else if (state is HomeStatisticsLoaded) {

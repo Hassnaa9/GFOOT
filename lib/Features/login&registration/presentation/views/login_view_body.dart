@@ -105,7 +105,7 @@ class _LoginBodyState extends State<LoginBody> {
               child: BlocBuilder<AuthCubit, UserState>(
                 builder: (context, state) {
                   if (state is SignInLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor,));
                   }
                   if (state is SignInFailure) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {

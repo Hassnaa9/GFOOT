@@ -73,7 +73,7 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
         child: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
             if (state is HomeLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor,));
             } else if (state is HomeRecommendationsLoaded) {
               final recommendations = state.recommendations;
               if (recommendations.isEmpty) {
