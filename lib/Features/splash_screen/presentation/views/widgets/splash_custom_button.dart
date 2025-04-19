@@ -23,7 +23,7 @@ class CustomSwipeButton extends StatelessWidget {
         children: [
           Container(
             height: .2*screenHeight,
-            width: .1*screenWidth,
+            width: .16*screenWidth,
             decoration: BoxDecoration(
               color: const Color(0x44FBFBF7),
               borderRadius: BorderRadius.circular(43),

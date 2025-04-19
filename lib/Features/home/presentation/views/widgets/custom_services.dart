@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:graduation_project/Core/utils/assets.dart';
-import 'package:graduation_project/Features/home/statistics.dart';
 import 'package:graduation_project/constants.dart';
 
 class CustomServices extends StatelessWidget {
@@ -18,59 +17,43 @@ class CustomServices extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimationLimiter(
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: AnimationConfiguration.toStaggeredList(
           duration: const Duration(milliseconds: 600),
           childAnimationBuilder: (widget) => SlideAnimation(
             verticalOffset: 50.0,
-            child: FadeInAnimation(
-              child: widget,
-            ),
+            child: FadeInAnimation(child: widget),
           ),
           children: [
-            // First Row of Services
             _buildServiceRow(
               items: [
                 _ServiceItem(
                   color: MyColors.white,
                   asset: AssetsData.calcs,
                   label: "Calculations",
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/Calculations');
-                  },
+                  onPressed: () => Navigator.pushNamed(context, '/Calculations'),
                 ),
                 _ServiceItem(
                   color: MyColors.kPrimaryColor,
                   asset: AssetsData.statistics,
                   label: "Statistics",
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                       '/Statistics',
-                    );
-                  },
+                  onPressed: () => Navigator.pushNamed(context, '/Statistics'),
                 ),
               ],
             ),
-            const SizedBox(height: 5),
-            // Second Row of Services
+            SizedBox(height: screenHeight * 0.01),
             _buildServiceRow(
               items: [
                 _ServiceItem(
                   color: MyColors.serviceCard,
                   asset: AssetsData.learn,
                   label: "Recommendation",
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/Recommendations');
-                  },
+                  onPressed: () => Navigator.pushNamed(context, '/Recommendations'),
                 ),
                 _ServiceItem(
                   color: MyColors.kPrimaryColor,
                   asset: AssetsData.rank,
                   label: "Rank",
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/Rank');
-                  },
+                  onPressed: () => Navigator.pushNamed(context, '/Rank'),
                 ),
               ],
             ),
@@ -80,7 +63,6 @@ class CustomServices extends StatelessWidget {
     );
   }
 
-  // Builds a row of service cards
   Widget _buildServiceRow({required List<_ServiceItem> items}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -94,8 +76,9 @@ class CustomServices extends StatelessWidget {
             verticalOffset: 50.0,
             child: FadeInAnimation(
               child: SizedBox(
-                width: screenWidth * 0.3, // Ensures equal card sizes
-                child: _AnimatedServiceCard(item: item, screenHeight: screenHeight),
+                width: screenWidth * 0.44,
+                height: screenHeight * 0.2,
+                child: _AnimatedServiceCard(item: item),
               ),
             ),
           ),
@@ -105,15 +88,10 @@ class CustomServices extends StatelessWidget {
   }
 }
 
-// Animated service card with tap and hover effects
 class _AnimatedServiceCard extends StatefulWidget {
   final _ServiceItem item;
-  final double screenHeight;
 
-  const _AnimatedServiceCard({
-    required this.item,
-    required this.screenHeight,
-  });
+  const _AnimatedServiceCard({required this.item});
 
   @override
   _AnimatedServiceCardState createState() => _AnimatedServiceCardState();
@@ -140,45 +118,42 @@ class _AnimatedServiceCardState extends State<_AnimatedServiceCard> {
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
           child: Card(
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            elevation: 4,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             color: widget.item.color,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Icon container
-                Container(
-                  width: double.infinity,
-                  height: widget.screenHeight * 0.15,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 231, 231, 231),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      widget.item.asset,
-                      fit: BoxFit.contain,
-                      height: widget.screenHeight * 0.08,
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 231, 231, 231),
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        widget.item.asset,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 ),
-                // Text container
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: const BoxDecoration(
-                    color: MyColors.serviceCard,
-                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
-                  ),
-                  child: Text(
-                    widget.item.label,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: MyColors.white,
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: MyColors.serviceCard,
+                      borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      widget.item.label,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: MyColors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -191,7 +166,6 @@ class _AnimatedServiceCardState extends State<_AnimatedServiceCard> {
   }
 }
 
-// Model for a service item
 class _ServiceItem {
   final Color color;
   final String asset;

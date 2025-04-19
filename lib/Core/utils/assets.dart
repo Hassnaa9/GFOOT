@@ -34,5 +34,5 @@ class AssetsData {
   static const benifits ='assets/icons/benifits.png';
   static const co2 ='assets/icons/co2.png';
   static const left_arrow ='assets/icons/left_arrow.png';
-
+  static const homeBackground ='assets/images/c2.png';
 }

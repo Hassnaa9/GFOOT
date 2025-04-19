@@ -24,7 +24,7 @@ class CustomCarbonResult extends StatelessWidget {
         Text(
           "${carbonFootprint?.toStringAsFixed(2) ?? '0.00'} kg",
           style: TextStyle(
-              fontSize: 20,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: MyColors.kPrimaryColor,)
         ),

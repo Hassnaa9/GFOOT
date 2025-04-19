@@ -46,7 +46,7 @@ class _CustomQuestionOptionState extends State<CustomQuestionOption> {
               });
             },
             title: Text(
-              widget.options[index]['value'],
+              widget.options[index]['display'] as String, // Extract the 'display' field
               style: const TextStyle(color: Colors.white),
             ),
             activeColor: Colors.white,

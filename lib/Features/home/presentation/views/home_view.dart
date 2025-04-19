@@ -61,6 +61,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    double carbonFootprint = 0.00; // Initialize carbonFootprint
 
     return Scaffold(
       appBar: AppBar(
@@ -90,18 +91,15 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       ),
       body: Stack(
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             height: screenHeight * .31,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 232, 240, 231),
-                  Color.fromARGB(255, 214, 215, 216),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            child: Image.asset(
+              AssetsData.homeBackground,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: screenHeight * .3,
+              opacity: AlwaysStoppedAnimation(.3),
             ),
           ),
           SingleChildScrollView(
@@ -113,7 +111,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 const SizedBox(height: 6),
                 const Text(
                   "See your carbon footprint today!",
-                  style: TextStyle(fontSize: 18, color: MyColors.serviceCard),
+                  style: TextStyle(fontSize: 17, color: MyColors.kPrimaryColor),
                 ),
                 SizedBox(height: screenHeight * .02),
                 BlocBuilder<HomeCubit, HomeState>(
@@ -121,17 +119,18 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                     if (state is HomeLoading) {
                       return const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor));
                     } else if (state is HomeLoaded) {
+                      carbonFootprint = state.carbonValue;
                       final normalizedValue = (state.carbonValue / 5000).clamp(0.0, 1.0);
                       return Stack(
                         alignment: Alignment.center,
                         children: [
                           SizedBox(
-                            width: screenWidth * .30,
+                            width: screenWidth * .42,
                             height: screenWidth * .30,
                             child: GradientCircularProgressIndicator(
                               value: normalizedValue,
-                              size: screenWidth * .6,
-                              strokeWidth: 13.0,
+                              size: screenWidth * .8,
+                              strokeWidth: 15.0,
                             ),
                           ),
                           CustomCarbonResult(carbonFootprint: state.carbonValue),
@@ -182,17 +181,28 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         ],
                       );
                     }
-                    return const Text(
-                      'Please complete the questionnaire to see your carbon footprint.',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    );
+                    return Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            width: screenWidth * .42,
+                            height: screenWidth * .30,
+                            child: GradientCircularProgressIndicator(
+                              value: carbonFootprint,
+                              size: screenWidth * .8,
+                              strokeWidth: 15.0,
+                            ),
+                          ),
+                          CustomCarbonResult(carbonFootprint: carbonFootprint),
+                        ],
+                      );
                   },
                 ),
-                SizedBox(height: screenHeight * .02),
-                const Text(
+                SizedBox(height: screenHeight * .027),
+                (carbonFootprint > 0.00)?const Text(
                   "Good job!",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: MyColors.serviceCard),
-                ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: MyColors.kPrimaryColor),
+                ):Text("please complete the questionnaire to see your carbon footprint",style: TextStyle(fontSize: 8, fontWeight: FontWeight.w500, color: MyColors.kPrimaryColor),),
                 SizedBox(height: screenHeight * .01),
                  Align(
                   alignment: Alignment.center,

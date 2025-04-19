@@ -69,8 +69,8 @@ class _EnhancedServicesHeaderState extends State<EnhancedServicesHeader> with Si
                       horizontal: widget.screenWidth * 0.002,
                       vertical: widget.screenHeight * 0.005,
                     ),
-                    width: widget.screenWidth * 0.8,
-                    height: widget.screenHeight * 0.06,
+                    width: widget.screenWidth * 0.7,
+                    height: widget.screenHeight * 0.05,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [

@@ -4,6 +4,7 @@ import 'package:graduation_project/Core/models/recommendations_model.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit_state.dart';
 import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/notification_card.dart';
+import 'package:graduation_project/constants.dart';
 
 class RecommendationsViewBody extends StatefulWidget {
   const RecommendationsViewBody({super.key});
@@ -64,7 +65,7 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
         ),
         title: const Text(
           "Your Eco Recommendations",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: MyColors.kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
       body: Padding(

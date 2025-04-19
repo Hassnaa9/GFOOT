@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -92,13 +93,20 @@ class _SettingsScreenState extends State<SettingViewBody>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffF6F6F6),
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text("Settings"),
+        title: const Text("Settings",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: MyColors.kPrimaryColor,
+            )),
+        backgroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -192,6 +200,7 @@ class _SettingsScreenState extends State<SettingViewBody>
         child: SlideTransition(
           position: _slideAnimation,
           child: Card(
+            color: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -223,6 +232,7 @@ class _SettingsScreenState extends State<SettingViewBody>
         child: SlideTransition(
           position: _slideAnimation,
           child: Card(
+            color: Colors.white,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             elevation: 2,
