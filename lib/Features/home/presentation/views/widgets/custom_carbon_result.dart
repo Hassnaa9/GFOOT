@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/constants.dart';
 
 class CustomCarbonResult extends StatelessWidget {
   final double? carbonFootprint;
@@ -25,7 +26,7 @@ class CustomCarbonResult extends StatelessWidget {
           style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Color(0xff58b698)),
+              color: MyColors.kPrimaryColor,)
         ),
         SizedBox(
           height: 6,
@@ -35,7 +36,7 @@ class CustomCarbonResult extends StatelessWidget {
           style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w400,
-              color: Colors.grey[600]),
+              color: Colors.grey[700]),
         ),
       ],
     );

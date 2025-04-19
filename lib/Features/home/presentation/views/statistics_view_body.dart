@@ -74,7 +74,7 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
                           ),
                         ],
                       ),
-                      progressColor: progress < 0.5 ? Colors.green : (progress < 0.75 ? Color.fromARGB(255, 6, 223, 154) : Color.fromARGB(255, 62, 151, 123)),
+                      progressColor: progress < 0.5 ? Colors.green : (progress < 0.75 ? Color.fromARGB(255, 22, 143, 105) : MyColors.serviceCard),
                       backgroundColor: Colors.grey[300]!,
                       circularStrokeCap: CircularStrokeCap.round,
                     ),

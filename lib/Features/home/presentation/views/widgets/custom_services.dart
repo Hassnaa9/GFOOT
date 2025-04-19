@@ -18,7 +18,7 @@ class CustomServices extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimationLimiter(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: AnimationConfiguration.toStaggeredList(
           duration: const Duration(milliseconds: 600),
           childAnimationBuilder: (widget) => SlideAnimation(
@@ -32,7 +32,7 @@ class CustomServices extends StatelessWidget {
             _buildServiceRow(
               items: [
                 _ServiceItem(
-                  color: MyColors.serviceCard,
+                  color: MyColors.white,
                   asset: AssetsData.calcs,
                   label: "Calculations",
                   onPressed: () {
@@ -44,15 +44,15 @@ class CustomServices extends StatelessWidget {
                   asset: AssetsData.statistics,
                   label: "Statistics",
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushNamed(
                       context,
-                      MaterialPageRoute(builder: (context) => const Statistics()),
+                       '/Statistics',
                     );
                   },
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 5),
             // Second Row of Services
             _buildServiceRow(
               items: [
@@ -140,7 +140,7 @@ class _AnimatedServiceCardState extends State<_AnimatedServiceCard> {
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
           child: Card(
-            elevation: 5,
+            elevation: 2,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
@@ -151,9 +151,9 @@ class _AnimatedServiceCardState extends State<_AnimatedServiceCard> {
                 // Icon container
                 Container(
                   width: double.infinity,
-                  height: widget.screenHeight * 0.16,
+                  height: widget.screenHeight * 0.15,
                   decoration: const BoxDecoration(
-                    color: MyColors.serviceCard,
+                    color: Color.fromARGB(255, 231, 231, 231),
                     borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                   ),
                   child: Center(
@@ -169,7 +169,7 @@ class _AnimatedServiceCardState extends State<_AnimatedServiceCard> {
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: const BoxDecoration(
-                    color: Colors.white,
+                    color: MyColors.serviceCard,
                     borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
                   ),
                   child: Text(
@@ -178,7 +178,7 @@ class _AnimatedServiceCardState extends State<_AnimatedServiceCard> {
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: MyColors.serviceCard,
+                      color: MyColors.white,
                     ),
                   ),
                 ),

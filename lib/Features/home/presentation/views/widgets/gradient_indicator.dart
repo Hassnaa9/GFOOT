@@ -11,8 +11,8 @@ class GradientCircularProgressIndicator extends StatefulWidget {
     Key? key,
     required this.value,
     this.gradientColors = const [
-      Color(0xff3CB371),
-      Color(0xffaee7d5),
+      Color.fromARGB(255, 8, 243, 114),
+      Color.fromARGB(255, 5, 141, 98),
       Color(0xffe58259),
     ], required this.size, required this.strokeWidth,
   }) : super(key: key);
