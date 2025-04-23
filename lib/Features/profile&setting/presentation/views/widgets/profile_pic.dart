@@ -9,15 +9,15 @@ class ProfilePic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 140,
-      width: 140,
+      height: 100,
+      width: 100,
       child: Stack(
         fit: StackFit.expand,
         clipBehavior: Clip.none,
         children: [
           const CircleAvatar(
             backgroundImage:
-                AssetImage(AssetsData.otpImg),
+                AssetImage(AssetsData.profileImg),
           ),
           Positioned(
             right: -16,

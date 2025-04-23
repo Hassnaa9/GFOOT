@@ -91,17 +91,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       ),
       body: Stack(
         children: [
-          SizedBox(
-            width: double.infinity,
-            height: screenHeight * .31,
-            child: Image.asset(
-              AssetsData.homeBackground,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: screenHeight * .3,
-              opacity: AlwaysStoppedAnimation(.3),
-            ),
-          ),
+          
           SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),

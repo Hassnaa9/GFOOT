@@ -63,3 +63,14 @@ class OtpVerificationFailure extends UserState {
   final String errMessage;
   OtpVerificationFailure({required this.errMessage});
 }
+class UserProfileLoading extends UserState {}
+
+class UserProfileLoaded extends UserState {
+  final UserModel user;
+  UserProfileLoaded({required this.user});
+}
+
+class UserProfileError extends UserState {
+  final String errorMessage;
+  UserProfileError({required this.errorMessage});
+}

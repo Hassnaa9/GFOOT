@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:graduation_project/Core/cache/cache_helper.dart';
 import 'package:graduation_project/Core/errors/exceptions.dart';
 import 'package:graduation_project/Data/repository/auth_repository.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthCubit extends Cubit<UserState> {
   final AuthRepository authRepository;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   String? _email; // Store email temporarily
   String? _otp;   // Store OTP temporarily
 
@@ -186,4 +188,15 @@ Future<void> verifyConfirmEmailOtp(String email, String otp) async {
       emit(OtpVerificationFailure(errMessage: e.toString()));
     }
   }
+  Future<void> fetchUserProfile() async {
+  emit(UserProfileLoading());
+  try {
+    final token = await secureStorage.read(key: 'accessToken');
+    final user = await authRepository.getUserProfile(token!);
+    emit(UserProfileLoaded(user: user));
+  } catch (e) {
+    emit(UserProfileError(errorMessage: e.toString()));
+  }
+}
+
 }

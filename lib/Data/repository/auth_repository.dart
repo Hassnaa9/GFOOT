@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graduation_project/Core/api/api_consumer.dart';
 import 'package:graduation_project/Core/api/end_points.dart';
@@ -5,6 +6,7 @@ import 'package:graduation_project/Core/errors/error_model.dart';
 import 'package:graduation_project/Core/errors/exceptions.dart';
 import 'package:graduation_project/Core/models/login_model.dart';
 import 'package:graduation_project/Core/models/register_model.dart';
+import 'package:graduation_project/Core/models/user_model.dart';
 
 class AuthRepository {
   final ApiConsumer apiConsumer;
@@ -497,5 +499,21 @@ Future<void> verifyResetPasswordOtp(String email, String otp,String newPassword)
     );
   }
 }
+
+Future<UserModel> getUserProfile(String token) async {
+  try {
+    final response = await apiConsumer.get(
+      EndPoint.getProfile,
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+    return UserModel.fromJson(response);
+  } catch (e) {
+    throw Exception('Failed to fetch user profile');
+  }
+}
+
+
 
 }

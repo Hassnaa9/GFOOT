@@ -35,4 +35,8 @@ class AssetsData {
   static const co2 ='assets/icons/co2.png';
   static const left_arrow ='assets/icons/left_arrow.png';
   static const homeBackground ='assets/images/c2.png';
+  static const profileImg ='assets/images/grandmother.png';
+  static const email ='assets/icons/mail.png';
+  static const phone ='assets/icons/call-me.png';
+  static const location ='assets/icons/location.png';
 }
