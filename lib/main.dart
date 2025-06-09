@@ -28,6 +28,9 @@ import 'package:graduation_project/Features/profile&setting/setting.dart';
 import 'package:graduation_project/Features/questionnaire/questionnaire.dart';
 import 'package:graduation_project/Features/splash_screen/splash_screen.dart';
 
+// هنا بنعرف RouteObserver ليه استخدام مع RouteAware
+final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
@@ -57,7 +60,7 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               AuthRepository(apiConsumer: context.read<ApiConsumer>()),
         ),
-        RepositoryProvider<ActivityRepository>( // Add ActivityRepository
+        RepositoryProvider<ActivityRepository>(
           create: (context) =>
               ActivityRepository(apiConsumer: context.read<ApiConsumer>()),
         ),
@@ -69,16 +72,18 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) =>
-                HomeCubit(context.read<ActivityRepository>()), // Add HomeCubit
+                HomeCubit(context.read<ActivityRepository>()),
           ),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-    fontFamily: 'Urbanist',
-  ),
+            fontFamily: 'Urbanist',
+          ),
           title: 'Your App',
           initialRoute: '/',
+          // مهم: نضيف الـ routeObserver هنا عشان نستخدمه في الـ RouteAware بالشاشات
+          navigatorObservers: [routeObserver],
           routes: {
             '/': (context) => const SplashScreen(),
             '/SigninOrSignup': (context) => const SigninOrSignupScreen(),

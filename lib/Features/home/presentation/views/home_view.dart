@@ -14,6 +14,8 @@ import 'package:graduation_project/Features/profile&setting/profile.dart';
 import 'package:graduation_project/Features/profile&setting/setting.dart';
 import 'package:graduation_project/constants.dart';
 
+import 'package:graduation_project/main.dart';  
+
 class HomeViewBody extends StatefulWidget {
   final Map<String, dynamic> userAnswers;
 
@@ -23,7 +25,7 @@ class HomeViewBody extends StatefulWidget {
   _HomeViewBodyState createState() => _HomeViewBodyState();
 }
 
-class _HomeViewBodyState extends State<HomeViewBody> {
+class _HomeViewBodyState extends State<HomeViewBody> with RouteAware {
   int _selectedIndex = 0;
 
   @override
@@ -35,20 +37,38 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     }
   }
 
-  void _onItemTapped(int index) {
+  @override
+  void didPopNext() {
+    super.didPopNext();
+    context.read<HomeCubit>().getCarbonFootprint();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
     });
 
     switch (index) {
       case 1:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const Learn()));
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => const Learn()));
         break;
       case 2:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const Setting()));
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => const Setting()));
         break;
       case 3:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile()));
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile()));
         break;
     }
   }

@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_project/Core/models/statistics_model.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit_state.dart';
+import 'package:graduation_project/Features/home/presentation/views/widgets/custom_carbon_result.dart';
+import 'package:graduation_project/Features/home/presentation/views/widgets/gradient_indicator.dart';
 import 'package:graduation_project/constants.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:intl/intl.dart';
@@ -19,15 +21,18 @@ class StatisticsViewBody extends StatefulWidget {
 class _StatisticsViewBodyState extends State<StatisticsViewBody> {
   int _selectedTabIndex = 0;
   int _touchedGroupIndex = -1;
+  String _currentStatsType = 'Daily';
 
   @override
   void initState() {
     super.initState();
-    context.read<HomeCubit>().fetchStatistics('Daily');
+    context.read<HomeCubit>().fetchStatistics(_currentStatsType);
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -42,20 +47,29 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           if (state is HomeLoading) {
-            return const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor,));
+            return const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor));
           } else if (state is HomeStatisticsError) {
             return Center(child: Text(state.message));
           } else if (state is HomeStatisticsLoaded) {
             final List<EmissionEntry> stats = state.statistics;
             final statistics = stats.map((e) => e.carbonEmission).toList();
-            double sum = 0.0;
-            if (statistics.isNotEmpty) {
-              for (var el in statistics) {
-                sum += el;
-              }
+            double sum = statistics.fold(0.0, (a, b) => a + b);
+
+            // Determine the target emission limit based on selected tab
+            double limit;
+            switch (_currentStatsType) {
+              case 'Monthly':
+                limit = 2500 * 30;
+                break;
+              case 'Yearly':
+                limit = 2500 * 365;
+                break;
+              case 'Daily':
+              default:
+                limit = 2500;
             }
-            final todayEmission = statistics.isNotEmpty ? sum / statistics.length : 0.0;
-            final progress = (todayEmission / 2500).clamp(0.0, 1.0);
+
+            final progress = (sum / limit).clamp(0.0, 1.0);
 
             return SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
@@ -65,35 +79,22 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircularPercentIndicator(
-                        radius: 85.0,
-                        lineWidth: 14.0,
-                        percent: progress,
-                        center: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              todayEmission.toStringAsFixed(1),
-                              style: const TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            width: screenWidth * .35,
+                            height: screenWidth * .30,
+                            child: GradientCircularProgressIndicator(
+                              value: progress,
+                              size: screenWidth * .8,
+                              strokeWidth: 15.0,
                             ),
-                            const Text(
-                              'kg CO₂',
-                              style: TextStyle(fontSize: 14, color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                        progressColor: progress < 0.5
-                            ? Colors.green
-                            : (progress < 0.75
-                                ? const Color.fromARGB(255, 22, 143, 105)
-                                : MyColors.serviceCard),
-                        backgroundColor: Colors.grey[300]!,
-                        circularStrokeCap: CircularStrokeCap.round,
+                          ),
+                          CustomCarbonResult(carbonFootprint: sum), // You may add `progress` too
+                        ],
                       ),
-                      const SizedBox(height: 18),
+                      SizedBox(height: screenHeight * .03),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -108,9 +109,10 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
                         child: Text(
                           'Emission Trends',
                           style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: MyColors.kPrimaryColor),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: MyColors.kPrimaryColor,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -163,8 +165,7 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
                                                 padding: const EdgeInsets.only(top: 8.0),
                                                 child: Text(
                                                   DateFormat('MM/dd').format(barDate),
-                                                  style: const TextStyle(
-                                                      color: Colors.black54, fontSize: 11),
+                                                  style: const TextStyle(color: Colors.black54, fontSize: 11),
                                                 ),
                                               );
                                             },
@@ -223,9 +224,9 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
       onTap: () {
         setState(() {
           _selectedTabIndex = index;
+          _currentStatsType = ['Daily', 'Monthly', 'Yearly'][index];
         });
-        final types = ['Daily', 'Monthly', 'Yearly'];
-        context.read<HomeCubit>().fetchStatistics(types[index]);
+        context.read<HomeCubit>().fetchStatistics(_currentStatsType);
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
