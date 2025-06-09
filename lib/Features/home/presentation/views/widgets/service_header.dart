@@ -72,15 +72,15 @@ class _EnhancedServicesHeaderState extends State<EnhancedServicesHeader> with Si
                     width: widget.screenWidth * 0.7,
                     height: widget.screenHeight * 0.05,
                     decoration: BoxDecoration(
-                      color: MyColors.serviceCard,
+                      color: MyColors.white,
                         
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
-                        BoxShadow(
-                          color: MyColors.kPrimaryColor.withOpacity(0.3),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
+                        // BoxShadow(
+                        //   color: MyColors.kPrimaryColor.withOpacity(0.3),
+                        //   blurRadius: 8,
+                        //   offset: const Offset(0, 4),
+                        // ),
                       ],
                     ),
                     child: Center(
@@ -89,7 +89,7 @@ class _EnhancedServicesHeaderState extends State<EnhancedServicesHeader> with Si
                         style: TextStyle(
                           fontSize: widget.screenWidth * 0.04, // Responsive font size
                           fontWeight: FontWeight.bold,
-                          color: Colors.black, // White text for contrast
+                          color: MyColors.kPrimaryColor, // White text for contrast
                           shadows: [
                             Shadow(
                               color: Colors.black.withOpacity(0.2),

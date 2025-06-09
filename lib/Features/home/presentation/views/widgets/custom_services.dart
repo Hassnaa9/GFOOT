@@ -7,6 +7,7 @@ class CustomServices extends StatelessWidget {
   final double screenWidth;
   final double screenHeight;
 
+
   const CustomServices({
     super.key,
     required this.screenWidth,
@@ -33,7 +34,7 @@ class CustomServices extends StatelessWidget {
                   onPressed: () => Navigator.pushNamed(context, '/Calculations'),
                 ),
                 _ServiceItem(
-                  color: MyColors.kPrimaryColor,
+                  color: MyColors.white,
                   asset: AssetsData.statistics,
                   label: "Statistics",
                   onPressed: () => Navigator.pushNamed(context, '/Statistics'),
@@ -44,13 +45,13 @@ class CustomServices extends StatelessWidget {
             _buildServiceRow(
               items: [
                 _ServiceItem(
-                  color: MyColors.serviceCard,
+                  color: MyColors.white,
                   asset: AssetsData.learn,
                   label: "Recommendation",
                   onPressed: () => Navigator.pushNamed(context, '/Recommendations'),
                 ),
                 _ServiceItem(
-                  color: MyColors.kPrimaryColor,
+                  color: MyColors.white,
                   asset: AssetsData.rank,
                   label: "Rank",
                   onPressed: () => Navigator.pushNamed(context, '/Rank'),
@@ -76,9 +77,9 @@ class CustomServices extends StatelessWidget {
             verticalOffset: 50.0,
             child: FadeInAnimation(
               child: SizedBox(
-                width: screenWidth * 0.44,
-                height: screenHeight * 0.2,
-                child: _AnimatedServiceCard(item: item),
+                width: screenWidth * 0.37,
+                height: screenHeight * 0.21,
+                child: _AnimatedServiceCard(item: item, screenWidth: screenWidth, screenHeight: screenHeight),
               ),
             ),
           ),
@@ -90,9 +91,9 @@ class CustomServices extends StatelessWidget {
 
 class _AnimatedServiceCard extends StatefulWidget {
   final _ServiceItem item;
-
-  const _AnimatedServiceCard({required this.item});
-
+  final double screenWidth;
+  final double screenHeight;
+  const _AnimatedServiceCard({required this.item, required this.screenWidth, required this.screenHeight});
   @override
   _AnimatedServiceCardState createState() => _AnimatedServiceCardState();
 }
@@ -118,22 +119,24 @@ class _AnimatedServiceCardState extends State<_AnimatedServiceCard> {
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
           child: Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            elevation: 2,
             color: widget.item.color,
             child: Column(
               children: [
                 Expanded(
-                  flex: 2,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 231, 231, 231),
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        widget.item.asset,
-                        fit: BoxFit.contain,
+                  flex: 3,
+                  child: Padding(
+                     padding: const EdgeInsets.only(top: 12.0),
+                    child: Container(
+                      width: widget.screenWidth * 0.28,
+                      decoration: BoxDecoration(
+                        color: (Color(0xFFC1E3C6)
+                    ),                    ),
+                      child: Center(
+                        child: Image.asset(
+                          widget.item.asset,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   ),
@@ -141,10 +144,9 @@ class _AnimatedServiceCardState extends State<_AnimatedServiceCard> {
                 Expanded(
                   flex: 1,
                   child: Container(
-                    width: double.infinity,
+                    width: widget.screenWidth * 0.28,
                     decoration: const BoxDecoration(
                       color: MyColors.white,
-                      borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
                     ),
                     alignment: Alignment.center,
                     child: Text(

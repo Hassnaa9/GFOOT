@@ -29,9 +29,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   @override
   void initState() {
     super.initState();
-    // Check for existing footprint
     context.read<HomeCubit>().getCarbonFootprint();
-    // Log new activity only if userAnswers is not empty
     if (widget.userAnswers.isNotEmpty) {
       context.read<HomeCubit>().logActivity(queryParameters: widget.userAnswers);
     }
@@ -43,8 +41,6 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     });
 
     switch (index) {
-      case 0:
-        break;
       case 1:
         Navigator.push(context, MaterialPageRoute(builder: (context) => const Learn()));
         break;
@@ -61,15 +57,15 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double carbonFootprint = 0.00; // Initialize carbonFootprint
 
     return Scaffold(
+      backgroundColor: MyColors.white,
       appBar: AppBar(
-        backgroundColor: MyColors.serviceCard,
+        backgroundColor: MyColors.white,
         elevation: 0,
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(5.0),
             child: CircleAvatar(
               backgroundColor: const Color(0xffD4E0EB),
               child: TextButton(
@@ -81,8 +77,8 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 },
                 child: Image.asset(
                   AssetsData.notify,
-                  width: screenWidth * 0.2,
-                  height: screenHeight * 0.2,
+                  width: screenWidth * 0.3,
+                  height: screenHeight * 0.3,
                 ),
               ),
             ),
@@ -91,121 +87,103 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       ),
       body: Stack(
         children: [
-          
           SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 6),
-                const Text(
-                  "See your carbon footprint today!",
-                  style: TextStyle(fontSize: 17, color: MyColors.kPrimaryColor),
-                ),
-                SizedBox(height: screenHeight * .02),
-                BlocBuilder<HomeCubit, HomeState>(
-                  builder: (context, state) {
-                    if (state is HomeLoading) {
-                      return const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor));
-                    } else if (state is HomeLoaded) {
-                      carbonFootprint = state.carbonValue;
-                      final normalizedValue = (state.carbonValue / 5000).clamp(0.0, 1.0);
-                      return Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          SizedBox(
-                            width: screenWidth * .4,
-                            height: screenWidth * .30,
-                            child: GradientCircularProgressIndicator(
-                              value: normalizedValue,
-                              size: screenWidth * .8,
-                              strokeWidth: 15.0,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    "See your carbon footprint today!",
+                    style: TextStyle(fontSize: 17, color: MyColors.kPrimaryColor),
+                  ),
+                  SizedBox(height: screenHeight * .04),
+                  BlocBuilder<HomeCubit, HomeState>(
+                    builder: (context, state) {
+                      if (state is HomeLoading) {
+                        return const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor));
+                      } else if (state is HomeLoaded) {
+                        final carbonFootprint = state.carbonValue;
+                        final normalizedValue = (carbonFootprint / 5000).clamp(0.0, 1.0);
+
+                        return Column(
+                          children: [
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                SizedBox(
+                                  width: screenWidth * .35,
+                                  height: screenWidth * .30,
+                                  child: GradientCircularProgressIndicator(
+                                    value: normalizedValue,
+                                    size: screenWidth * .8,
+                                    strokeWidth: 15.0,
+                                  ),
+                                ),
+                                CustomCarbonResult(carbonFootprint: carbonFootprint),
+                              ],
                             ),
-                          ),
-                          CustomCarbonResult(carbonFootprint: carbonFootprint),
-                        ],
-                      );
-                    } else if (state is HomeNoData) {
-                      return Column(
-                        children: [
-                          const Text(
-                            'Please complete the questionnaire to see your carbon footprint.',
-                            style: TextStyle(fontSize: 16, color: Colors.grey),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 10),
-                          // ElevatedButton(
-                          //   onPressed: () {
-                          //     Navigator.pushNamed(context, '/Questionnaire'); // Replace with your questionnaire route
-                          //   },
-                          //   style: ElevatedButton.styleFrom(
-                          //     backgroundColor: MyColors.kPrimaryColor,
-                          //     foregroundColor: Colors.white,
-                          //     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                          //   ),
-                          //   child: const Text('Take Questionnaire'),
-                          // ),
-                        ],
-                      );
-                    } else if (state is HomeError) {
-                      print('HomeViewBody: Error state - ${state.errorMessage}');
-                      if (state.errorMessage.contains('Please log in to continue')) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const SignInScreen()),
-                          );
-                        });
-                        return const Center(child: Text('Redirecting to login...'));
+                            SizedBox(height: screenHeight * .027),
+                            if (carbonFootprint > 0.00)
+                              const Text(
+                                "Good job!",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                  color: MyColors.kPrimaryColor,
+                                ),
+                              ),
+                            SizedBox(height: screenHeight * .01),
+                          ],
+                        );
+                      } else if (state is HomeNoData) {
+                        return Column(
+                          children: [
+                            const Text(
+                              'Please complete the questionnaire to see your carbon footprint.',
+                              style: TextStyle(fontSize: 16, color: Colors.grey),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: screenHeight * .01),
+                          ],
+                        );
+                      } else if (state is HomeError) {
+                        print('HomeViewBody: Error state - ${state.errorMessage}');
+                        if (state.errorMessage.contains('Please log in to continue')) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => const SignInScreen()),
+                            );
+                          });
+                          return const Center(child: Text('Redirecting to login...'));
+                        }
+                        return Column(
+                          children: [
+                            Text('Error: ${state.errorMessage}'),
+                          ],
+                        );
                       }
-                      return Column(
-                        children: [
-                          Text('Error: ${state.errorMessage}'),
-                          // ElevatedButton(
-                          //   onPressed: () {
-                          //     context.read<HomeCubit>().getCarbonFootprint();
-                          //   },
-                          //   child: const Text('Retry'),
-                          // ),
-                        ],
-                      );
-                    }
-                    return Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          SizedBox(
-                            width: screenWidth * .4,
-                            height: screenWidth * .30,
-                            child: GradientCircularProgressIndicator(
-                              value: carbonFootprint,
-                              size: screenWidth * .8,
-                              strokeWidth: 15.0,
-                            ),
-                          ),
-                          CustomCarbonResult(carbonFootprint: carbonFootprint),
-                        ],
-                      );
-                  },
-                ),
-                SizedBox(height: screenHeight * .027),
-                (carbonFootprint > 0.00)?const Text(
-                  "Good job!",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: MyColors.kPrimaryColor),
-                ):Text("please complete the questionnaire to see your carbon footprint",style: TextStyle(fontSize: 8, fontWeight: FontWeight.w500, color: MyColors.kPrimaryColor),),
-                SizedBox(height: screenHeight * .01),
-                 Align(
-                  alignment: Alignment.center,
-                  child: EnhancedServicesHeader(screenWidth: screenWidth, screenHeight: screenHeight),
-                ),
-                SizedBox(height: screenHeight * .02),
-                CustomServices(screenHeight: screenHeight, screenWidth: screenWidth),
-              ],
+                      return const SizedBox();
+                    },
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: EnhancedServicesHeader(
+                      screenWidth: screenWidth,
+                      screenHeight: screenHeight,
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * .02),
+                  CustomServices(screenHeight: screenHeight, screenWidth: screenWidth),
+                ],
+              ),
             ),
           ),
-        ),
-     ] ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: MyColors.white,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: MyColors.kPrimaryColor,
         unselectedItemColor: Colors.grey,
