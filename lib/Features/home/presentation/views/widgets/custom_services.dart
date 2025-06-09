@@ -143,7 +143,7 @@ class _AnimatedServiceCardState extends State<_AnimatedServiceCard> {
                   child: Container(
                     width: double.infinity,
                     decoration: const BoxDecoration(
-                      color: MyColors.serviceCard,
+                      color: MyColors.white,
                       borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
                     ),
                     alignment: Alignment.center,
@@ -152,7 +152,7 @@ class _AnimatedServiceCardState extends State<_AnimatedServiceCard> {
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: MyColors.white,
+                        color: MyColors.black,
                       ),
                     ),
                   ),

@@ -115,7 +115,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         alignment: Alignment.center,
                         children: [
                           SizedBox(
-                            width: screenWidth * .42,
+                            width: screenWidth * .4,
                             height: screenWidth * .30,
                             child: GradientCircularProgressIndicator(
                               value: normalizedValue,
@@ -135,17 +135,17 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 10),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/Questionnaire'); // Replace with your questionnaire route
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: MyColors.kPrimaryColor,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                            ),
-                            child: const Text('Take Questionnaire'),
-                          ),
+                          // ElevatedButton(
+                          //   onPressed: () {
+                          //     Navigator.pushNamed(context, '/Questionnaire'); // Replace with your questionnaire route
+                          //   },
+                          //   style: ElevatedButton.styleFrom(
+                          //     backgroundColor: MyColors.kPrimaryColor,
+                          //     foregroundColor: Colors.white,
+                          //     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          //   ),
+                          //   child: const Text('Take Questionnaire'),
+                          // ),
                         ],
                       );
                     } else if (state is HomeError) {
@@ -162,12 +162,12 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                       return Column(
                         children: [
                           Text('Error: ${state.errorMessage}'),
-                          ElevatedButton(
-                            onPressed: () {
-                              context.read<HomeCubit>().getCarbonFootprint();
-                            },
-                            child: const Text('Retry'),
-                          ),
+                          // ElevatedButton(
+                          //   onPressed: () {
+                          //     context.read<HomeCubit>().getCarbonFootprint();
+                          //   },
+                          //   child: const Text('Retry'),
+                          // ),
                         ],
                       );
                     }
@@ -175,7 +175,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         alignment: Alignment.center,
                         children: [
                           SizedBox(
-                            width: screenWidth * .42,
+                            width: screenWidth * .4,
                             height: screenWidth * .30,
                             child: GradientCircularProgressIndicator(
                               value: carbonFootprint,
