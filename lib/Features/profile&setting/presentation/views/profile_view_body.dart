@@ -34,7 +34,6 @@ class ProfileViewBody extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const ProfilePic(),
-                  const SizedBox(height: 4),
                   Text(
                     user.displayName,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(

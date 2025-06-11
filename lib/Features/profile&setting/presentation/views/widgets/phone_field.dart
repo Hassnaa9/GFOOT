@@ -27,7 +27,7 @@ class PhoneField extends StatelessWidget {
           ],
         ),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Colors.grey[100],
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide.none,

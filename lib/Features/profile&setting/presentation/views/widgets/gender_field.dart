@@ -14,7 +14,7 @@ class GenderField extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.grey[100],
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButtonFormField<String>(
