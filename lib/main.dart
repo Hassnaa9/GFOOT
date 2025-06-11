@@ -10,7 +10,6 @@ import 'package:graduation_project/Features/forget_password/change_password.dart
 import 'package:graduation_project/Features/forget_password/forget_password.dart';
 import 'package:graduation_project/Features/forget_password/OTP_verification.dart';
 import 'package:graduation_project/Features/forget_password/password_changed.dart';
-import 'package:graduation_project/Features/home/home.dart';
 import 'package:graduation_project/Features/home/learn.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
 import 'package:graduation_project/Features/home/presentation/views/statistics_view_body.dart';
@@ -27,8 +26,9 @@ import 'package:graduation_project/Features/profile&setting/profile.dart';
 import 'package:graduation_project/Features/profile&setting/setting.dart';
 import 'package:graduation_project/Features/questionnaire/questionnaire.dart';
 import 'package:graduation_project/Features/splash_screen/splash_screen.dart';
+import 'package:graduation_project/app_scaffold.dart';
 
-// هنا بنعرف RouteObserver ليه استخدام مع RouteAware
+// Define RouteObserver for RouteAware
 final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
 
 void main() async {
@@ -82,7 +82,6 @@ class MyApp extends StatelessWidget {
           ),
           title: 'Your App',
           initialRoute: '/',
-          // مهم: نضيف الـ routeObserver هنا عشان نستخدمه في الـ RouteAware بالشاشات
           navigatorObservers: [routeObserver],
           routes: {
             '/': (context) => const SplashScreen(),
@@ -93,7 +92,7 @@ class MyApp extends StatelessWidget {
             '/Verify': (context) => const VerificationScreen(),
             '/ChangePass': (context) => const ChangePasswordScreen(),
             '/PassChanged': (context) => PasswordChangedScreen(),
-            '/Home': (context) => const Home(),
+            '/Home': (context) => const AppScaffold(),
             '/Calculations': (context) => const Questionnaire(),
             '/Statistics': (context) => const StatisticsViewBody(),
             '/Profile': (context) => const Profile(),
