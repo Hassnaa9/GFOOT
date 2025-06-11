@@ -6,13 +6,42 @@ import 'package:graduation_project/Features/login&registration/presentation/view
 import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/profile_menu.dart';
 import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/profile_pic.dart';
 import 'package:graduation_project/constants.dart';
+import 'package:graduation_project/main.dart'; // For routeObserver
 
-class ProfileViewBody extends StatelessWidget {
+class ProfileViewBody extends StatefulWidget {
   const ProfileViewBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<ProfileViewBody> createState() => _ProfileViewBodyState();
+}
+
+class _ProfileViewBodyState extends State<ProfileViewBody> with RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+  }
+
+  @override
+  void didPopNext() {
+    super.didPopNext();
+    // Trigger profile refresh when returning to this screen
     context.read<AuthCubit>().fetchUserProfile();
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Fetch user profile on initial load
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<AuthCubit>().fetchUserProfile();
+    });
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -35,7 +64,7 @@ class ProfileViewBody extends StatelessWidget {
                 children: [
                   const ProfilePic(),
                   Text(
-                    user.displayName,
+                    user.displayName ?? 'N/A',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: const Color(0xff1A1A1A),
@@ -43,13 +72,25 @@ class ProfileViewBody extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "@${user.userName}",
+                    "@${user.userName ?? 'N/A'}",
                     style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 10),
-                  ProfileMenu(text: 'email: ${user.email}', icon: AssetsData.email, press: () {Navigator.pushNamed(context, "/Account");}),
-                  ProfileMenu(text: 'phone: ${user.phoneNumber}', icon: AssetsData.phone, press: () {Navigator.pushNamed(context, "/Account");}),
-                  ProfileMenu(text: 'location: ${user.city +',' +  user.country}', icon: AssetsData.location, press: () {Navigator.pushNamed(context, "/Account");}),
+                  ProfileMenu(
+                    text: 'email: ${user.email ?? 'N/A'}',
+                    icon: AssetsData.email,
+                    press: () => Navigator.pushNamed(context, "/Account"),
+                  ),
+                  ProfileMenu(
+                    text: 'phone: ${user.phoneNumber ?? 'N/A'}',
+                    icon: AssetsData.phone,
+                    press: () => Navigator.pushNamed(context, "/Account"),
+                  ),
+                  ProfileMenu(
+                    text: 'location: ${[user.city, user.country].where((s) => s != null && s.isNotEmpty).join(', ') ?? 'N/A'}',
+                    icon: AssetsData.location,
+                    press: () => Navigator.pushNamed(context, "/Account"),
+                  ),
                   ProfileMenu(
                     text: "Edit My Account",
                     icon: AssetsData.user,
@@ -97,6 +138,4 @@ class ProfileViewBody extends StatelessWidget {
       ),
     );
   }
-
- 
 }

@@ -4,8 +4,6 @@ import 'package:graduation_project/Core/utils/assets.dart';
 import 'package:graduation_project/Features/home/home.dart';
 import 'package:graduation_project/Features/home/learn.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
-import 'package:graduation_project/Features/home/rank.dart';
-import 'package:graduation_project/Features/home/recommendations.dart';
 import 'package:graduation_project/Features/profile&setting/profile.dart';
 import 'package:graduation_project/Features/profile&setting/setting.dart';
 import 'package:graduation_project/constants.dart';
@@ -80,14 +78,16 @@ class _AppScaffoldState extends State<AppScaffold> with RouteAware {
             padding: const EdgeInsets.all(5.0),
             child: CircleAvatar(
               backgroundColor: const Color(0xffD4E0EB),
+              radius: 30, // Increased radius to accommodate larger icon
               child: TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/Notifications');
                 },
                 child: Image.asset(
                   AssetsData.notify,
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height: MediaQuery.of(context).size.height * 0.3,
+                  width: 40, // Increased from 0.4 to a fixed 40 (adjust as needed)
+                  height: 40, // Increased from 0.4 to a fixed 40 (adjust as needed)
+                  fit: BoxFit.contain, // Ensures the image scales properly within the space
                 ),
               ),
             ),
