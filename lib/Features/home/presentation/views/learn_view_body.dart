@@ -10,10 +10,10 @@ class LearnViewBody extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: MyColors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 600),
@@ -21,37 +21,38 @@ class LearnViewBody extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    ' Carbon Footprint',
+                    'Carbon Footprint',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: MyColors.kPrimaryColor,
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 40),
                   _buildItem(
                     context,
                     image: AssetsData.what_its_this,
                     title: 'What It Is?',
                     description:
-                        'Your Carbon footprint is the total amount of greenhouse gases you cause, including carbon dioxide and methane.',
+                        'Your Carbon Footprint is the total amount of greenhouse gases you produce, including carbon dioxide and methane.',
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
                   _buildItem(
                     context,
                     image: AssetsData.benifits,
                     title: 'Benefits of Reducing',
                     description:
-                        'Reducing your carbon footprint helps to slow climate change, conserve natural resources, and create a more sustainable future.',
+                        'Reducing your Carbon Footprint helps slow climate change, conserve natural resources, and create a more sustainable future.',
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
                   _buildItem(
                     context,
                     image: AssetsData.co2,
                     title: 'Ways to Reduce',
                     description:
-                        'You can lower your footprint by saving energy, reducing waste, choosing sustainable transportation, and supporting eco-friendly products.',
+                        'Lower your footprint by saving energy, reducing waste, choosing sustainable transportation, and supporting eco-friendly products.',
                   ),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),
@@ -70,38 +71,49 @@ class LearnViewBody extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final imageSize = screenWidth < 400 ? 60.0 : 80.0;
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Image.asset(
-          image,
-          height: imageSize,
-          width: imageSize,
-        ),
-        const SizedBox(width: 20),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+    return Card(
+      elevation: 2,
+      color: MyColors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(
+              image,
+              height: imageSize,
+              width: imageSize,
+            ),
+            const SizedBox(width: 24),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: MyColors.kPrimaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    description,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.black87,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 6),
-              Text(
-                description,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black87,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
