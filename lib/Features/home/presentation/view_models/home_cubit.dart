@@ -116,5 +116,24 @@ class HomeCubit extends Cubit<HomeState> {
       print('HomeCubit: Error in fetchUserProfile: $e');
       emit(HomeError(e.toString(), errorMessage: 'Failed to fetch user profile'));
     }
+  }Future<void> updateProfile({
+    required String displayName,
+    required String phoneNumber,
+    required String country,
+    required String city,
+  }) async {
+    emit(HomeLoading());
+    try {
+      await activityRepository.updateProfile(
+        displayName: displayName,
+        phoneNumber: phoneNumber,
+        country: country,
+        city: city,
+      );
+      await fetchUserProfile(); // Refresh user profile after update
+      emit(HomeProfileLoaded(user: _user!)); // Emit updated profile state
+    } catch (e) {
+      emit(HomeError(e.toString(), errorMessage: 'Failed to update profile'));
+    }
   }
 }

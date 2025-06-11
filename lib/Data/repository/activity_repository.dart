@@ -225,5 +225,81 @@ Future<RankModel> getRanks(String token) async {
     );
     return UserModel.fromJson(response);
   }
+Future<void> updateProfile({
+    required String displayName,
+    required String phoneNumber,
+    required String country,
+    required String city,
+  }) async {
+    try {
+      String? token = await secureStorage.read(key: 'accessToken');
+      print('ActivityRepository: Fetched token for updateProfile: $token');
+      if (token == null) {
+        throw ServerException(
+          errModel: ErrorModel(
+            status: 401,
+            errorMessage: 'No token found',
+            message: 'Please log in to continue',
+          ),
+        );
+      }
 
+      if (JwtDecoder.isExpired(token)) {
+        print('ActivityRepository: Token expired, refreshing...');
+        token = await _refreshToken();
+      }
+
+      final body = {
+        'DisplayName': displayName,
+        'PhoneNumber': phoneNumber,
+        'Country': country,
+        'City': city,
+      };
+
+      print('ActivityRepository: Sending PUT request to ${EndPoint.updateProfile}');
+      print('ActivityRepository: Request Body: $body');
+
+      final response = await apiConsumer.put(
+        EndPoint.updateProfile,
+        data: body,
+        headers: {'Authorization': 'Bearer $token'},
+        isFormData: false, // Assuming JSON payload, not form data
+      );
+
+      print('ActivityRepository: UpdateProfile response: $response');
+    } on DioException catch (e) {
+      if (e.response != null) {
+        final errorData = e.response!.data;
+        final errors = errorData['errors'] as Map<String, dynamic>?;
+        final errorMessage = errors != null
+            ? errors.entries.map((entry) => '${entry.key}: ${entry.value.join(", ")}').join('; ')
+            : errorData['title'] ?? 'Unknown error';
+        print('ActivityRepository: DioException in updateProfile: $errorMessage');
+        throw ServerException(
+          errModel: ErrorModel(
+            status: e.response!.statusCode ?? 400,
+            errorMessage: errorMessage,
+            message: 'Validation failed: $errorMessage',
+          ),
+        );
+      }
+      print('ActivityRepository: DioException in updateProfile: ${e.message}');
+      throw ServerException(
+        errModel: ErrorModel(
+          status: 400,
+          errorMessage: e.message ?? 'Unknown error',
+          message: 'Unexpected error occurred while updating profile',
+        ),
+      );
+    } catch (e) {
+      print('ActivityRepository: General error in updateProfile: $e');
+      throw ServerException(
+        errModel: ErrorModel(
+          status: 400,
+          errorMessage: e.toString(),
+          message: 'Unexpected error occurred while updating profile',
+        ),
+      );
+    }
+  }
 }

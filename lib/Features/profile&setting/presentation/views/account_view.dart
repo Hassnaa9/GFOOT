@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:graduation_project/Data/repository/activity_repository.dart';
+import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
 import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/gender_field.dart';
 import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/phone_field.dart';
 import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/custom_text_field.dart';
@@ -76,13 +79,11 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
   // Function to pick an image from gallery or camera
   Future<void> _pickImage(ImageSource source) async {
     try {
-      // Check permissions based on the source
       bool hasPermission = false;
       if (source == ImageSource.camera) {
         hasPermission = await _checkAndRequestPermission(Permission.camera);
       } else {
         hasPermission = await _checkAndRequestPermission(Permission.storage);
-        // For Android 13+, also check media permissions
         if (!hasPermission) {
           hasPermission = await _checkAndRequestPermission(Permission.photos);
         }
@@ -97,9 +98,9 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
 
       final XFile? pickedFile = await _picker.pickImage(
         source: source,
-        maxWidth: 300, // Reduce resolution for performance
+        maxWidth: 300,
         maxHeight: 300,
-        imageQuality: 85, // Compress image
+        imageQuality: 85,
       );
 
       if (pickedFile != null) {
@@ -161,7 +162,7 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE5F5F0), // Light green background
+      backgroundColor: const Color(0xFFE5F5F0),
       appBar: AppBar(
         backgroundColor: const Color(0xFFE5F5F0),
         elevation: 0,
@@ -180,7 +181,6 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           children: [
-            // Profile Picture
             FadeTransition(
               opacity: _fadeAnimation,
               child: Stack(
@@ -214,8 +214,6 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
               ),
             ),
             const SizedBox(height: 20),
-
-            // Full Name
             SlideTransition(
               position: _slideAnimation,
               child: CustomTextField(
@@ -225,19 +223,15 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
               ),
             ),
             const SizedBox(height: 15),
-
-            // Address
             SlideTransition(
               position: _slideAnimation,
-                child: CustomTextField(
+              child: CustomTextField(
                 controller: _addressController,
                 label: "Address",
                 icon: Icons.location_on,
               ),
             ),
             const SizedBox(height: 15),
-
-            // Date of Birth
             SlideTransition(
               position: _slideAnimation,
               child: CustomTextField(
@@ -259,8 +253,6 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
               ),
             ),
             const SizedBox(height: 15),
-
-            // Email
             SlideTransition(
               position: _slideAnimation,
               child: CustomTextField(
@@ -271,22 +263,16 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
               ),
             ),
             const SizedBox(height: 15),
-
-            // Phone Number
             SlideTransition(
               position: _slideAnimation,
-              child: PhoneField(phoneController:  _phoneController),
+              child: PhoneField(phoneController: _phoneController),
             ),
             const SizedBox(height: 15),
-
-            // Gender
             SlideTransition(
               position: _slideAnimation,
               child: GenderField(),
             ),
             const SizedBox(height: 30),
-
-            // Update Button
             SlideTransition(
               position: _slideAnimation,
               child: ElevatedButton(
@@ -295,13 +281,25 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
                   if (_profileImage != null) {
                     savedImagePath = await _saveImageLocally(_profileImage!);
                   }
-                  print("Update button pressed");
-                  print("Full Name: ${_fullNameController.text}");
-                  print("Address: ${_addressController.text}");
-                  print("DOB: ${_dobController.text}");
-                  print("Email: ${_emailController.text}");
-                  print("Phone: ${_phoneController.text}");
-                  print("Profile Image Path: $savedImagePath");
+
+                  try {
+                    await context.read<HomeCubit>().fetchUserProfile(); // Refresh user profile
+                    final activityRepository = context.read<ActivityRepository>();
+                    await activityRepository.updateProfile(
+                      displayName: _fullNameController.text,
+                      phoneNumber: _phoneController.text,
+                      country: _addressController.text.split(',').last.trim(), // Assuming country is last part of address
+                      city: _addressController.text.split(',').first.trim(), // Assuming city is first part of address
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Profile updated successfully!')),
+                    );
+                    Navigator.pop(context); // Return to previous screen
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to update profile: $e')),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: MyColors.kPrimaryColor,
@@ -319,7 +317,4 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
       ),
     );
   }
-
-  
-
 }

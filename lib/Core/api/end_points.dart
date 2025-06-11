@@ -21,6 +21,7 @@ static const String _baseUrl = "https://gfoot.runasp.net/api/";
   static String confirmEmail = "${_baseUrl}Authentication/Confirm-Email";
   static String sendConfirmationEmailOtp = "${_baseUrl}Authentication/Resend-EmailConfirmation-Otp";
   static String  getProfile = "${_baseUrl}Individual/profile";
+  static String updateProfile = "${_baseUrl}Individual/profile";
 }
 
 class ApiKey {
