@@ -1,26 +1,25 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graduation_project/Core/models/statistics_model.dart';
+import 'package:graduation_project/Core/models/user_model.dart';
 import 'package:graduation_project/Data/repository/activity_repository.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   final ActivityRepository activityRepository;
-    final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  UserModel? _user; // Persist user data
 
   HomeCubit(this.activityRepository) : super(HomeInitial());
 
- Future<void> logActivity({required Map<String, dynamic> queryParameters}) async {
+  Future<void> logActivity({required Map<String, dynamic> queryParameters}) async {
     try {
       print('HomeCubit: Starting logActivity with queryParameters: $queryParameters');
       emit(HomeLoading());
 
-      // Step 1: Log the activity
       await activityRepository.logActivity(queryParameters: queryParameters);
       print('HomeCubit: Activity logged successfully');
 
-      // Step 2: Fetch the footprint value
       final carbonValue = await activityRepository.getFootprint();
       print('HomeCubit: Successfully fetched carbonValue: $carbonValue');
 
@@ -30,6 +29,7 @@ class HomeCubit extends Cubit<HomeState> {
       emit(HomeError(e.toString(), errorMessage: 'An error occurred while logging activity'));
     }
   }
+
   Future<void> getCarbonFootprint() async {
     emit(HomeLoading());
 
@@ -40,14 +40,14 @@ class HomeCubit extends Cubit<HomeState> {
       emit(HomeError(e.toString(), errorMessage: 'Failed to fetch carbon footprint'));
     }
   }
- Future<void> fetchStatistics(String type) async {
+
+  Future<void> fetchStatistics(String type) async {
     emit(HomeLoading());
 
     try {
       final token = await secureStorage.read(key: 'accessToken');
       final data = await activityRepository.getStatistics(token!);
 
-      // choose the correct list based on tab
       List<EmissionEntry> list;
       switch (type) {
         case 'Daily':
@@ -68,24 +68,53 @@ class HomeCubit extends Cubit<HomeState> {
       emit(HomeStatisticsError(e.toString(), message: 'Failed to fetch statistics'));
     }
   }
+
   Future<void> fetchRecommendations() async {
-  emit(HomeLoading());
-  try {
-    final token = await secureStorage.read(key: 'accessToken');
-    final recs = await activityRepository.getRecommendations(token!);
-    emit(HomeRecommendationsLoaded(recommendations: recs));
-  } catch (e) {
-    emit(HomeError(e.toString(), errorMessage: 'Failed to load recommendations'));
+    emit(HomeLoading());
+    try {
+      final token = await secureStorage.read(key: 'accessToken');
+      final recs = await activityRepository.getRecommendations(token!);
+      emit(HomeRecommendationsLoaded(recommendations: recs));
+    } catch (e) {
+      emit(HomeError(e.toString(), errorMessage: 'Failed to load recommendations'));
+    }
   }
-}
-Future<void> fetchRanks() async {
-  emit(HomeLoading());
-  try {
-    final token = await secureStorage.read(key: 'accessToken');
-    final rank = await activityRepository.getRanks(token!);
-    emit(HomeRanksLoaded(rank: rank));
-  } catch (e) {
-    emit(HomeError(e.toString(), errorMessage: 'Failed to load rankings'));
+
+  Future<void> fetchRanks() async {
+    emit(HomeLoading());
+    try {
+      final token = await secureStorage.read(key: 'accessToken');
+      if (token == null) {
+        throw Exception('No access token found');
+      }
+      print('HomeCubit: Fetching ranks with token: $token');
+      final rank = await activityRepository.getRanks(token);
+      if (_user == null) {
+        print('HomeCubit: User not loaded, fetching profile');
+        await fetchUserProfile();
+      }
+      emit(HomeRanksLoaded(rank: rank, user: _user));
+    } catch (e) {
+      print('HomeCubit: Error in fetchRanks: $e');
+      emit(HomeError(e.toString(), errorMessage: 'Failed to load rankings'));
+    }
   }
-}
+
+  Future<void> fetchUserProfile() async {
+    emit(HomeLoading());
+    try {
+      final token = await secureStorage.read(key: 'accessToken');
+      if (token == null) {
+        throw Exception('No access token found');
+      }
+      print('HomeCubit: Fetching user profile with token: $token');
+      final user = await activityRepository.getUserProfile(token);
+      _user = user; // Persist user data
+      print('HomeCubit: User profile fetched: ${user.displayName ?? user.userName ?? 'No name'}');
+      emit(HomeProfileLoaded(user: user));
+    } catch (e) {
+      print('HomeCubit: Error in fetchUserProfile: $e');
+      emit(HomeError(e.toString(), errorMessage: 'Failed to fetch user profile'));
+    }
+  }
 }

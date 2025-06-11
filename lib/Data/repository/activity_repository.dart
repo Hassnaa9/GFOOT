@@ -7,6 +7,7 @@ import 'package:graduation_project/Core/errors/exceptions.dart';
 import 'package:graduation_project/Core/models/rank_model.dart';
 import 'package:graduation_project/Core/models/recommendations_model.dart';
 import 'package:graduation_project/Core/models/statistics_model.dart';
+import 'package:graduation_project/Core/models/user_model.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class ActivityRepository {
@@ -217,5 +218,12 @@ Future<RankModel> getRanks(String token) async {
   );
   return RankModel.fromJson(response);
 }
+  Future<UserModel> getUserProfile(String token) async {
+    final response = await apiConsumer.get(
+      EndPoint.getProfile,
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    return UserModel.fromJson(response);
+  }
 
 }

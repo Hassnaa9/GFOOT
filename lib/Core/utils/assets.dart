@@ -39,4 +39,5 @@ class AssetsData {
   static const email ='assets/icons/mail.png';
   static const phone ='assets/icons/call-me.png';
   static const location ='assets/icons/location.png';
+  static const echoF ='assets/images/echoF.jpeg';
 }
