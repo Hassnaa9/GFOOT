@@ -5,11 +5,14 @@ import 'package:graduation_project/Features/home/presentation/view_models/home_c
 import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/gender_field.dart';
 import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/phone_field.dart';
 import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/custom_text_field.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+
 
 class EditAccountViewBody extends StatefulWidget {
   const EditAccountViewBody({super.key});
@@ -78,6 +81,8 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
 
   // Function to pick an image from gallery or camera
   Future<void> _pickImage(ImageSource source) async {
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
     try {
       bool hasPermission = false;
       if (source == ImageSource.camera) {
@@ -91,7 +96,7 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
 
       if (!hasPermission) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Permission denied. Please enable it in settings.")),
+          SnackBar(content: Text(l10n.permissionDeniedMessage)), // Localized
         );
         return;
       }
@@ -110,13 +115,15 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error picking image: $e")),
+        SnackBar(content: Text("${l10n.errorPickingImageMessage}: $e")), // Localized
       );
     }
   }
 
   // Show a dialog to choose between camera and gallery
   void _showImageSourceDialog() {
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
     showModalBottomSheet(
       context: context,
       builder: (context) => Column(
@@ -124,7 +131,7 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
         children: [
           ListTile(
             leading: const Icon(Icons.camera_alt),
-            title: const Text("Camera"),
+            title: Text(l10n.cameraOption), // Localized
             onTap: () {
               Navigator.pop(context);
               _pickImage(ImageSource.camera);
@@ -132,7 +139,7 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
           ),
           ListTile(
             leading: const Icon(Icons.photo_library),
-            title: const Text("Gallery"),
+            title: Text(l10n.galleryOption), // Localized
             onTap: () {
               Navigator.pop(context);
               _pickImage(ImageSource.gallery);
@@ -145,6 +152,8 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
 
   // Save the image locally
   Future<String?> _saveImageLocally(File image) async {
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
     try {
       final directory = await getApplicationDocumentsDirectory();
       final path = directory.path;
@@ -153,7 +162,7 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
       return savedImage.path;
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error saving image: $e")),
+        SnackBar(content: Text("${l10n.errorSavingImageMessage}: $e")), // Localized
       );
       return null;
     }
@@ -161,6 +170,8 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
 
   @override
   Widget build(BuildContext context) {
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -172,9 +183,9 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
             Navigator.pop(context);
           },
         ),
-        title: const Text(
-          "Edit Profile",
-          style: TextStyle(color: Colors.black),
+        title: Text(
+          l10n.editProfileTitle, // Localized
+          style: const TextStyle(color: Colors.black),
         ),
       ),
       body: SingleChildScrollView(
@@ -218,7 +229,7 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
               position: _slideAnimation,
               child: CustomTextField(
                 controller: _fullNameController,
-                label: "Full Name",
+                label: l10n.fullNameLabel, // Localized
                 icon: Icons.person,
               ),
             ),
@@ -227,7 +238,7 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
               position: _slideAnimation,
               child: CustomTextField(
                 controller: _addressController,
-                label: "Address",
+                label: l10n.addressLabel, // Localized
                 icon: Icons.location_on,
               ),
             ),
@@ -236,7 +247,7 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
               position: _slideAnimation,
               child: CustomTextField(
                 controller: _dobController,
-                label: "Date of Birth",
+                label: l10n.dateOfBirthLabel, // Localized
                 icon: Icons.calendar_today,
                 onTap: () async {
                   DateTime? pickedDate = await showDatePicker(
@@ -257,7 +268,7 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
               position: _slideAnimation,
               child: CustomTextField(
                 controller: _emailController,
-                label: "Email",
+                label: l10n.emailLabel, // Localized
                 icon: Icons.email,
                 keyboardType: TextInputType.emailAddress,
               ),
@@ -292,12 +303,12 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
                       city: _addressController.text.split(',').first.trim(), // Assuming city is first part of address
                     );
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Profile updated successfully!')),
+                      SnackBar(content: Text(l10n.profileUpdateSuccessMessage)), // Localized
                     );
                     Navigator.pop(context); // Return to previous screen
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Failed to update profile: $e')),
+                      SnackBar(content: Text("${l10n.profileUpdateFailedMessage}: $e")), // Localized
                     );
                   }
                 },
@@ -309,7 +320,7 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                child: const Text("UPDATE"),
+                child: Text(l10n.updateButton), // Localized
               ),
             ),
           ],
