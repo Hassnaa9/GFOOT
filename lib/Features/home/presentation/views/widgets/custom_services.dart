@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:graduation_project/Core/utils/assets.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
+
 
 class CustomServices extends StatelessWidget {
   final double screenWidth;
@@ -16,6 +18,9 @@ class CustomServices extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
+
     return AnimationLimiter(
       child: Column(
         children: AnimationConfiguration.toStaggeredList(
@@ -26,34 +31,36 @@ class CustomServices extends StatelessWidget {
           ),
           children: [
             _buildServiceRow(
+              context: context, // Pass context to access l10n
               items: [
                 _ServiceItem(
                   color: MyColors.white,
                   asset: AssetsData.calcs,
-                  label: "Calculations",
+                  label: l10n.calculationsTile, // Localized
                   onPressed: () => Navigator.pushNamed(context, '/Calculations'),
                 ),
                 _ServiceItem(
                   color: MyColors.white,
                   asset: AssetsData.statistics,
-                  label: "Statistics",
+                  label: l10n.statisticsTile, // Localized
                   onPressed: () => Navigator.pushNamed(context, '/Statistics'),
                 ),
               ],
             ),
             SizedBox(height: screenHeight * 0.01),
             _buildServiceRow(
+              context: context, // Pass context to access l10n
               items: [
                 _ServiceItem(
                   color: MyColors.white,
                   asset: AssetsData.learn,
-                  label: "Recommendation",
+                  label: l10n.recommendationTile, // Localized
                   onPressed: () => Navigator.pushNamed(context, '/Recommendations'),
                 ),
                 _ServiceItem(
                   color: MyColors.white,
                   asset: AssetsData.rank,
-                  label: "Rank",
+                  label: l10n.rankTile, // Localized
                   onPressed: () => Navigator.pushNamed(context, '/Rank'),
                 ),
               ],
@@ -64,7 +71,10 @@ class CustomServices extends StatelessWidget {
     );
   }
 
-  Widget _buildServiceRow({required List<_ServiceItem> items}) {
+  // Added context parameter to _buildServiceRow
+  Widget _buildServiceRow({required BuildContext context, required List<_ServiceItem> items}) {
+    // Get the localization instance inside the method too, if it needs to build localized widgets.
+    // In this case, labels are already localized in the _ServiceItem creation.
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: items.asMap().entries.map((entry) {
@@ -129,7 +139,7 @@ class _AnimatedServiceCardState extends State<_AnimatedServiceCard> {
                      padding: const EdgeInsets.only(top: 12.0),
                     child: Container(
                       width: widget.screenWidth * 0.28,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration( // Kept const where possible
                         color: (Color(0xFFC1E3C6)
                     ),                    ),
                       child: Center(
@@ -150,7 +160,7 @@ class _AnimatedServiceCardState extends State<_AnimatedServiceCard> {
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      widget.item.label,
+                      widget.item.label, // This is already localized
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,

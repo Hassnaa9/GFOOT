@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
 
 class CustomCarbonResult extends StatelessWidget {
@@ -10,10 +11,13 @@ class CustomCarbonResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        const Text( // Kept as const as CO2 is a scientific symbol
           "CO₂",
           style: TextStyle(
             fontSize: 18,
@@ -21,18 +25,18 @@ class CustomCarbonResult extends StatelessWidget {
             color: Color(0xff183309),
           ),
         ),
-        Text(
+        Text( // No longer const
           "${carbonFootprint?.toStringAsFixed(2) ?? '0.00'} kg",
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: MyColors.kPrimaryColor,)
         ),
-        SizedBox(
+        const SizedBox(
           height: 6,
         ),
-        Text(
-          "Today",
+        Text( // No longer const
+          l10n.todayLabel, // Localized
           style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w400,
