@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
 
 class EnhancedServicesHeader extends StatefulWidget {
@@ -39,6 +40,9 @@ class _EnhancedServicesHeaderState extends State<EnhancedServicesHeader> with Si
 
   @override
   Widget build(BuildContext context) {
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
+
     return AnimationConfiguration.staggeredList(
       position: 0,
       duration: const Duration(milliseconds: 600),
@@ -75,7 +79,7 @@ class _EnhancedServicesHeaderState extends State<EnhancedServicesHeader> with Si
                       color: MyColors.white,
                         
                       borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
+                      boxShadow: const [ // Kept const if no dynamic shadows are added
                         // BoxShadow(
                         //   color: MyColors.kPrimaryColor.withOpacity(0.3),
                         //   blurRadius: 8,
@@ -85,7 +89,7 @@ class _EnhancedServicesHeaderState extends State<EnhancedServicesHeader> with Si
                     ),
                     child: Center(
                       child: Text(
-                        "Explore our services",
+                        l10n.exploreOurServices, // Localized
                         style: TextStyle(
                           fontSize: widget.screenWidth * 0.04, // Responsive font size
                           fontWeight: FontWeight.bold,
