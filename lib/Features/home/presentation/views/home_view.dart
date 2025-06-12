@@ -7,7 +7,9 @@ import 'package:graduation_project/Features/home/presentation/views/widgets/cust
 import 'package:graduation_project/Features/home/presentation/views/widgets/gradient_indicator.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/service_header.dart';
 import 'package:graduation_project/Features/login&registration/login.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
+
 
 class HomeViewBody extends StatefulWidget {
   final Map<String, dynamic> userAnswers;
@@ -32,6 +34,8 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
 
     return SingleChildScrollView(
       child: Padding(
@@ -39,9 +43,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              "See your carbon footprint today!",
-              style: TextStyle(fontSize: 17, color: MyColors.kPrimaryColor),
+            Text( // No longer const
+              l10n.seeYourCarbonFootprintToday, // Localized
+              style: const TextStyle(fontSize: 17, color: MyColors.kPrimaryColor),
             ),
             SizedBox(height: screenHeight * .04),
             BlocBuilder<HomeCubit, HomeState>(
@@ -71,9 +75,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                       ),
                       SizedBox(height: screenHeight * .027),
                       if (carbonFootprint > 0.00)
-                        const Text(
-                          "Good job!",
-                          style: TextStyle(
+                        Text( // No longer const
+                          l10n.goodJobMessage, // Localized
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
                             color: MyColors.kPrimaryColor,
@@ -85,9 +89,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 } else if (state is HomeNoData) {
                   return Column(
                     children: [
-                      const Text(
-                        'Please complete the questionnaire to see your carbon footprint.',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      Text( // No longer const
+                        l10n.completeQuestionnaireMessage, // Localized (new ARB key)
+                        style: const TextStyle(fontSize: 16, color: Colors.grey),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: screenHeight * .01),
@@ -102,11 +106,11 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         MaterialPageRoute(builder: (context) => const SignInScreen()),
                       );
                     });
-                    return const Center(child: Text('Redirecting to login...'));
+                    return Center(child: Text(l10n.redirectingToLogin)); // Localized (new ARB key)
                   }
                   return Column(
                     children: [
-                      Text('Error: ${state.errorMessage}'),
+                      Text('${l10n.errorPrefix}: ${state.errorMessage}'), // Localized prefix (new ARB key)
                     ],
                   );
                 }
