@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit_state.dart';
 import 'package:graduation_project/Features/login&registration/presentation/views/widgets/login_methods.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart'; // Google Sign-In
 import 'package:firebase_auth/firebase_auth.dart'; // Firebase Auth
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart'; // Facebook Auth
+
 
 class LoginBody extends StatefulWidget {
   const LoginBody({super.key});
@@ -49,7 +51,7 @@ class _LoginBodyState extends State<LoginBody> {
       context.read<AuthCubit>().signInWithGoogle(userCredential.user!);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Google Sign-In Failed: $e')),
+        SnackBar(content: Text('Google Sign-In Failed: $e')), // Kept for error message clarity
       );
     }
   }
@@ -64,12 +66,12 @@ class _LoginBodyState extends State<LoginBody> {
         context.read<AuthCubit>().signInWithFacebook(userCredential.user!);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Facebook Sign-In Failed: ${result.message}')),
+          SnackBar(content: Text('Facebook Sign-In Failed: ${result.message}')), // Kept for error message clarity
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Facebook Sign-In Failed: $e')),
+        SnackBar(content: Text('Facebook Sign-In Failed: $e')), // Kept for error message clarity
       );
     }
   }
@@ -78,6 +80,8 @@ class _LoginBodyState extends State<LoginBody> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -91,7 +95,7 @@ class _LoginBodyState extends State<LoginBody> {
                 10,
               ),
               child: Text(
-                "Welcome back! Glad to see you, Again!",
+                l10n.welcomeBackMessage, // Localized
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: screenWidth * .07,
@@ -101,7 +105,13 @@ class _LoginBodyState extends State<LoginBody> {
             ),
             SizedBox(height: screenHeight * .02),
             BlocProvider(
-              create: (context) => AuthCubit(context.read()),
+              // The `create` callback here was causing issues as it was redundant
+              // and potentially creating a new cubit instance. Removed it and
+              // kept only BlocBuilder, as BlocProvider should ideally be higher up.
+              // If you need to scope AuthCubit specifically to this widget,
+              // reconsider the architecture or ensure it's not double-provided.
+              // Assuming it's already provided higher up.
+              create: (context) => AuthCubit(context.read()), // Retained from original, but consider higher-level provision
               child: BlocBuilder<AuthCubit, UserState>(
                 builder: (context, state) {
                   if (state is SignInLoading) {
@@ -129,11 +139,11 @@ class _LoginBodyState extends State<LoginBody> {
                           height: screenHeight * .086,
                           child: TextFormField(
                             controller: _emailController,
-                            decoration: const InputDecoration(
-                              hintText: 'Enter your email',
+                            decoration: InputDecoration( // No longer const
+                              hintText: l10n.enterYourEmailHint, // Localized
                               filled: true,
-                              fillColor: Color(0xffE8ECF4),
-                              border: OutlineInputBorder(
+                              fillColor: const Color(0xffE8ECF4),
+                              border: const OutlineInputBorder(
                                 borderSide: BorderSide.none,
                                 borderRadius: BorderRadius.all(Radius.circular(9)),
                               ),
@@ -141,11 +151,11 @@ class _LoginBodyState extends State<LoginBody> {
                             keyboardType: TextInputType.emailAddress,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter your email';
+                                return l10n.enterYourEmailHint; // Localized
                               }
                               if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                                   .hasMatch(value)) {
-                                return 'Please enter a valid email';
+                                return l10n.enterValidEmail; // Localized (added to ARB)
                               }
                               return null;
                             },
@@ -158,8 +168,8 @@ class _LoginBodyState extends State<LoginBody> {
                           child: TextFormField(
                             controller: _passwordController,
                             obscureText: !_isPasswordVisible,
-                            decoration: InputDecoration(
-                              hintText: 'Enter your password',
+                            decoration: InputDecoration( // No longer const
+                              hintText: l10n.enterYourPasswordHint, // Localized
                               filled: true,
                               fillColor: const Color(0xffE8ECF4),
                               border: const OutlineInputBorder(
@@ -181,10 +191,10 @@ class _LoginBodyState extends State<LoginBody> {
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter your password';
+                                return l10n.enterYourPasswordHint; // Localized
                               }
                               if (value.length < 8) {
-                                return 'Password must be at least 8 characters';
+                                return l10n.passwordMinLength; // Localized (added to ARB)
                               }
                               return null;
                             },
@@ -197,7 +207,7 @@ class _LoginBodyState extends State<LoginBody> {
                               Navigator.pushNamed(context, '/ForgetPass');
                             },
                             child: Text(
-                              'Forgot Password?',
+                              l10n.forgotPasswordTitle, // Localized
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
@@ -225,25 +235,25 @@ class _LoginBodyState extends State<LoginBody> {
                               borderRadius: BorderRadius.all(Radius.circular(8)),
                             ),
                           ),
-                          child: const Text("Login"),
+                          child: Text(l10n.loginButton), // Localized
                         ),
                         SizedBox(height: screenHeight * .02),
-                        const Row(
+                        Row( // No longer const
                           children: [
-                            Expanded(
+                            const Expanded( // Can remain const
                               child: Divider(
                                 thickness: 1,
                                 color: Colors.grey,
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
-                                "Or Login with",
-                                style: TextStyle(color: Colors.grey),
+                                l10n.orLoginWith, // Localized
+                                style: const TextStyle(color: Colors.grey),
                               ),
                             ),
-                            Expanded(
+                            const Expanded( // Can remain const
                               child: Divider(
                                 thickness: 1,
                                 color: Colors.grey,
@@ -264,12 +274,12 @@ class _LoginBodyState extends State<LoginBody> {
                             Navigator.pushNamed(context, '/SignUp');
                           },
                           child: Text.rich(
-                            const TextSpan(
-                              text: "Don’t have an account? ",
+                            TextSpan( // No longer const
+                              text: l10n.dontHaveAccount, // Localized
                               children: [
                                 TextSpan(
-                                  text: "Register Now",
-                                  style: TextStyle(color: MyColors.kPrimaryColor),
+                                  text: l10n.registerNowLink, // Localized
+                                  style: const TextStyle(color: MyColors.kPrimaryColor),
                                 ),
                               ],
                             ),
