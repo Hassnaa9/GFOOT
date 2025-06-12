@@ -4,8 +4,10 @@ import 'package:graduation_project/Core/utils/assets.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit_state.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/rank_card.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
 import 'package:graduation_project/Core/models/user_model.dart';
+// Import the generated AppLocalizations class
 
 class RankViewBody extends StatefulWidget {
   const RankViewBody({super.key});
@@ -51,10 +53,24 @@ class _RankViewBodyState extends State<RankViewBody> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: const Color(0xffF6F6F6),
+      appBar: AppBar(
+        title: Text(l10n.rankTitle, style: const TextStyle(color: Colors.black)), // Localized
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SafeArea(
         child: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
@@ -112,45 +128,45 @@ class _RankViewBodyState extends State<RankViewBody> with SingleTickerProviderSt
                                 ),
                                 const SizedBox(height: 6),
                                 if (isProfileLoading)
-                                  const Text(
-                                    'Loading user...',
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
+                                  Text( // No longer const
+                                    l10n.loadingUser, // Localized
+                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
                                   )
                                 else if (profileError != null)
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      const Text(
-                                        'Failed to load user',
-                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.red),
+                                      Text( // No longer const
+                                        l10n.failedToLoadUser, // Localized
+                                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.red),
                                       ),
                                       TextButton(
                                         onPressed: () => context.read<HomeCubit>().fetchUserProfile(),
-                                        child: const Text('Retry', style: TextStyle(color: MyColors.kPrimaryColor)),
+                                        child: Text(l10n.retryButton, style: const TextStyle(color: MyColors.kPrimaryColor)), // Localized
                                       ),
                                     ],
                                   )
                                 else
                                   Text(
-                                    user?.displayName ?? user?.userName ?? 'User Name',
+                                    user?.displayName ?? user?.userName ?? l10n.userNamePlaceholder, // Localized
                                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                                   ),
                                 const SizedBox(height: 32),
                                 BuildRankCard(
                                   imagePath: AssetsData.cityRank,
-                                  title: 'City Rank',
+                                  title: l10n.cityRankTitle, // Localized
                                   rank: state.rank.cityRank,
                                 ),
                                 const SizedBox(height: 16),
                                 BuildRankCard(
                                   imagePath: AssetsData.countryRank,
-                                  title: 'Country Rank',
+                                  title: l10n.countryRankTitle, // Localized
                                   rank: state.rank.countryRank,
                                 ),
                                 const SizedBox(height: 16),
                                 BuildRankCard(
                                   imagePath: AssetsData.globalRank,
-                                  title: 'Global Rank',
+                                  title: l10n.globalRankTitle, // Localized
                                   rank: state.rank.globalRank,
                                 ),
                               ],
@@ -172,15 +188,15 @@ class _RankViewBodyState extends State<RankViewBody> with SingleTickerProviderSt
                                 context.read<HomeCubit>().fetchRanks();
                               },
                               style: ElevatedButton.styleFrom(backgroundColor: MyColors.kPrimaryColor),
-                              child: const Text("Retry"),
+                              child: Text(l10n.retryButton), // Localized
                             ),
                           ],
                         )
                       else
-                        const Center(
+                        Center( // No longer const
                           child: Text(
-                            "No Rankings Available",
-                            style: TextStyle(fontSize: 18, color: Colors.grey),
+                            l10n.noRankingsAvailable, // Localized
+                            style: const TextStyle(fontSize: 18, color: Colors.grey),
                           ),
                         ),
                     ],
