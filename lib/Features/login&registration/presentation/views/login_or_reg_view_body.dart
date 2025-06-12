@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Core/utils/assets.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
+
 
 class LoginOrRegBody extends StatefulWidget {
   const LoginOrRegBody({super.key});
@@ -9,7 +11,7 @@ class LoginOrRegBody extends StatefulWidget {
   State<LoginOrRegBody> createState() => _LoginOrRegBodyState();
 }
 
-class _LoginOrRegBodyState extends State<LoginOrRegBody> 
+class _LoginOrRegBodyState extends State<LoginOrRegBody>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
@@ -19,7 +21,7 @@ class _LoginOrRegBodyState extends State<LoginOrRegBody>
   @override
   void initState() {
     super.initState();
-    
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
@@ -65,6 +67,8 @@ class _LoginOrRegBodyState extends State<LoginOrRegBody>
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
 
     return Stack(
       fit: StackFit.expand,
@@ -114,7 +118,7 @@ class _LoginOrRegBodyState extends State<LoginOrRegBody>
                         borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
                     ),
-                    child: const Text("Sign In"),
+                    child: Text(l10n.signInButton), // Localized "Sign In"
                   ),
                 ),
                 SizedBox(height: screenHeight * .02),
@@ -133,7 +137,7 @@ class _LoginOrRegBodyState extends State<LoginOrRegBody>
                       ),
                       backgroundColor: MyColors.white,
                     ),
-                    child: const Text("Sign Up"),
+                    child: Text(l10n.signUpButton), // Localized "Sign Up"
                   ),
                 ),
                 Spacer(flex: (screenHeight * .0039).toInt()),
