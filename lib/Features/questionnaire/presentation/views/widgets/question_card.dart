@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Features/questionnaire/presentation/views/widgets/custom_question_options.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
+
 
 class QuestionCard extends StatefulWidget {
   final String question;
@@ -55,6 +57,8 @@ class _QuestionCardState extends State<QuestionCard> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
 
     return FadeTransition(
       opacity: _fadeAnimation,
@@ -80,7 +84,7 @@ class _QuestionCardState extends State<QuestionCard> with SingleTickerProviderSt
                     ],
                   ),
                   child: Text(
-                    widget.question,
+                    widget.question, // This is already localized from questionnaire_view.dart
                     style: const TextStyle(color: Colors.white, fontSize: 16),
                     softWrap: true,
                   ),
@@ -95,8 +99,8 @@ class _QuestionCardState extends State<QuestionCard> with SingleTickerProviderSt
                 else
                   TextField(
                     controller: _controller,
-                    decoration: InputDecoration(
-                      labelText: 'Enter value',
+                    decoration: InputDecoration( // No longer const
+                      labelText: l10n.enterValue, // Localized
                       filled: true,
                       fillColor: Colors.white.withOpacity(0.8),
                       border: OutlineInputBorder(
@@ -109,11 +113,11 @@ class _QuestionCardState extends State<QuestionCard> with SingleTickerProviderSt
                       setState(() {
                         final parsedValue = double.tryParse(value);
                         if (parsedValue == null) {
-                          _errorText = 'Invalid number';
+                          _errorText = l10n.invalidNumber; // Localized
                         } else if (widget.keyName == 'how_long_tv_pc_daily_hour' ||
                             widget.keyName == 'how_long_internet_daily_hour') {
                           if (parsedValue < 0 || parsedValue > 24) {
-                            _errorText = 'Must be between 0 and 24 hours';
+                            _errorText = l10n.questionnaireHoursRange; // Localized
                           } else {
                             _errorText = null;
                             // Convert to int for fields that expect integers
@@ -127,7 +131,7 @@ class _QuestionCardState extends State<QuestionCard> with SingleTickerProviderSt
                             }
                           }
                         } else if (parsedValue < 0) {
-                          _errorText = 'Must be a positive number';
+                          _errorText = l10n.questionnairePositiveNumber; // Localized
                         } else {
                           _errorText = null;
                           // Convert to int for fields that expect integers
