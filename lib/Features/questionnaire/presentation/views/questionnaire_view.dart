@@ -5,8 +5,10 @@ import 'package:graduation_project/Data/repository/activity_repository.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
 import 'package:graduation_project/Features/home/presentation/views/home_view.dart';
 import 'package:graduation_project/Features/questionnaire/presentation/views/widgets/question_card.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
 import 'package:graduation_project/Core/api/end_points.dart';
+
 
 class QuestionnaireViewBody extends StatefulWidget {
   const QuestionnaireViewBody({super.key});
@@ -22,156 +24,10 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
   late AnimationController _buttonAnimationController;
   late Animation<double> _buttonScaleAnimation;
 
- final List<Map<String, dynamic>> questions = [
-  {
-    'text': '🏋️‍♀️ What is your body type?',
-    'type': 'multiple_choice',
-    'options': [
-      {'display': '⚖️ Obese', 'value': 'obese'},
-      {'display': '⚖️ Overweight', 'value': 'overweight'},
-      {'display': '⚖️ Underweight', 'value': 'underweight'},
-      {'display': '⚖️ Normal', 'value': 'normal'},
-    ],
-    'key': 'body_type'
-  },
-  {
-    'text': '👤 What is your gender?',
-    'type': 'multiple_choice',
-    'options': [
-      {'display': '♀️ Female', 'value': 'female'},
-      {'display': '♂️ Male', 'value': 'male'},
-    ],
-    'key': 'sex'
-  },
-  {
-    'text': '🍽️ What is your diet type?',
-    'type': 'multiple_choice',
-    'options': [
-      {'display': '🍖 Omnivore', 'value': 'omnivore'},
-      {'display': '🥗 Vegetarian', 'value': 'vegetarian'},
-      {'display': '🌱 Vegan', 'value': 'vegan'},
-      {'display': '🐟 Pescatarian', 'value': 'pescatarian'},
-    ],
-    'key': 'diet'
-  },
-  {
-    'text': '🚿 How frequently do you shower?',
-    'type': 'multiple_choice',
-    'options': [
-      {'display': '🕒 Twice a day', 'value': 'twice a day'},
-      {'display': '📅 Daily', 'value': 'daily'},
-      {'display': '⏳ Less frequently', 'value': 'less frequently'},
-      {'display': '⏰ More frequently', 'value': 'more frequently'},
-    ],
-    'key': 'how_often_shower'
-  },
-  {
-    'text': '🔥 What is your home’s primary heating energy source?',
-    'type': 'multiple_choice',
-    'options': [
-      {'display': '🪨 Coal', 'value': 'coal'},
-      {'display': '💨 Natural gas', 'value': 'natural gas'},
-      {'display': '🪵 Wood', 'value': 'wood'},
-      {'display': '⚡ Electricity', 'value': 'electricity'},
-    ],
-    'key': 'heating_energy_source'
-  },
-  {
-    'text': '🚗 What is your primary mode of transportation?',
-    'type': 'multiple_choice',
-    'options': [
-      {'display': '🚘 Private', 'value': 'private'},
-      {'display': '🚌 Public', 'value': 'public'},
-      {'display': '🚶‍♂️ Walk/Bicycle', 'value': 'walk/bicycle'},
-    ],
-    'key': 'transport'
-  },
-  {
-    'text': '🚙 What type of vehicle you use?',
-    'type': 'multiple_choice',
-    'options': [
-      {'display': '🔋 Hybrid', 'value': 'hybrid'},
-      {'display': '⛽ Petrol', 'value': 'petrol'},
-      {'display': '🛢️ Diesel', 'value': 'diesel'},
-      {'display': '💧 LPG', 'value': 'lpg'},
-      {'display': '⚡ Electric', 'value': 'electric'},
-      {'display': '❓ NaN', 'value': 'NaN'},
-    ],
-    'key': 'vehicle_type_detailed'
-  },
-  {
-    'text': '🎉 How often do you participate in social activities?',
-    'type': 'multiple_choice',
-    'options': [
-      {'display': '🤷‍♂️ Sometimes', 'value': 'sometimes'},
-      {'display': '🥳 Often', 'value': 'often'},
-      {'display': '🚫 Never', 'value': 'never'},
-    ],
-    'key': 'social_activity'
-  },
-  {
-    'text': '🛒 What is your average monthly grocery bill (in your local currency)?',
-    'type': 'numeric',
-    'key': 'monthly_grocery_bill'
-  },
-  {
-    'text': '✈️ How often did you travel by air?',
-    'type': 'multiple_choice',
-    'options': [
-      {'display': '🚫 Never', 'value': 'never'},
-      {'display': '🌟 Rarely', 'value': 'rarely'},
-      {'display': '🛫 Frequently', 'value': 'frequently'},
-      {'display': '✈️ Very frequently', 'value': 'very frequently'},
-    ],
-    'key': 'frequency_of_traveling_by_air'
-  },
-  {
-    'text': '🛣️ How many kilometers do you drive per month?',
-    'type': 'numeric',
-    'key': 'vehicle_monthly_distance_km'
-  },
-  {
-    'text': '🗑️ What is the size of your garbage bag?',
-    'type': 'multiple_choice',
-    'options': [
-      {'display': '📏 Medium', 'value': 'medium'},
-      {'display': '📏 Small', 'value': 'small'},
-      {'display': '📏 Large', 'value': 'large'},
-    ],
-    'key': 'waste_bag_size'
-  },
-  {
-    'text': '♻️ On average, how many garbage bags did your household use weekly?',
-    'type': 'numeric',
-    'key': 'waste_bag_weekly_count'
-  },
-  {
-    'text': '📺 On average, how many hours do you spend daily watching TV or using a PC?',
-    'type': 'numeric',
-    'key': 'how_long_tv_pc_daily_hour'
-  },
-  {
-    'text': '🌐 On average, how many hours do you spend online daily?',
-    'type': 'numeric',
-    'key': 'how_long_internet_daily_hour'
-  },
-  {
-    'text': '👕 On average, how many new clothes do you buy per month?',
-    'type': 'numeric',
-    'key': 'how_many_new_clothes_monthly'
-  },
-  {
-    'text': '💡 Do you actively seek out energy-efficient appliances?',
-    'type': 'multiple_choice',
-    'options': [
-      {'display': '✅ Yes', 'value': 'Yes'},
-      {'display': '🤔 Sometimes', 'value': 'Sometimes'},
-      {'display': '❌ No', 'value': 'No'},
-    ],
-    'key': 'energy_efficiency'
-  },
-];
-@override
+  // The list of questions will now be built dynamically in the build method
+  // using localized strings.
+
+  @override
   void initState() {
     super.initState();
     _buttonAnimationController = AnimationController(
@@ -191,6 +47,12 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
   }
 
   void _nextPage() {
+    // Get the localization instance for this method (if needed)
+    final l10n = AppLocalizations.of(context)!;
+    
+    // Define questions inside a method or make it dependent on context for localization
+    final List<Map<String, dynamic>> questions = _buildQuestions(l10n);
+
     if (_currentPage < questions.length - 1) {
       _buttonAnimationController.forward().then((_) => _buttonAnimationController.reverse());
       _pageController.nextPage(
@@ -203,7 +65,12 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
   }
 
   void _submitResponses() {
+    final l10n = AppLocalizations.of(context)!; // Get localization instance
     print('Responses: $_responses');
+
+    // Re-build questions list to get localized texts for validation messages
+    final List<Map<String, dynamic>> questions = _buildQuestions(l10n);
+
     List<String> missingQuestions = [];
     List<String> invalidQuestions = [];
 
@@ -216,7 +83,7 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
         // Validate numeric fields
         final stringValue = value.toString();
         if (double.tryParse(stringValue) == null) {
-          invalidQuestions.add('${question['text']} (must be a valid number)');
+          invalidQuestions.add('${question['text']} (${l10n.questionnaireMustBeNumber})'); // Localized
         }
       }
     }
@@ -226,7 +93,7 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Please answer: ${missingQuestions.join(", ")}',
+            '${l10n.questionnairePleaseAnswer}: ${missingQuestions.join(", ")}', // Localized
             style: const TextStyle(fontSize: 12),
           ),
           duration: const Duration(seconds: 5),
@@ -240,7 +107,7 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Please correct: ${invalidQuestions.join(", ")}',
+            '${l10n.questionnairePleaseCorrect}: ${invalidQuestions.join(", ")}', // Localized
             style: const TextStyle(fontSize: 12),
           ),
           duration: const Duration(seconds: 5),
@@ -291,10 +158,168 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
     });
   }
 
+  // Method to build questions list with localized strings
+  List<Map<String, dynamic>> _buildQuestions(AppLocalizations l10n) {
+    return [
+      {
+        'text': l10n.questionnaireBodyType,
+        'type': 'multiple_choice',
+        'options': [
+          {'display': l10n.bodyTypeObese, 'value': 'obese'},
+          {'display': l10n.bodyTypeOverweight, 'value': 'overweight'},
+          {'display': l10n.bodyTypeUnderweight, 'value': 'underweight'},
+          {'display': l10n.bodyTypeNormal, 'value': 'normal'},
+        ],
+        'key': 'body_type'
+      },
+      {
+        'text': l10n.questionnaireGender,
+        'type': 'multiple_choice',
+        'options': [
+          {'display': l10n.genderFemale, 'value': 'female'},
+          {'display': l10n.genderMale, 'value': 'male'},
+        ],
+        'key': 'sex'
+      },
+      {
+        'text': l10n.questionnaireDietType,
+        'type': 'multiple_choice',
+        'options': [
+          {'display': l10n.dietOmnivore, 'value': 'omnivore'},
+          {'display': l10n.dietVegetarian, 'value': 'vegetarian'},
+          {'display': l10n.dietVegan, 'value': 'vegan'},
+          {'display': l10n.dietPescatarian, 'value': 'pescatarian'},
+        ],
+        'key': 'diet'
+      },
+      {
+        'text': l10n.questionnaireShowerFrequency,
+        'type': 'multiple_choice',
+        'options': [
+          {'display': l10n.showerTwiceDaily, 'value': 'twice a day'},
+          {'display': l10n.showerDaily, 'value': 'daily'},
+          {'display': l10n.showerLessFrequently, 'value': 'less frequently'},
+          {'display': l10n.showerMoreFrequently, 'value': 'more frequently'},
+        ],
+        'key': 'how_often_shower'
+      },
+      {
+        'text': l10n.questionnaireHeatingSource,
+        'type': 'multiple_choice',
+        'options': [
+          {'display': l10n.heatingCoal, 'value': 'coal'},
+          {'display': l10n.heatingNaturalGas, 'value': 'natural gas'},
+          {'display': l10n.heatingWood, 'value': 'wood'},
+          {'display': l10n.heatingElectricity, 'value': 'electricity'},
+        ],
+        'key': 'heating_energy_source'
+      },
+      {
+        'text': l10n.questionnaireTransportation,
+        'type': 'multiple_choice',
+        'options': [
+          {'display': l10n.transportPrivate, 'value': 'private'},
+          {'display': l10n.transportPublic, 'value': 'public'},
+          {'display': l10n.transportWalkBicycle, 'value': 'walk/bicycle'},
+        ],
+        'key': 'transport'
+      },
+      {
+        'text': l10n.questionnaireVehicleType,
+        'type': 'multiple_choice',
+        'options': [
+          {'display': l10n.vehicleHybrid, 'value': 'hybrid'},
+          {'display': l10n.vehiclePetrol, 'value': 'petrol'},
+          {'display': l10n.vehicleDiesel, 'value': 'diesel'},
+          {'display': l10n.vehicleLPG, 'value': 'lpg'},
+          {'display': l10n.vehicleElectric, 'value': 'electric'},
+          {'display': l10n.vehicleNaN, 'value': 'NaN'},
+        ],
+        'key': 'vehicle_type_detailed'
+      },
+      {
+        'text': l10n.questionnaireSocialActivity,
+        'type': 'multiple_choice',
+        'options': [
+          {'display': l10n.socialSometimes, 'value': 'sometimes'},
+          {'display': l10n.socialOften, 'value': 'often'},
+          {'display': l10n.socialNever, 'value': 'never'},
+        ],
+        'key': 'social_activity'
+      },
+      {
+        'text': l10n.questionnaireMonthlyGrocery,
+        'type': 'numeric',
+        'key': 'monthly_grocery_bill'
+      },
+      {
+        'text': l10n.questionnaireAirTravel,
+        'type': 'multiple_choice',
+        'options': [
+          {'display': l10n.airTravelNever, 'value': 'never'},
+          {'display': l10n.airTravelRarely, 'value': 'rarely'},
+          {'display': l10n.airTravelFrequently, 'value': 'frequently'},
+          {'display': l10n.airTravelVeryFrequently, 'value': 'very frequently'},
+        ],
+        'key': 'frequency_of_traveling_by_air'
+      },
+      {
+        'text': l10n.questionnaireVehicleDistance,
+        'type': 'numeric',
+        'key': 'vehicle_monthly_distance_km'
+      },
+      {
+        'text': l10n.questionnaireWasteBagSize,
+        'type': 'multiple_choice',
+        'options': [
+          {'display': l10n.wasteBagMedium, 'value': 'medium'},
+          {'display': l10n.wasteBagSmall, 'value': 'small'},
+          {'display': l10n.wasteBagLarge, 'value': 'large'},
+        ],
+        'key': 'waste_bag_size'
+      },
+      {
+        'text': l10n.questionnaireWasteBagCount,
+        'type': 'numeric',
+        'key': 'waste_bag_weekly_count'
+      },
+      {
+        'text': l10n.questionnaireTvPcHours,
+        'type': 'numeric',
+        'key': 'how_long_tv_pc_daily_hour'
+      },
+      {
+        'text': l10n.questionnaireInternetHours,
+        'type': 'numeric',
+        'key': 'how_long_internet_daily_hour'
+      },
+      {
+        'text': l10n.questionnaireNewClothes,
+        'type': 'numeric',
+        'key': 'how_many_new_clothes_monthly'
+      },
+      {
+        'text': l10n.questionnaireEnergyEfficiency,
+        'type': 'multiple_choice',
+        'options': [
+          {'display': l10n.energyEfficiencyYes, 'value': 'Yes'},
+          {'display': l10n.energyEfficiencySometimes, 'value': 'Sometimes'},
+          {'display': l10n.energyEfficiencyNo, 'value': 'No'},
+        ],
+        'key': 'energy_efficiency'
+      },
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
+    // Build questions list with localized strings
+    final List<Map<String, dynamic>> questions = _buildQuestions(l10n);
+
 
     return Scaffold(
       body: Stack(
@@ -396,9 +421,9 @@ class _QuestionnaireViewBodyState extends State<QuestionnaireViewBody> with Sing
                             ),
                           ),
                           child: _currentPage == questions.length - 1
-                              ? const Text(
-                                  'Submit',
-                                  style: TextStyle(color: MyColors.questions, fontSize: 20),
+                              ? Text( // No longer const
+                                  l10n.submitButton, // Localized
+                                  style: const TextStyle(color: MyColors.questions, fontSize: 20),
                                 )
                               : Image.asset(
                                   AssetsData.arrow,
