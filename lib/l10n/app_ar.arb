@@ -1,0 +1,72 @@
+{
+  "@@locale": "ar",
+  "appTitle": "جي فوت",
+
+  "navHome": "الرئيسية",
+  "navLearn": "تعلم",
+  "navSettings": "الإعدادات",
+  "navProfile": "الملف الشخصي",
+
+  "yourCarbonFootprintTitle": "بصمتك الكربونية",
+  "whatItIsTitle": "ما هي؟",
+  "whatItIsDescription": "بصمتك الكربونية هي إجمالي كمية غازات الدفيئة التي تنتجها، بما في ذلك ثاني أكسيد الكربون والميثان.",
+  "benefitsTitle": "الفوائد",
+  "benefitsDescription": "يساعد تقليل بصمتك الكربونية على إبطاء تغير المناخ، والحفاظ على الموارد الطبيعية، وإنشاء مستقبل أكثر استدامة.",
+  "waysToReduceTitle": "طرق التخفيض",
+  "waysToReduceDescription": "يمكنك تقليل بصمتك عن طريق توفير الطاقة، وتقليل النفايات، واختيار وسائل النقل المستدامة، ودعم المنتجات الصديقة للبيئة.",
+
+  "seeYourCarbonFootprintToday": "شاهد بصمتك الكربونية اليوم!",
+  "todayLabel": "اليوم",
+  "goodJobMessage": "أحسنت!",
+  "exploreOurServices": "اكتشف خدماتنا",
+  "calculationsTile": "الحسابات",
+  "statisticsTile": "الإحصائيات",
+  "recommendationTile": "التوصيات",
+  "rankTile": "الترتيب",
+
+  "passwordChangedTitle": "تم تغيير كلمة المرور!",
+  "passwordChangedSuccessMessage": "تم تغيير كلمة المرور الخاصة بك بنجاح!",
+  "backToLoginButton": "العودة لتسجيل الدخول",
+
+  "createNewPasswordTitle": "إنشاء كلمة مرور جديدة",
+  "newPasswordUniqueHint": "يجب أن تكون كلمة المرور الجديدة فريدة عن تلك المستخدمة مسبقاً!",
+  "enterYourPasswordHint": "أدخل كلمة المرور الخاصة بك",
+  "confirmYourPasswordHint": "تأكيد كلمة المرور الخاصة بك",
+  "resetPasswordButton": "إعادة تعيين كلمة المرور",
+
+  "otpVerificationTitle": "التحقق من رمز OTP",
+  "otpSentToEmailMessage": "أدخل الرمز المكون من 6 أرقام المرسل إلى بريدك الإلكتروني",
+  "verifyButton": "تحقق",
+  "didntReceiveOtp": "لم تتلقَ الرمز؟",
+  "resendOtp": "إعادة إرسال الرمز",
+  "resendOtpCountdown": "إعادة إرسال الرمز ({seconds} ث)",
+
+  "forgotPasswordTitle": "هل نسيت كلمة المرور؟",
+  "forgotPasswordHint": "لا تقلق! يحدث هذا. الرجاء إدخال عنوان بريدك الإلكتروني، وسنرسل رمز OTP إلى بريدك الإلكتروني.",
+  "enterYourEmailHint": "أدخل بريدك الإلكتروني",
+  "continueButton": "متابعة",
+
+  "enterYourPhoneNumberHint": "أدخل رقم هاتفك (مثال: +20123456789)",
+  "enterYourCountryHint": "أدخل دولتك",
+  "enterYourCityHint": "أدخل مدينتك",
+  "registerButton": "تسجيل",
+  "orRegisterWith": "أو سجل بواسطة",
+  "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+  "loginNowLink": "تسجيل الدخول الآن",
+
+  "helloRegisterToGetStarted": "مرحباً! سجل لتبدأ",
+  "enterYourUsernameHint": "أدخل اسم المستخدم الخاص بك",
+  "enterYourDisplayNameHint": "أدخل اسم العرض الخاص بك",
+  "individualUserDropdown": "مستخدم فردي",
+  "companyUserDropdown": "مستخدم شركة",
+  "organizationUserDropdown": "مستخدم منظمة",
+
+  "welcomeBackMessage": "أهلاً بعودتك! سعيد برؤيتك مرة أخرى!",
+  "loginButton": "تسجيل الدخول",
+  "orLoginWith": "أو تسجيل الدخول بواسطة",
+  "dontHaveAccount": "ليس لديك حساب؟",
+  "registerNowLink": "سجل الآن",
+
+  "signInButton": "تسجيل الدخول",
+  "signUpButton": "التسجيل"
+}

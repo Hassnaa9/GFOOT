@@ -1,0 +1,79 @@
+{
+  "@@locale": "en",
+  "appTitle": "GFoot",
+
+  "navHome": "Home",
+  "navLearn": "Learn",
+  "navSettings": "Settings",
+  "navProfile": "Profile",
+
+  "yourCarbonFootprintTitle": "Your Carbon Footprint",
+  "whatItIsTitle": "What It Is",
+  "whatItIsDescription": "Your Carbon Footprint is the total amount of greenhouse gases you produce, including carbon dioxide and methane.",
+  "benefitsTitle": "Benefits",
+  "benefitsDescription": "Reducing your Carbon Footprint helps to slow climate change, conserve natural resources, and create a more sustainable future.",
+  "waysToReduceTitle": "Ways to Reduce",
+  "waysToReduceDescription": "You can lower your footprint by saving energy, reducing waste, choosing sustainable transportation, and supporting eco-friendly products.",
+
+  "seeYourCarbonFootprintToday": "See your carbon footprint today!",
+  "todayLabel": "Today",
+  "goodJobMessage": "Good job!",
+  "exploreOurServices": "Explore our services",
+  "calculationsTile": "Calculations",
+  "statisticsTile": "Statistics",
+  "recommendationTile": "Recommendation",
+  "rankTile": "Rank",
+
+  "passwordChangedTitle": "Password Changed!",
+  "passwordChangedSuccessMessage": "Your password has been changed successfully!",
+  "backToLoginButton": "Back to Login",
+
+  "createNewPasswordTitle": "Create New Password",
+  "newPasswordUniqueHint": "Your new password must be unique from those previously used!",
+  "enterYourPasswordHint": "Enter your password",
+  "confirmYourPasswordHint": "Confirm your password",
+  "resetPasswordButton": "Reset Password",
+
+  "otpVerificationTitle": "OTP Verification",
+  "otpSentToEmailMessage": "Enter the 6-digit code sent to your email",
+  "verifyButton": "Verify",
+  "didntReceiveOtp": "Didn't receive the OTP?",
+  "resendOtp": "Resend OTP",
+  "resendOtpCountdown": "Resend OTP ({seconds} s)",
+  "@resendOtpCountdown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+
+  "forgotPasswordTitle": "Forgot Password?",
+  "forgotPasswordHint": "Don't worry! It happens. Please enter your email address, and we will send the OTP to your email.",
+  "enterYourEmailHint": "Enter your email",
+  "continueButton": "Continue",
+
+  "enterYourPhoneNumberHint": "Enter your phone number (e.g., +20123456789)",
+  "enterYourCountryHint": "Enter your country",
+  "enterYourCityHint": "Enter your city",
+  "registerButton": "Register",
+  "orRegisterWith": "Or Register with",
+  "alreadyHaveAccount": "Already have an account?",
+  "loginNowLink": "Login Now",
+
+  "helloRegisterToGetStarted": "Hello! Register to get started",
+  "enterYourUsernameHint": "Enter your username",
+  "enterYourDisplayNameHint": "Enter your display name",
+  "individualUserDropdown": "Individual User",
+  "companyUserDropdown": "Company User",
+  "organizationUserDropdown": "Organization User",
+
+  "welcomeBackMessage": "Welcome back! Glad to see you, Again!",
+  "loginButton": "Login",
+  "orLoginWith": "Or Login with",
+  "dontHaveAccount": "Don't have an account?",
+  "registerNowLink": "Register Now",
+
+  "signInButton": "Sign In",
+  "signUpButton": "Sign Up"
+}

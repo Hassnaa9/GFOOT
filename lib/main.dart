@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_localizations/flutter_localizations.dart'; // Import for global localizations
+
 import 'package:graduation_project/Core/api/api_consumer.dart';
 import 'package:graduation_project/Core/api/dio_consumer.dart';
 import 'package:graduation_project/Data/repository/activity_repository.dart';
@@ -27,6 +29,10 @@ import 'package:graduation_project/Features/profile&setting/setting.dart';
 import 'package:graduation_project/Features/questionnaire/questionnaire.dart';
 import 'package:graduation_project/Features/splash_screen/splash_screen.dart';
 import 'package:graduation_project/app_scaffold.dart';
+
+// Import the generated AppLocalizations class
+import 'package:graduation_project/app_localizations.dart';
+
 
 // Define RouteObserver for RouteAware
 final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
@@ -80,9 +86,34 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             fontFamily: 'Urbanist',
           ),
-          title: 'Your App',
+          // Set the app title to be localized
+          title: AppLocalizations.lookupAppLocalizations(
+                  WidgetsBinding.instance.platformDispatcher.locale)
+              .appTitle,
           initialRoute: '/',
           navigatorObservers: [routeObserver],
+          // Add localization delegates and supported locales
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [
+            AppLocalizations.delegate, // Your generated delegate
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          // Optional: A locale resolution callback to handle how the app resolves its locale.
+          // This ensures that if the device locale isn't perfectly matched, it falls back
+          // to one of your supported locales (e.g., English or Arabic).
+          localeResolutionCallback: (locale, supportedLocales) {
+            if (locale != null) {
+              for (var supportedLocale in supportedLocales) {
+                if (supportedLocale.languageCode == locale.languageCode) {
+                  return supportedLocale;
+                }
+              }
+            }
+            // If the device locale is not supported, default to the first supported locale (e.g., English)
+            return supportedLocales.first;
+          },
           routes: {
             '/': (context) => const SplashScreen(),
             '/SigninOrSignup': (context) => const SigninOrSignupScreen(),
