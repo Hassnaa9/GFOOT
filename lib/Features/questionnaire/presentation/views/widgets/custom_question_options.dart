@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/constants.dart';
+// Import the generated AppLocalizations class
+
 
 class CustomQuestionOption extends StatefulWidget {
   final List<Map<String , dynamic>> options;
@@ -22,6 +24,8 @@ class _CustomQuestionOptionState extends State<CustomQuestionOption> {
 
   @override
   Widget build(BuildContext context) {
+    // Note: The 'display' field in widget.options is expected to already be localized
+    // from the questionnaire_view.dart where the questions list is built.
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -46,7 +50,7 @@ class _CustomQuestionOptionState extends State<CustomQuestionOption> {
               });
             },
             title: Text(
-              widget.options[index]['display'] as String, // Extract the 'display' field
+              widget.options[index]['display'] as String, // This 'display' should now be localized
               style: const TextStyle(color: Colors.white),
             ),
             activeColor: Colors.white,
