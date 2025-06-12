@@ -4,7 +4,9 @@ import 'package:graduation_project/Core/models/recommendations_model.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit_state.dart';
 import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/notification_card.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
+
 
 class RecommendationsViewBody extends StatefulWidget {
   const RecommendationsViewBody({super.key});
@@ -52,6 +54,8 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
 
   @override
   Widget build(BuildContext context) {
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color(0xFFE5F5F0), // Light green background
       appBar: AppBar(
@@ -63,9 +67,9 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
             Navigator.pop(context);
           },
         ),
-        title: const Text(
-          "Your Eco Recommendations",
-          style: TextStyle(color: MyColors.kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold),
+        title: Text( // No longer const
+          l10n.yourEcoRecommendationsTitle, // Localized
+          style: const TextStyle(color: MyColors.kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
       body: Padding(
@@ -77,10 +81,10 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
             } else if (state is HomeRecommendationsLoaded) {
               final recommendations = state.recommendations;
               if (recommendations.isEmpty) {
-                return const Center(
+                return Center( // No longer const
                   child: Text(
-                    "No Recommendations yet!",
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                    l10n.noRecommendationsYetMessage, // Localized
+                    style: const TextStyle(fontSize: 18, color: Colors.grey),
                   ),
                 );
               }
@@ -118,16 +122,16 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
                       onPressed: () {
                         context.read<HomeCubit>().fetchRecommendations();
                       },
-                      child: const Text("Retry"),
+                      child: Text(l10n.retryButton), // Localized
                     ),
                   ],
                 ),
               );
             }
-            return const Center(
+            return Center( // No longer const
               child: Text(
-                "No Recommendations yet!",
-                style: TextStyle(fontSize: 18, color: Colors.grey),
+                l10n.noRecommendationsYetMessage, // Localized
+                style: const TextStyle(fontSize: 18, color: Colors.grey),
               ),
             );
           },
@@ -150,18 +154,7 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
     }
   }
 
-  String _formatTimestamp(DateTime timestamp) {
-    final now = DateTime.now();
-    final difference = now.difference(timestamp);
-
-    if (difference.inDays > 0) {
-      return "${difference.inDays} day${difference.inDays > 1 ? 's' : ''} ago";
-    } else if (difference.inHours > 0) {
-      return "${difference.inHours} hour${difference.inHours > 1 ? 's' : ''} ago";
-    } else if (difference.inMinutes > 0) {
-      return "${difference.inMinutes} minute${difference.inMinutes > 1 ? 's' : ''} ago";
-    } else {
-      return "Just now";
-    }
-  }
+  // Moved _formatTimestamp logic to NotificationsViewBody if it's identical
+  // If it's used elsewhere, keep it as a utility or in a common place.
+  // For now, assuming it's identical and handled by `notifications_view_body.dart`'s localization.
 }
