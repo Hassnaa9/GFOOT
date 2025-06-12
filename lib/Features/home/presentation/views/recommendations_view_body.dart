@@ -5,8 +5,6 @@ import 'package:graduation_project/Features/home/presentation/view_models/home_c
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit_state.dart';
 import 'package:graduation_project/Features/profile&setting/presentation/views/widgets/notification_card.dart';
 import 'package:graduation_project/app_localizations.dart';
-import 'package:graduation_project/constants.dart';
-
 
 class RecommendationsViewBody extends StatefulWidget {
   const RecommendationsViewBody({super.key});
@@ -54,22 +52,28 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
 
   @override
   Widget build(BuildContext context) {
-    // Get the localization instance
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!; // Localization instance
+    final theme = Theme.of(context); // Theme instance for theme-aware colors
+
     return Scaffold(
-      backgroundColor: const Color(0xFFE5F5F0), // Light green background
+      backgroundColor: theme.scaffoldBackgroundColor, // Theme-aware background
       appBar: AppBar(
-        backgroundColor: const Color(0xFFE5F5F0),
-        elevation: 0,
+        backgroundColor: theme.appBarTheme.backgroundColor, // Theme-aware AppBar background
+        elevation: theme.appBarTheme.elevation ?? 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: theme.appBarTheme.iconTheme?.color ?? theme.colorScheme.onBackground, // Theme-aware icon color
+          ),
+          onPressed: () => Navigator.pop(context),
         ),
-        title: Text( // No longer const
-          l10n.yourEcoRecommendationsTitle, // Localized
-          style: const TextStyle(color: MyColors.kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold),
+        title: Text(
+          l10n.yourEcoRecommendationsTitle,
+          style: theme.appBarTheme.titleTextStyle ?? TextStyle(
+            color: theme.colorScheme.onBackground, // Fallback to onBackground
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: Padding(
@@ -77,14 +81,21 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
         child: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
             if (state is HomeLoading) {
-              return const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor,));
+              return Center(
+                child: CircularProgressIndicator(
+                  color: theme.colorScheme.primary, // Theme-aware indicator color
+                ),
+              );
             } else if (state is HomeRecommendationsLoaded) {
               final recommendations = state.recommendations;
               if (recommendations.isEmpty) {
-                return Center( // No longer const
+                return Center(
                   child: Text(
-                    l10n.noRecommendationsYetMessage, // Localized
-                    style: const TextStyle(fontSize: 18, color: Colors.grey),
+                    l10n.noRecommendationsYetMessage,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: theme.colorScheme.onSurface.withOpacity(0.6), // Subtle text color
+                    ),
                   ),
                 );
               }
@@ -115,23 +126,31 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
                   children: [
                     Text(
                       state.errorMessage,
-                      style: const TextStyle(fontSize: 18, color: Colors.red),
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: theme.colorScheme.error, // Theme-aware error color
+                      ),
                     ),
                     const SizedBox(height: 10),
                     ElevatedButton(
-                      onPressed: () {
-                        context.read<HomeCubit>().fetchRecommendations();
-                      },
-                      child: Text(l10n.retryButton), // Localized
+                      onPressed: () => context.read<HomeCubit>().fetchRecommendations(),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.colorScheme.primary, // Theme-aware button background
+                        foregroundColor: theme.colorScheme.onPrimary, // Theme-aware button text/icon
+                      ),
+                      child: Text(l10n.retryButton),
                     ),
                   ],
                 ),
               );
             }
-            return Center( // No longer const
+            return Center(
               child: Text(
-                l10n.noRecommendationsYetMessage, // Localized
-                style: const TextStyle(fontSize: 18, color: Colors.grey),
+                l10n.noRecommendationsYetMessage,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: theme.colorScheme.onSurface.withOpacity(0.6), // Subtle text color
+                ),
               ),
             );
           },
@@ -153,8 +172,4 @@ class _RecommendationsViewBodyState extends State<RecommendationsViewBody>
         return Icons.info;
     }
   }
-
-  // Moved _formatTimestamp logic to NotificationsViewBody if it's identical
-  // If it's used elsewhere, keep it as a utility or in a common place.
-  // For now, assuming it's identical and handled by `notifications_view_body.dart`'s localization.
 }

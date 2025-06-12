@@ -19,12 +19,12 @@ Widget BuildRankCard({
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Colors.white,
-          boxShadow: const [
+          color: Theme.of(context).colorScheme.surface, // Changed from Colors.white
+          boxShadow: [
             BoxShadow(
-              color: Colors.black12,
+              color: Theme.of(context).colorScheme.shadow.withOpacity(0.12), // Changed from Colors.black12
               blurRadius: 8,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -42,6 +42,7 @@ Widget BuildRankCard({
                 style: TextStyle(
                   fontSize: isSmall ? 14 : 18,
                   fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.onSurface, // Ensures text color is theme-aware
                 ),
               ),
             ),
@@ -51,7 +52,7 @@ Widget BuildRankCard({
                 vertical: isSmall ? 6 : 8,
               ),
               decoration: BoxDecoration(
-                color: Colors.green[100],
+                color: Theme.of(context).colorScheme.primaryContainer, // Changed from Colors.green[100]
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -59,7 +60,7 @@ Widget BuildRankCard({
                 style: TextStyle(
                   fontSize: isSmall ? 14 : 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green,
+                  color: Theme.of(context).colorScheme.primary, // Changed from Colors.green
                 ),
               ),
             ),

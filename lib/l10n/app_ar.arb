@@ -282,5 +282,7 @@
   "yearlyTab": "سنوي",
   "emissionTrendsTitle": "اتجاهات الانبعاثات",
   "noDataAvailable": "لا توجد بيانات متاحة",
-  "kilogramAbbreviation": "كجم"
+  "kilogramAbbreviation": "كجم",
+  "useSystemTheme": "استخدام سمة النظام"
+
 }

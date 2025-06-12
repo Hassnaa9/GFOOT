@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Core/utils/assets.dart';
 import 'package:graduation_project/app_localizations.dart';
-import 'package:graduation_project/constants.dart';
-// Import the generated AppLocalizations class
-
 
 class LearnViewBody extends StatelessWidget {
   const LearnViewBody({super.key});
@@ -11,11 +8,11 @@ class LearnViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    // Get the localization instance
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context); // Access theme data
 
     return Scaffold(
-      backgroundColor: MyColors.white,
+      backgroundColor: theme.scaffoldBackgroundColor, // Theme-aware background
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
@@ -25,34 +22,34 @@ class LearnViewBody extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text( // No longer const
-                    l10n.yourCarbonFootprintTitle, // Localized
-                    style: const TextStyle(
+                  Text(
+                    l10n.yourCarbonFootprintTitle,
+                    style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: MyColors.kPrimaryColor,
+                      color: theme.colorScheme.primary, // Theme-aware primary color
                     ),
                   ),
                   const SizedBox(height: 40),
                   _buildItem(
                     context,
-                    image: AssetsData.questionMark, // Adjusted to match UI icon
-                    title: l10n.whatItIsTitle, // Localized
-                    description: l10n.whatItIsDescription, // Localized
+                    image: AssetsData.questionMark,
+                    title: l10n.whatItIsTitle,
+                    description: l10n.whatItIsDescription,
                   ),
                   const SizedBox(height: 24),
                   _buildItem(
                     context,
-                    image: AssetsData.benifits, // Adjusted to match UI icon
-                    title: l10n.benefitsTitle, // Localized
-                    description: l10n.benefitsDescription, // Localized
+                    image: AssetsData.benifits,
+                    title: l10n.benefitsTitle,
+                    description: l10n.benefitsDescription,
                   ),
                   const SizedBox(height: 24),
                   _buildItem(
                     context,
-                    image: AssetsData.co2, // Matches UI icon
-                    title: l10n.waysToReduceTitle, // Localized
-                    description: l10n.waysToReduceDescription, // Localized
+                    image: AssetsData.co2,
+                    title: l10n.waysToReduceTitle,
+                    description: l10n.waysToReduceDescription,
                   ),
                   const SizedBox(height: 24),
                 ],
@@ -72,10 +69,11 @@ class LearnViewBody extends StatelessWidget {
   }) {
     final screenWidth = MediaQuery.of(context).size.width;
     final imageSize = screenWidth < 400 ? 60.0 : 80.0;
+    final theme = Theme.of(context); // Access theme data
 
     return Card(
       elevation: 2,
-      color: MyColors.white,
+      color: theme.cardTheme.color, // Theme-aware card color
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: const EdgeInsets.only(bottom: 16),
       child: Padding(
@@ -87,6 +85,7 @@ class LearnViewBody extends StatelessWidget {
               image,
               height: imageSize,
               width: imageSize,
+              color: theme.colorScheme.onSurface, // Theme-aware image tint
             ),
             const SizedBox(width: 24),
             Expanded(
@@ -95,18 +94,18 @@ class LearnViewBody extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: MyColors.kPrimaryColor,
+                      color: theme.colorScheme.primary, // Theme-aware primary color
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     description,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
-                      color: Colors.black87,
+                      color: theme.colorScheme.onSurface, // Theme-aware text color
                       height: 1.5,
                     ),
                   ),

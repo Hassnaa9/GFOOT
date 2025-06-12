@@ -58,6 +58,14 @@ class OtpVerificationSuccess extends UserState {
   final String message;
   OtpVerificationSuccess({this.message = 'OTP verified successfully', required String errMessage});
 }
+class ForgotPasswordFailure extends UserState {
+  final String errMessage;
+
+  ForgotPasswordFailure({required this.errMessage});
+
+  @override
+  List<Object?> get props => [errMessage];
+} 
 
 class OtpVerificationFailure extends UserState {
   final String errMessage;
@@ -74,3 +82,19 @@ class UserProfileError extends UserState {
   final String errorMessage;
   UserProfileError({required this.errorMessage});
 }
+class ResetPasswordFailure extends UserState {
+  final String errMessage;
+
+  ResetPasswordFailure({required this.errMessage});
+
+  @override
+  List<Object?> get props => [errMessage];
+}
+class ResetPasswordSuccess extends UserState {
+  final String message;
+
+  ResetPasswordSuccess({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+} 

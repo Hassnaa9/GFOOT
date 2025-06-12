@@ -27,7 +27,6 @@ class _AppScaffoldState extends State<AppScaffold> with RouteAware {
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
-    // Fetch carbon footprint on initial load if on Home screen
     if (_selectedIndex == 0) {
       context.read<HomeCubit>().getCarbonFootprint();
       if (widget.userAnswers?.isNotEmpty ?? false) {
@@ -45,7 +44,6 @@ class _AppScaffoldState extends State<AppScaffold> with RouteAware {
   @override
   void didPopNext() {
     super.didPopNext();
-    // Refresh carbon footprint when returning to Home screen
     if (_selectedIndex == 0) {
       context.read<HomeCubit>().getCarbonFootprint();
     }
@@ -61,7 +59,6 @@ class _AppScaffoldState extends State<AppScaffold> with RouteAware {
     setState(() {
       _selectedIndex = index;
     });
-    // Fetch carbon footprint when switching to Home screen
     if (index == 0) {
       context.read<HomeCubit>().getCarbonFootprint();
     }
@@ -69,13 +66,13 @@ class _AppScaffoldState extends State<AppScaffold> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    // Get the localization instance
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: MyColors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: MyColors.white,
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
         actions: [
           Padding(
@@ -100,29 +97,28 @@ class _AppScaffoldState extends State<AppScaffold> with RouteAware {
       ),
       body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: MyColors.white,
+        backgroundColor: theme.bottomNavigationBarTheme.backgroundColor,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: MyColors.kPrimaryColor,
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: theme.bottomNavigationBarTheme.selectedItemColor,
+        unselectedItemColor: theme.bottomNavigationBarTheme.unselectedItemColor,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        // Removed const as labels are now dynamic
         items: [
           BottomNavigationBarItem(
-            icon: const ImageIcon(AssetImage(AssetsData.home)),
-            label: l10n.navHome, // Localized
+            icon: ImageIcon(AssetImage(AssetsData.home), color: _selectedIndex == 0 ? MyColors.kPrimaryColor : theme.bottomNavigationBarTheme.unselectedItemColor),
+            label: l10n.navHome,
           ),
           BottomNavigationBarItem(
-            icon: const ImageIcon(AssetImage(AssetsData.recomend)),
-            label: l10n.navLearn, // Localized
+            icon: ImageIcon(AssetImage(AssetsData.recomend), color: _selectedIndex == 1 ? MyColors.kPrimaryColor : theme.bottomNavigationBarTheme.unselectedItemColor),
+            label: l10n.navLearn,
           ),
           BottomNavigationBarItem(
-            icon: const ImageIcon(AssetImage(AssetsData.setting)),
-            label: l10n.navSettings, // Localized
+            icon: ImageIcon(AssetImage(AssetsData.setting), color: _selectedIndex == 2 ? MyColors.kPrimaryColor : theme.bottomNavigationBarTheme.unselectedItemColor),
+            label: l10n.navSettings,
           ),
           BottomNavigationBarItem(
-            icon: const ImageIcon(AssetImage(AssetsData.profile)),
-            label: l10n.navProfile, // Localized
+            icon: ImageIcon(AssetImage(AssetsData.profile), color: _selectedIndex == 3 ? MyColors.kPrimaryColor : theme.bottomNavigationBarTheme.unselectedItemColor),
+            label: l10n.navProfile,
           ),
         ],
       ),
@@ -140,7 +136,7 @@ class _AppScaffoldState extends State<AppScaffold> with RouteAware {
       case 3:
         return const Profile();
       default:
-        return Home(); // No longer const
+        return Home();
     }
   }
 }

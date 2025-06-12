@@ -5,9 +5,7 @@ import 'package:graduation_project/Features/home/presentation/view_models/home_c
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit_state.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/rank_card.dart';
 import 'package:graduation_project/app_localizations.dart';
-import 'package:graduation_project/constants.dart';
 import 'package:graduation_project/Core/models/user_model.dart';
-// Import the generated AppLocalizations class
 
 class RankViewBody extends StatefulWidget {
   const RankViewBody({super.key});
@@ -41,7 +39,8 @@ class _RankViewBodyState extends State<RankViewBody> with SingleTickerProviderSt
       CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
 
-    context.read<HomeCubit>().fetchRanks(); // Triggers user profile fetch if needed
+    // Fetch ranks when the widget initializes
+    context.read<HomeCubit>().fetchRanks();
     _controller.forward();
   }
 
@@ -53,22 +52,29 @@ class _RankViewBodyState extends State<RankViewBody> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    // Get the localization instance
-    final l10n = AppLocalizations.of(context)!;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final l10n = AppLocalizations.of(context)!; // Localization instance
+    final theme = Theme.of(context); // Theme instance for theme-aware colors
 
     return Scaffold(
-      backgroundColor: const Color(0xffF6F6F6),
+      backgroundColor: theme.scaffoldBackgroundColor, // Theme-aware background
       appBar: AppBar(
-        title: Text(l10n.rankTitle, style: const TextStyle(color: Colors.black)), // Localized
-        backgroundColor: Colors.white,
-        elevation: 0,
+        title: Text(
+          l10n.rankTitle,
+          style: theme.appBarTheme.titleTextStyle ?? TextStyle(
+            color: theme.colorScheme.onBackground, // Fallback to onBackground
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: theme.appBarTheme.backgroundColor, // Theme-aware AppBar background
+        elevation: theme.appBarTheme.elevation ?? 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: theme.appBarTheme.iconTheme?.color ?? theme.colorScheme.onBackground, // Theme-aware icon color
+          ),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SafeArea(
@@ -79,10 +85,11 @@ class _RankViewBodyState extends State<RankViewBody> with SingleTickerProviderSt
             bool isProfileLoading = false;
             String? profileError;
 
+            // Handle different states from HomeCubit
             if (state is HomeProfileLoaded) {
               user = state.user;
             } else if (state is HomeRanksLoaded) {
-              user = state.user; // Now correctly accesses the user field
+              user = state.user;
             } else if (state is HomeLoading) {
               isProfileLoading = true;
             } else if (state is HomeError && state.errorMessage.contains('user profile')) {
@@ -97,7 +104,11 @@ class _RankViewBodyState extends State<RankViewBody> with SingleTickerProviderSt
                   child: Column(
                     children: [
                       if (state is HomeLoading && !isProfileLoading)
-                        const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor))
+                        Center(
+                          child: CircularProgressIndicator(
+                            color: theme.colorScheme.primary, // Theme-aware indicator color
+                          ),
+                        )
                       else if (state is HomeRanksLoaded)
                         FadeTransition(
                           opacity: _fadeAnimation,
@@ -106,21 +117,22 @@ class _RankViewBodyState extends State<RankViewBody> with SingleTickerProviderSt
                             child: Column(
                               children: [
                                 const SizedBox(height: 10),
-                                const CircleAvatar(
+                                CircleAvatar(
                                   radius: 60,
-                                  backgroundImage: AssetImage(AssetsData.echoF),
+                                  backgroundImage: const AssetImage(AssetsData.echoF),
+                                  backgroundColor: theme.colorScheme.surface, // Theme-aware fallback background
                                 ),
                                 const SizedBox(height: 12),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
                                   decoration: BoxDecoration(
-                                    color: MyColors.kPrimaryColor,
+                                    color: theme.colorScheme.primary, // Theme-aware container color
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
                                     '${state.rank.cityRank}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
+                                    style: TextStyle(
+                                      color: theme.colorScheme.onPrimary, // Theme-aware text color
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -128,45 +140,62 @@ class _RankViewBodyState extends State<RankViewBody> with SingleTickerProviderSt
                                 ),
                                 const SizedBox(height: 6),
                                 if (isProfileLoading)
-                                  Text( // No longer const
-                                    l10n.loadingUser, // Localized
-                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey),
+                                  Text(
+                                    l10n.loadingUser,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: theme.colorScheme.onSurface.withOpacity(0.6), // Subtle text color
+                                    ),
                                   )
                                 else if (profileError != null)
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text( // No longer const
-                                        l10n.failedToLoadUser, // Localized
-                                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.red),
+                                      Text(
+                                        l10n.failedToLoadUser,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: theme.colorScheme.error, // Theme-aware error color
+                                        ),
                                       ),
                                       TextButton(
                                         onPressed: () => context.read<HomeCubit>().fetchUserProfile(),
-                                        child: Text(l10n.retryButton, style: const TextStyle(color: MyColors.kPrimaryColor)), // Localized
+                                        child: Text(
+                                          l10n.retryButton,
+                                          style: TextStyle(
+                                            color: theme.colorScheme.primary, // Theme-aware button text
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   )
                                 else
                                   Text(
-                                    user?.displayName ?? user?.userName ?? l10n.userNamePlaceholder, // Localized
-                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                                    user?.displayName ?? user?.userName ?? l10n.userNamePlaceholder,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: theme.colorScheme.onBackground, // Theme-aware text color
+                                    ),
                                   ),
                                 const SizedBox(height: 32),
                                 BuildRankCard(
                                   imagePath: AssetsData.cityRank,
-                                  title: l10n.cityRankTitle, // Localized
+                                  title: l10n.cityRankTitle,
                                   rank: state.rank.cityRank,
                                 ),
                                 const SizedBox(height: 16),
                                 BuildRankCard(
                                   imagePath: AssetsData.countryRank,
-                                  title: l10n.countryRankTitle, // Localized
+                                  title: l10n.countryRankTitle,
                                   rank: state.rank.countryRank,
                                 ),
                                 const SizedBox(height: 16),
                                 BuildRankCard(
                                   imagePath: AssetsData.globalRank,
-                                  title: l10n.globalRankTitle, // Localized
+                                  title: l10n.globalRankTitle,
                                   rank: state.rank.globalRank,
                                 ),
                               ],
@@ -180,23 +209,30 @@ class _RankViewBodyState extends State<RankViewBody> with SingleTickerProviderSt
                             Text(
                               state.errorMessage,
                               textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 18, color: Colors.red),
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: theme.colorScheme.error, // Theme-aware error color
+                              ),
                             ),
                             const SizedBox(height: 10),
                             ElevatedButton(
-                              onPressed: () {
-                                context.read<HomeCubit>().fetchRanks();
-                              },
-                              style: ElevatedButton.styleFrom(backgroundColor: MyColors.kPrimaryColor),
-                              child: Text(l10n.retryButton), // Localized
+                              onPressed: () => context.read<HomeCubit>().fetchRanks(),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: theme.colorScheme.primary, // Theme-aware button background
+                                foregroundColor: theme.colorScheme.onPrimary, // Theme-aware button text/icon
+                              ),
+                              child: Text(l10n.retryButton),
                             ),
                           ],
                         )
                       else
-                        Center( // No longer const
+                        Center(
                           child: Text(
-                            l10n.noRankingsAvailable, // Localized
-                            style: const TextStyle(fontSize: 18, color: Colors.grey),
+                            l10n.noRankingsAvailable,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: theme.colorScheme.onSurface.withOpacity(0.6), // Subtle text color
+                            ),
                           ),
                         ),
                     ],

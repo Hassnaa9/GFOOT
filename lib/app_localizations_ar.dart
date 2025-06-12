@@ -681,4 +681,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get kilogramAbbreviation => 'كجم';
+
+  @override
+  String get useSystemTheme => 'استخدام سمة النظام';
 }

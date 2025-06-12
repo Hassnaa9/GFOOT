@@ -7,10 +7,8 @@ import 'package:graduation_project/Features/home/presentation/view_models/home_c
 import 'package:graduation_project/Features/home/presentation/views/widgets/custom_carbon_result.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/gradient_indicator.dart';
 import 'package:graduation_project/app_localizations.dart';
-import 'package:graduation_project/constants.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
-
 
 class StatisticsViewBody extends StatefulWidget {
   const StatisticsViewBody({super.key});
@@ -34,32 +32,48 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    // Get the localization instance
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!; // Localization instance
+    final theme = Theme.of(context); // Theme instance for theme-aware colors
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor, // Theme-aware background
       appBar: AppBar(
-        title: Text( // No longer const
-          l10n.carbonEmissionReportTitle, // Localized
-          style: const TextStyle(color: MyColors.kPrimaryColor, fontSize: 18, fontWeight: FontWeight.bold),
+        title: Text(
+          l10n.carbonEmissionReportTitle,
+          style: theme.appBarTheme.titleTextStyle ?? TextStyle(
+            color: theme.colorScheme.onBackground, // Fallback to onBackground
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: Colors.white,
-        elevation: 0,
+        backgroundColor: theme.appBarTheme.backgroundColor, // Theme-aware AppBar background
+        elevation: theme.appBarTheme.elevation ?? 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: theme.appBarTheme.iconTheme?.color ?? theme.colorScheme.onBackground, // Theme-aware icon color
+          ),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           if (state is HomeLoading) {
-            return const Center(child: CircularProgressIndicator(color: MyColors.kPrimaryColor));
+            return Center(
+              child: CircularProgressIndicator(
+                color: Colors.white, // Theme-aware indicator color
+              ),
+            );
           } else if (state is HomeStatisticsError) {
-            return Center(child: Text(state.message));
+            return Center(
+              child: Text(
+                state.message,
+                style: TextStyle(
+                  color: theme.colorScheme.error, // Theme-aware error color
+                ),
+              ),
+            );
           } else if (state is HomeStatisticsLoaded) {
             final List<EmissionEntry> stats = state.statistics;
             final statistics = stats.map((e) => e.carbonEmission).toList();
@@ -101,27 +115,27 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
                               strokeWidth: 15.0,
                             ),
                           ),
-                          CustomCarbonResult(carbonFootprint: sum), // You may add `progress` too
+                          CustomCarbonResult(carbonFootprint: sum),
                         ],
                       ),
                       SizedBox(height: screenHeight * .03),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          _buildTabButton(l10n.dailyTab, 0), // Localized
-                          _buildTabButton(l10n.monthlyTab, 1), // Localized
-                          _buildTabButton(l10n.yearlyTab, 2), // Localized
+                          _buildTabButton(l10n.dailyTab, 0, theme),
+                          _buildTabButton(l10n.monthlyTab, 1, theme),
+                          _buildTabButton(l10n.yearlyTab, 2, theme),
                         ],
                       ),
                       const SizedBox(height: 18),
-                      Align( // No longer const
+                      Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          l10n.emissionTrendsTitle, // Localized
-                          style: const TextStyle(
+                          l10n.emissionTrendsTitle,
+                          style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: MyColors.kPrimaryColor,
+                            color: theme.colorScheme.primary, // Theme-aware primary color
                           ),
                         ),
                       ),
@@ -129,11 +143,18 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.grey[100],
+                          color: theme.colorScheme.surface.withOpacity(0.1), // Theme-aware subtle background
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: statistics.isEmpty
-                            ? Center(child: Text(l10n.noDataAvailable)) // Localized
+                            ? Center(
+                                child: Text(
+                                  l10n.noDataAvailable,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurface.withOpacity(0.6), // Subtle text color
+                                  ),
+                                ),
+                              )
                             : SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: SizedBox(
@@ -146,13 +167,15 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
                                       barTouchData: BarTouchData(
                                         enabled: true,
                                         touchTooltipData: BarTouchTooltipData(
-                                          getTooltipColor: (_) => const Color(0xFFEAEAEA),
+                                          getTooltipColor: (_) => theme.colorScheme.surface, // Theme-aware tooltip background
                                           tooltipPadding: const EdgeInsets.all(8),
                                           tooltipRoundedRadius: 8,
                                           getTooltipItem: (group, _, rod, __) {
                                             return BarTooltipItem(
-                                              '${rod.toY.toStringAsFixed(1)} ${l10n.kilogramAbbreviation}', // Localized
-                                              const TextStyle(color: Colors.black87),
+                                              '${rod.toY.toStringAsFixed(1)} ${l10n.kilogramAbbreviation}',
+                                              TextStyle(
+                                                color: theme.colorScheme.onSurface, // Theme-aware tooltip text
+                                              ),
                                             );
                                           },
                                         ),
@@ -171,20 +194,22 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
                                               final index = value.toInt();
                                               if (index >= statistics.length) return const SizedBox();
                                               final barDate = stats[index].date;
-                                              // Format date based on selected tab (daily/monthly/yearly)
                                               String formatString;
                                               if (_currentStatsType == 'Daily') {
                                                 formatString = 'MM/dd';
                                               } else if (_currentStatsType == 'Monthly') {
                                                 formatString = 'MMM yy';
-                                              } else { // Yearly
+                                              } else {
                                                 formatString = 'yyyy';
                                               }
                                               return Padding(
                                                 padding: const EdgeInsets.only(top: 8.0),
                                                 child: Text(
                                                   DateFormat(formatString).format(barDate),
-                                                  style: const TextStyle(color: Colors.black54, fontSize: 11),
+                                                  style: TextStyle(
+                                                    color: theme.colorScheme.onSurface.withOpacity(0.7), // Theme-aware label color
+                                                    fontSize: 11,
+                                                  ),
                                                 ),
                                               );
                                             },
@@ -210,10 +235,10 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
                                               toY: statistics[index],
                                               width: 22,
                                               color: _touchedGroupIndex == index
-                                                  ? const Color.fromARGB(255, 214, 205, 205)
-                                                  : MyColors.kPrimaryColor,
+                                                  ? theme.colorScheme.secondary // Theme-aware touched bar color
+                                                  : theme.colorScheme.primary, // Theme-aware bar color
                                               borderRadius: BorderRadius.circular(4),
-                                            )
+                                            ),
                                           ],
                                         );
                                       }),
@@ -230,24 +255,19 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
               ),
             );
           }
-
           return const SizedBox();
         },
       ),
     );
   }
 
-  Widget _buildTabButton(String title, int index) {
+  Widget _buildTabButton(String title, int index, dynamic theme) {
     bool isSelected = _selectedTabIndex == index;
     return GestureDetector(
       onTap: () {
         setState(() {
           _selectedTabIndex = index;
-          // _currentStatsType is already localized through the title parameter
-          // we pass to it, we just need to map it back to the English values for API calls
           _currentStatsType = [AppLocalizations.of(context)!.dailyTab, AppLocalizations.of(context)!.monthlyTab, AppLocalizations.of(context)!.yearlyTab][index];
-
-          // Use the English values for API calls as expected by the backend
           if (_currentStatsType == AppLocalizations.of(context)!.dailyTab) {
             _currentStatsType = 'Daily';
           } else if (_currentStatsType == AppLocalizations.of(context)!.monthlyTab) {
@@ -262,13 +282,13 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
         duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? MyColors.kPrimaryColor : Colors.grey[300],
+          color: isSelected ? theme.colorScheme.primary : theme.colorScheme.surface, // Theme-aware button background
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
-          title, // Already localized when passed to this method
+          title,
           style: TextStyle(
-            color: isSelected ? Colors.white : Colors.black87,
+            color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface, // Theme-aware text color
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),

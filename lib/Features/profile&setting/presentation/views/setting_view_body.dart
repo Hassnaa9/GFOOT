@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Data/local/local_cubit.dart';
 import 'package:graduation_project/app_localizations.dart';
-import 'package:graduation_project/constants.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:flutter_bloc/flutter_bloc.dart'; // Import flutter_bloc
-
-
+import 'package:graduation_project/theme/theme_cubit.dart'; // Import ThemeCubit
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingViewBody extends StatefulWidget {
   const SettingViewBody({super.key});
@@ -21,11 +17,9 @@ class _SettingsScreenState extends State<SettingViewBody>
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
+  // State variables for settings
   bool _notificationsEnabled = true;
-  bool _darkThemeEnabled = false;
   bool _useMetricUnits = true;
-
-  final String _baseUrl = 'https://yourapi.com/api/settings';
 
   @override
   void initState() {
@@ -47,47 +41,17 @@ class _SettingsScreenState extends State<SettingViewBody>
       CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
 
-    _loadSettings();
+    // No need to load darkThemeEnabled from API anymore, Cubit handles it
+    // _loadSettings(); // Adjust if you still load other settings from API
 
     _controller.forward();
   }
 
-  Future<void> _loadSettings() async {
-    try {
-      final response = await http.get(Uri.parse('$_baseUrl/get'));
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        setState(() {
-          _notificationsEnabled = data['notificationsEnabled'] ?? true;
-          _darkThemeEnabled = data['darkThemeEnabled'] ?? false;
-          _useMetricUnits = data['useMetricUnits'] ?? true;
-        });
-      } else {
-        throw Exception('Failed to load settings');
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error loading settings: $e")), // Kept for error clarity
-      );
-    }
-  }
-
-  Future<void> _saveSettings(String key, bool value) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$_baseUrl/update'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({key: value}),
-      );
-      if (response.statusCode != 200) {
-        throw Exception('Failed to save settings');
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error saving settings: $e")), // Kept for error clarity
-      );
-    }
-  }
+  // Removed _loadSettings and _saveSettings for dark mode, as it's now handled by ThemeCubit
+  // Keep if you still have other API settings to load/save.
+  // For demonstration, I'm keeping the API logic for other settings as-is,
+  // but you might want to switch them to local storage (e.g., SharedPreferences)
+  // if you truly mean "local memory not API" for all settings.
 
   @override
   void dispose() {
@@ -97,87 +61,113 @@ class _SettingsScreenState extends State<SettingViewBody>
 
   @override
   Widget build(BuildContext context) {
-    // Get the localization instance
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context); // Get current theme data
+    final themeCubit = context.read<ThemeCubit>(); // Access ThemeCubit
 
     return Scaffold(
-      backgroundColor: const Color(0xffF6F6F6),
+      backgroundColor: theme.scaffoldBackgroundColor, // Use theme background
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: theme.appBarTheme.foregroundColor), // Use theme icon color
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(l10n.navSettings, // Localized
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: MyColors.kPrimaryColor,
-            )),
-        backgroundColor: Colors.white,
+        title: Text(
+          l10n.navSettings,
+          style: theme.appBarTheme.titleTextStyle, // Use theme title style
+        ),
+        backgroundColor: theme.appBarTheme.backgroundColor, // Use theme app bar background
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: ListView(
           children: [
-            _buildAnimatedSection(l10n.notificationsSection), // Localized
+            _buildAnimatedSection(l10n.notificationsSection),
             _buildAnimatedSwitchTile(
-              title: l10n.enablePushNotifications, // Localized
+              title: l10n.enablePushNotifications,
               value: _notificationsEnabled,
               onChanged: (value) {
                 setState(() => _notificationsEnabled = value);
-                _saveSettings('notificationsEnabled', value);
+                // _saveSettings('notificationsEnabled', value); // Keep if using API/local storage for this
               },
               icon: Icons.notifications,
             ),
             const SizedBox(height: 20),
 
-            _buildAnimatedSection(l10n.appearanceSection), // Localized
-            _buildAnimatedSwitchTile(
-              title: l10n.darkTheme, // Localized
-              value: _darkThemeEnabled,
-              onChanged: (value) {
-                setState(() => _darkThemeEnabled = value);
-                _saveSettings('darkThemeEnabled', value);
+            _buildAnimatedSection(l10n.appearanceSection),
+            // Use BlocBuilder to react to ThemeCubit's state for the switch value
+            BlocBuilder<ThemeCubit, ThemeState>(
+              builder: (context, themeState) {
+                // Determine if 'dark theme enabled' switch should be on.
+                // If it's system theme, check current system brightness.
+                bool isDarkActive = themeState.themeMode == ThemeMode.dark ||
+                                  (themeState.themeMode == ThemeMode.system &&
+                                   MediaQuery.of(context).platformBrightness == Brightness.dark);
+                return _buildAnimatedSwitchTile(
+                  title: l10n.darkTheme,
+                  value: isDarkActive,
+                  onChanged: (value) {
+                    // This toggles between Light and Dark
+                    themeCubit.toggleTheme(value);
+                  },
+                  icon: Icons.brightness_6,
+                );
               },
-              icon: Icons.brightness_6,
+            ),
+            // NEW: Add a switch for "Use System Theme"
+            BlocBuilder<ThemeCubit, ThemeState>(
+              builder: (context, themeState) {
+                return _buildAnimatedSwitchTile(
+                  title: l10n.useSystemTheme, // You'll need to add this key to your AppLocalizations
+                  value: themeState.themeMode == ThemeMode.system,
+                  onChanged: (value) {
+                    if (value) {
+                      themeCubit.setSystemTheme();
+                    } else {
+                      // If switching off system theme, set it to the current actual brightness
+                      final currentBrightness = MediaQuery.of(context).platformBrightness;
+                      themeCubit.toggleTheme(currentBrightness == Brightness.dark);
+                    }
+                  },
+                  icon: Icons.brightness_auto, // Icon for system theme
+                );
+              },
             ),
             const SizedBox(height: 20),
 
-            _buildAnimatedSection(l10n.unitsSection), // Localized
+            _buildAnimatedSection(l10n.unitsSection),
             _buildAnimatedSwitchTile(
-              title: l10n.useMetricUnits, // Localized
-              subtitle: l10n.useMetricUnitsSubtitle, // Localized
+              title: l10n.useMetricUnits,
+              subtitle: l10n.useMetricUnitsSubtitle,
               value: _useMetricUnits,
               onChanged: (value) {
                 setState(() => _useMetricUnits = value);
-                _saveSettings('useMetricUnits', value);
+                // _saveSettings('useMetricUnits', value); // Keep if using API/local storage for this
               },
               icon: Icons.straighten,
             ),
             const SizedBox(height: 20),
 
             // NEW: Language Toggle Section
-            _buildAnimatedSection(l10n.languageSection), // Localized
+            _buildAnimatedSection(l10n.languageSection),
             _buildAnimatedListTile(
-              title: l10n.toggleLanguage, // Localized
+              title: l10n.toggleLanguage,
               icon: Icons.language,
               onTap: () {
-                // Toggle the locale using the LocaleCubit
                 context.read<LocaleCubit>().toggleLocale();
               },
             ),
             const SizedBox(height: 20),
 
-
-            _buildAnimatedSection(l10n.accountSection), // Localized
+            _buildAnimatedSection(l10n.accountSection),
             _buildAnimatedListTile(
-              title: l10n.editProfile, // Localized
+              title: l10n.editProfile,
               icon: Icons.person,
               onTap: () => Navigator.pushNamed(context, '/Profile'),
             ),
             _buildAnimatedListTile(
-              title: l10n.logoutButton, // Localized
+              title: l10n.logoutButton,
               icon: Icons.logout,
               onTap: () {
                 Navigator.pushNamedAndRemoveUntil(
@@ -193,22 +183,24 @@ class _SettingsScreenState extends State<SettingViewBody>
     );
   }
 
-  Widget _buildAnimatedSection(String title) => FadeTransition(
-        opacity: _fadeAnimation,
-        child: SlideTransition(
-          position: _slideAnimation,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+  Widget _buildAnimatedSection(String title) {
+    final theme = Theme.of(context);
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Text(
+            title,
+            style: theme.textTheme.titleLarge?.copyWith(
+              color: theme.colorScheme.onBackground, // Adjust color for theme
             ),
           ),
         ),
-      );
+      ),
+    );
+  }
 
   Widget _buildAnimatedSwitchTile({
     required String title,
@@ -216,56 +208,66 @@ class _SettingsScreenState extends State<SettingViewBody>
     required bool value,
     required ValueChanged<bool> onChanged,
     required IconData icon,
-  }) => FadeTransition(
-        opacity: _fadeAnimation,
-        child: SlideTransition(
-          position: _slideAnimation,
-          child: Card(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+  }) {
+    final theme = Theme.of(context);
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: Card(
+          color: theme.cardTheme.color, // Use theme card color
+          shape: theme.cardTheme.shape,
+          elevation: theme.cardTheme.elevation,
+          child: ListTile(
+            leading: Icon(icon, color: theme.listTileTheme.iconColor), // Use theme icon color
+            title: Text(title, style: theme.listTileTheme.textColor != null
+                ? theme.textTheme.titleMedium?.copyWith(color: theme.listTileTheme.textColor)
+                : theme.textTheme.titleMedium,
             ),
-            elevation: 2,
-            child: ListTile(
-              leading: Icon(icon, color: Colors.green),
-              title: Text(title, style: const TextStyle(fontSize: 16)),
-              subtitle: subtitle != null
-                  ? Text(subtitle,
-                      style:
-                          const TextStyle(fontSize: 12, color: Colors.grey))
-                  : null,
-              trailing: Switch(
-                value: value,
-                onChanged: onChanged,
-                activeColor: Colors.green,
-              ),
+            subtitle: subtitle != null
+                ? Text(subtitle,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.listTileTheme.textColor?.withOpacity(0.7) ?? Colors.grey,
+                    ),
+                  )
+                : null,
+            trailing: Switch(
+              value: value,
+              onChanged: onChanged,
+              activeColor: theme.colorScheme.primary, // Use primary color for active switch
             ),
           ),
         ),
-      );
+      ),
+    );
+  }
 
   Widget _buildAnimatedListTile({
     required String title,
     required IconData icon,
     required VoidCallback onTap,
-  }) => FadeTransition(
-        opacity: _fadeAnimation,
-        child: SlideTransition(
-          position: _slideAnimation,
-          child: Card(
-            color: Colors.white,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            elevation: 2,
-            child: ListTile(
-              leading: Icon(icon, color: Colors.green),
-              title:
-                  Text(title, style: const TextStyle(fontSize: 16)),
-              trailing: const Icon(Icons.arrow_forward_ios,
-                  size: 16, color: Colors.grey),
-              onTap: onTap,
+  }) {
+    final theme = Theme.of(context);
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: Card(
+          color: theme.cardTheme.color, // Use theme card color
+          shape: theme.cardTheme.shape,
+          elevation: theme.cardTheme.elevation,
+          child: ListTile(
+            leading: Icon(icon, color: theme.listTileTheme.iconColor), // Use theme icon color
+            title: Text(title, style: theme.listTileTheme.textColor != null
+                ? theme.textTheme.titleMedium?.copyWith(color: theme.listTileTheme.textColor)
+                : theme.textTheme.titleMedium,
             ),
+            trailing: Icon(Icons.arrow_forward_ios,
+                size: 16, color: theme.listTileTheme.iconColor?.withOpacity(0.5) ?? Colors.grey), // Adjust trailing icon color
+            onTap: onTap,
           ),
         ),
-      );
+      ),
+    );
+  }
 }

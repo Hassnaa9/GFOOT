@@ -681,4 +681,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get kilogramAbbreviation => 'kg';
+
+  @override
+  String get useSystemTheme => 'Use System Theme';
 }

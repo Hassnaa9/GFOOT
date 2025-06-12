@@ -283,5 +283,7 @@
   "yearlyTab": "Yearly",
   "emissionTrendsTitle": "Emission Trends",
   "noDataAvailable": "No data available",
-  "kilogramAbbreviation": "kg"
+  "kilogramAbbreviation": "kg",
+  "useSystemTheme": "Use System Theme"
+
 }

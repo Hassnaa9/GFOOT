@@ -31,15 +31,15 @@ import 'package:graduation_project/Features/questionnaire/questionnaire.dart';
 import 'package:graduation_project/Features/splash_screen/splash_screen.dart';
 import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/app_scaffold.dart';
-
-
+import 'package:graduation_project/theme/app_themes.dart'; // Import your themes
+import 'package:graduation_project/theme/theme_cubit.dart'; // Import your ThemeCubit
 
 
 // Define RouteObserver for RouteAware
 final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized(); // Keep this for Firebase initialization if needed
   try {
     await Firebase.initializeApp();
     print("Firebase initialized successfully");
@@ -47,9 +47,12 @@ void main() async {
     print("Error initializing Firebase: $e");
   }
   runApp(
-    // Provide the LocaleCubit at the top of the widget tree
-    BlocProvider(
-      create: (context) => LocaleCubit(),
+    // Provide both LocaleCubit and ThemeCubit at the top of the widget tree
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => LocaleCubit()),
+        BlocProvider(create: (context) => ThemeCubit()), // ThemeCubit no longer uses SharedPreferences
+      ],
       child: const MyApp(),
     ),
   );
@@ -88,58 +91,59 @@ class MyApp extends StatelessWidget {
                 HomeCubit(context.read<ActivityRepository>()),
           ),
         ],
-        // Use BlocBuilder to rebuild MaterialApp when locale state changes
+        // Use BlocBuilder for both LocaleCubit and ThemeCubit
         child: BlocBuilder<LocaleCubit, LocaleState>(
           builder: (context, localeState) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                fontFamily: 'Urbanist',
-              ),
-              // Set the app title to be localized
-              onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-              initialRoute: '/',
-              navigatorObservers: [routeObserver],
-              // Set the locale from the LocaleCubit's state
-              locale: localeState.locale,
-              // Add localization delegates and supported locales
-              supportedLocales: AppLocalizations.supportedLocales,
-              localizationsDelegates: const [
-                AppLocalizations.delegate, // Your generated delegate
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              localeResolutionCallback: (locale, supportedLocales) {
-                if (locale != null) {
-                  for (var supportedLocale in supportedLocales) {
-                    if (supportedLocale.languageCode == locale.languageCode) {
-                      return supportedLocale;
+            return BlocBuilder<ThemeCubit, ThemeState>( // BlocBuilder for theme
+              builder: (context, themeState) {
+                return MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  theme: AppThemes.lightTheme, // Default light theme
+                  darkTheme: AppThemes.darkTheme, // Default dark theme
+                  themeMode: themeState.themeMode, // Controlled by ThemeCubit
+                  onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+                  initialRoute: '/',
+                  navigatorObservers: [routeObserver],
+                  locale: localeState.locale,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  localizationsDelegates: const [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  localeResolutionCallback: (locale, supportedLocales) {
+                    if (locale != null) {
+                      for (var supportedLocale in supportedLocales) {
+                        if (supportedLocale.languageCode == locale.languageCode) {
+                          return supportedLocale;
+                        }
+                      }
                     }
-                  }
-                }
-                return supportedLocales.first;
-              },
-              routes: {
-                '/': (context) => const SplashScreen(),
-                '/SigninOrSignup': (context) => const SigninOrSignupScreen(),
-                '/SignIn': (context) => const SignInScreen(),
-                '/SignUp': (context) => SignUpScreen(),
-                '/ForgetPass': (context) => ForgotPasswordScreen(),
-                '/Verify': (context) => const VerificationScreen(),
-                '/ChangePass': (context) => const ChangePasswordScreen(),
-                '/PassChanged': (context) => PasswordChangedScreen(),
-                '/Home': (context) => const AppScaffold(),
-                '/Calculations': (context) => const Questionnaire(),
-                '/Statistics': (context) => const StatisticsViewBody(),
-                '/Profile': (context) => const Profile(),
-                '/Account': (context) => const Account(),
-                '/Rank': (context) => const Rank(),
-                '/Learn': (context) => const Learn(),
-                '/Settings': (context) => const Setting(),
-                '/Notifications': (context) => const Notifications(),
-                '/Recommendations': (context) => const Recommendations(),
-                '/ConfirmEmail': (context) => const ConfirmEmail(),
+                    return supportedLocales.first;
+                  },
+                  routes: {
+                    '/': (context) => const SplashScreen(),
+                    '/SigninOrSignup': (context) => const SigninOrSignupScreen(),
+                    '/SignIn': (context) => const SignInScreen(),
+                    '/SignUp': (context) => SignUpScreen(),
+                    '/ForgetPass': (context) => ForgotPasswordScreen(),
+                    '/Verify': (context) => const VerificationScreen(),
+                    '/ChangePass': (context) => const ChangePasswordScreen(),
+                    '/PassChanged': (context) => PasswordChangedScreen(),
+                    '/Home': (context) => const AppScaffold(),
+                    '/Calculations': (context) => const Questionnaire(),
+                    '/Statistics': (context) => const StatisticsViewBody(),
+                    '/Profile': (context) => const Profile(),
+                    '/Account': (context) => const Account(),
+                    '/Rank': (context) => const Rank(),
+                    '/Learn': (context) => const Learn(),
+                    '/Settings': (context) => const Setting(),
+                    '/Notifications': (context) => const Notifications(),
+                    '/Recommendations': (context) => const Recommendations(),
+                    '/ConfirmEmail': (context) => const ConfirmEmail(),
+                  },
+                );
               },
             );
           },

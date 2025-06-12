@@ -1414,6 +1414,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'kg'**
   String get kilogramAbbreviation;
+
+  /// No description provided for @useSystemTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Use System Theme'**
+  String get useSystemTheme;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
