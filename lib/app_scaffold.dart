@@ -6,6 +6,7 @@ import 'package:graduation_project/Features/home/learn.dart';
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit.dart';
 import 'package:graduation_project/Features/profile&setting/profile.dart';
 import 'package:graduation_project/Features/profile&setting/setting.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
 import 'package:graduation_project/main.dart';
 
@@ -68,6 +69,9 @@ class _AppScaffoldState extends State<AppScaffold> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: MyColors.white,
       appBar: AppBar(
@@ -102,22 +106,23 @@ class _AppScaffoldState extends State<AppScaffold> with RouteAware {
         unselectedItemColor: Colors.grey,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        items: const [
+        // Removed const as labels are now dynamic
+        items: [
           BottomNavigationBarItem(
-            icon: ImageIcon(AssetImage(AssetsData.home)),
-            label: "Home",
+            icon: const ImageIcon(AssetImage(AssetsData.home)),
+            label: l10n.navHome, // Localized
           ),
           BottomNavigationBarItem(
-            icon: ImageIcon(AssetImage(AssetsData.recomend)),
-            label: "Learn",
+            icon: const ImageIcon(AssetImage(AssetsData.recomend)),
+            label: l10n.navLearn, // Localized
           ),
           BottomNavigationBarItem(
-            icon: ImageIcon(AssetImage(AssetsData.setting)),
-            label: "Settings",
+            icon: const ImageIcon(AssetImage(AssetsData.setting)),
+            label: l10n.navSettings, // Localized
           ),
           BottomNavigationBarItem(
-            icon: ImageIcon(AssetImage(AssetsData.profile)),
-            label: "Profile",
+            icon: const ImageIcon(AssetImage(AssetsData.profile)),
+            label: l10n.navProfile, // Localized
           ),
         ],
       ),
@@ -135,7 +140,7 @@ class _AppScaffoldState extends State<AppScaffold> with RouteAware {
       case 3:
         return const Profile();
       default:
-        return const Home();
+        return Home(); // No longer const
     }
   }
 }
