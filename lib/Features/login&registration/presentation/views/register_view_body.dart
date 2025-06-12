@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit_state.dart';
 import 'package:graduation_project/Features/login&registration/presentation/views/widgets/login_methods.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
+
 
 class RegisterBody extends StatefulWidget {
   const RegisterBody({super.key});
@@ -41,37 +43,39 @@ class _RegisterBodyState extends State<RegisterBody> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
+
     return Builder(
       builder: (scaffoldContext) {
         return Scaffold(
-      body: BlocListener<AuthCubit, UserState>(
-  listener: (context, state) {
-    print('State received: $state'); // Debug
-    if (state is SignUpFailure) {
-      String errorMessage = state.errMessage ?? 'An unknown error occurred';
-      if (errorMessage.contains('Email')) {
-        errorMessage = 'This email is already registered. Please use a different email.';
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errorMessage),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } else if (state is SignUpSuccess) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Registration successful! Please verify your email.'),
-          backgroundColor: MyColors.kPrimaryColor,
-        ),
-      );
-      Navigator.pushNamed(context, '/ConfirmEmail', arguments: _emailController.text);
-      context.read<AuthCubit>().resendResetConfirmEmailOtp(_emailController.text, context);
-
-    }
-  },
-  child: _buildForm(scaffoldContext),
-),
+          body: BlocListener<AuthCubit, UserState>(
+            listener: (context, state) {
+              print('State received: $state'); // Debug
+              if (state is SignUpFailure) {
+                String errorMessage = state.errMessage ?? l10n.unknownErrorOccurred; // Localized
+                if (errorMessage.contains('Email')) { // Still checking for 'Email' in raw error message
+                  errorMessage = l10n.emailAlreadyRegistered; // Localized
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(errorMessage),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              } else if (state is SignUpSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.registrationSuccessVerifyEmail), // Localized
+                    backgroundColor: MyColors.kPrimaryColor,
+                  ),
+                );
+                Navigator.pushNamed(context, '/ConfirmEmail', arguments: _emailController.text);
+                context.read<AuthCubit>().resendResetConfirmEmailOtp(_emailController.text, context);
+              }
+            },
+            child: _buildForm(scaffoldContext),
+          ),
         );
       },
     );
@@ -80,6 +84,7 @@ class _RegisterBodyState extends State<RegisterBody> {
   Widget _buildForm(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final l10n = AppLocalizations.of(context)!; // Get the localization instance
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -94,57 +99,56 @@ class _RegisterBodyState extends State<RegisterBody> {
                 children: [
                   SizedBox(height: screenHeight * 0.08),
                   Text(
-                    "Hello! Register to get started",
+                    l10n.helloRegisterToGetStarted, // Localized
                     style: TextStyle(fontSize: screenWidth * 0.07, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: screenHeight * 0.04),
-                  _buildTextField(_userNameController, 'Enter your username'),
-                  _buildTextField(_displayNameController, 'Enter your display name'),
-                  _buildDropdown(screenWidth, screenHeight),
-                  _buildTextField(_emailController, 'Enter your email', keyboardType: TextInputType.emailAddress, validator: _emailValidator),
-                  _buildPasswordField(_passwordController, 'Enter your password'),
-                  _buildPasswordField(_confirmPasswordController, 'Confirm your password', confirm: true),
-                  _buildTextField(_phoneNumberController, 'Enter your phone number (e.g., +20123456789)', keyboardType: TextInputType.phone, validator: _phoneValidator),
-                  _buildTextField(_countryController, 'Enter your country'),
-                  _buildTextField(_cityController, 'Enter your city'),
+                  _buildTextField(_userNameController, l10n.enterYourUsernameHint), // Localized
+                  _buildTextField(_displayNameController, l10n.enterYourDisplayNameHint), // Localized
+                  _buildDropdown(screenWidth, screenHeight), // Localized internally
+                  _buildTextField(_emailController, l10n.enterYourEmailHint, keyboardType: TextInputType.emailAddress, validator: _emailValidator), // Localized
+                  _buildPasswordField(_passwordController, l10n.enterYourPasswordHint), // Localized
+                  _buildPasswordField(_confirmPasswordController, l10n.confirmYourPasswordHint, confirm: true), // Localized
+                  _buildTextField(_phoneNumberController, l10n.enterYourPhoneNumberHint, keyboardType: TextInputType.phone, validator: _phoneValidator), // Localized
+                  _buildTextField(_countryController, l10n.enterYourCountryHint), // Localized
+                  _buildTextField(_cityController, l10n.enterYourCityHint), // Localized
                   SizedBox(height: screenHeight * 0.02),
                   ElevatedButton(
-  onPressed: isLoading
-      ? null
-      : () {
-          print('Validating form...');
-          if (_formKey.currentState!.validate()) {
-            print('Form validated successfully');
-            _formKey.currentState!.save();
-            context.read<AuthCubit>().register(
-                  _userNameController.text,
-                  _displayNameController.text,
-                  _emailController.text,
-                  _passwordController.text,
-                  _phoneNumberController.text,
-                  _countryController.text,
-                  _cityController.text,
-                  _userType,
-                );
-
-            // Move navigation to BlocListener to ensure it happens after success
-          } else {
-            print('Form validation failed');
-          }
-        },
-  style: ElevatedButton.styleFrom(
-    backgroundColor: MyColors.kPrimaryColor,
-    foregroundColor: Colors.white,
-    minimumSize: Size(screenWidth - 44, screenHeight * 0.07),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-  ),
-  child: isLoading
-      ? const CircularProgressIndicator(color: Colors.white)
-      : const Text("Register"),
-),SizedBox(height: screenHeight * 0.02),
+                    onPressed: isLoading
+                        ? null
+                        : () {
+                      print('Validating form...');
+                      if (_formKey.currentState!.validate()) {
+                        print('Form validated successfully');
+                        _formKey.currentState!.save();
+                        context.read<AuthCubit>().register(
+                          _userNameController.text,
+                          _displayNameController.text,
+                          _emailController.text,
+                          _passwordController.text,
+                          _phoneNumberController.text,
+                          _countryController.text,
+                          _cityController.text,
+                          _userType,
+                        );
+                      } else {
+                        print('Form validation failed');
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: MyColors.kPrimaryColor,
+                      foregroundColor: Colors.white,
+                      minimumSize: Size(screenWidth - 44, screenHeight * 0.07),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                    child: isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : Text(l10n.registerButton), // Localized
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
                   const Divider(thickness: 1),
                   const SizedBox(height: 10),
-                  const Text("Or Register with", style: TextStyle(color: Colors.grey)),
+                  Text(l10n.orRegisterWith, style: const TextStyle(color: Colors.grey)), // Localized
                   const Divider(thickness: 1),
                   SizedBox(height: screenHeight * 0.02),
                   login_methods(screenWidth: screenWidth, screenHeight: screenHeight),
@@ -152,11 +156,11 @@ class _RegisterBodyState extends State<RegisterBody> {
                   TextButton(
                     onPressed: () => Navigator.pushNamed(context, '/SignIn'),
                     child: RichText(
-                      text: const TextSpan(
-                        text: "Already have an account? ",
-                        style: TextStyle(color: Colors.grey),
+                      text: TextSpan( // No longer const
+                        text: l10n.alreadyHaveAccount, // Localized
+                        style: const TextStyle(color: Colors.grey),
                         children: [
-                          TextSpan(text: "Login Now", style: TextStyle(color: MyColors.kPrimaryColor)),
+                          TextSpan(text: l10n.loginNowLink, style: const TextStyle(color: MyColors.kPrimaryColor)), // Localized
                         ],
                       ),
                     ),
@@ -182,12 +186,17 @@ class _RegisterBodyState extends State<RegisterBody> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(9), borderSide: BorderSide.none),
         ),
         keyboardType: keyboardType,
-        validator: validator ?? (value) => value == null || value.isEmpty ? 'Required field' : null,
+        validator: validator ?? (value) {
+          final l10n = AppLocalizations.of(context)!; // Access l10n in validator
+          return value == null || value.isEmpty ? l10n.requiredField : null; // Localized
+        },
       ),
     );
   }
 
   Widget _buildPasswordField(TextEditingController controller, String hintText, {bool confirm = false}) {
+    final l10n = AppLocalizations.of(context)!; // Access l10n in validator scope
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
@@ -204,13 +213,13 @@ class _RegisterBodyState extends State<RegisterBody> {
           ),
         ),
         validator: (value) {
-          if (value == null || value.isEmpty) return 'Required field';
+          if (value == null || value.isEmpty) return l10n.requiredField; // Localized
           if (!confirm) {
-            if (value.length < 8) return 'At least 8 characters';
-            if (!RegExp(r'[A-Z]').hasMatch(value)) return 'One uppercase letter required';
-            if (!RegExp(r'[!@#\$%^&*(),.?":{}|<>]').hasMatch(value)) return 'One special character required';
+            if (value.length < 8) return l10n.passwordMinLength; // Localized
+            if (!RegExp(r'[A-Z]').hasMatch(value)) return l10n.passwordOneUppercase; // Localized (new ARB key)
+            if (!RegExp(r'[!@#\$%^&*(),.?":{}|<>]').hasMatch(value)) return l10n.passwordOneSpecialChar; // Localized (new ARB key)
           } else if (value != _passwordController.text) {
-            return 'Passwords do not match';
+            return l10n.passwordsDoNotMatch; // Localized (new ARB key)
           }
           return null;
         },
@@ -219,19 +228,21 @@ class _RegisterBodyState extends State<RegisterBody> {
   }
 
   Widget _buildDropdown(double screenWidth, double screenHeight) {
+    final l10n = AppLocalizations.of(context)!; // Access l10n here
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: DropdownButtonFormField<String>(
         value: _userType,
         decoration: InputDecoration(
-          hintText: 'Select user type',
+          hintText: l10n.selectUserType, // Localized
           filled: true,
           fillColor: const Color(0xffE8ECF4),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(9), borderSide: BorderSide.none),
         ),
-        items: const [
-          DropdownMenuItem(value: 'IndividualUser', child: Text('IndividualUser')),
-          DropdownMenuItem(value: 'Admin', child: Text('Admin')),
+        items: [ // No longer const
+          DropdownMenuItem(value: 'IndividualUser', child: Text(l10n.individualUserDropdown)), // Localized
+          DropdownMenuItem(value: 'Admin', child: Text(l10n.companyUserDropdown)), // Mapped Admin to Company User for now
         ],
         onChanged: (value) {
           setState(() {
@@ -241,21 +252,25 @@ class _RegisterBodyState extends State<RegisterBody> {
         },
         validator: (value) {
           print('Validating user type: $value');
-          return value == null ? 'Please select a user type' : null;
+          return value == null ? l10n.pleaseSelectUserType : null; // Localized
         },
       ),
     );
   }
 
   String? _emailValidator(String? value) {
-    if (value == null || value.isEmpty) return 'Enter your email';
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Enter a valid email';
+    final l10n = AppLocalizations.of(context)!; // Access l10n here
+
+    if (value == null || value.isEmpty) return l10n.enterYourEmailHint; // Localized
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return l10n.enterValidEmail; // Localized
     return null;
   }
 
   String? _phoneValidator(String? value) {
-    if (value == null || value.isEmpty) return 'Enter your phone number';
-    if (!RegExp(r'^\+\d{10,15}$').hasMatch(value)) return 'Invalid phone (e.g., +20123456789)';
+    final l10n = AppLocalizations.of(context)!; // Access l10n here
+
+    if (value == null || value.isEmpty) return l10n.enterYourPhoneNumberHint; // Localized
+    if (!RegExp(r'^\+\d{10,15}$').hasMatch(value)) return l10n.invalidPhoneNumberExample; // Localized (new ARB key)
     return null;
   }
 }
