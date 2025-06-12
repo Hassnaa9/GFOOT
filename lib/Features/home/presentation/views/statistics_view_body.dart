@@ -6,10 +6,11 @@ import 'package:graduation_project/Features/home/presentation/view_models/home_c
 import 'package:graduation_project/Features/home/presentation/view_models/home_cubit_state.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/custom_carbon_result.dart';
 import 'package:graduation_project/Features/home/presentation/views/widgets/gradient_indicator.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
+
 
 class StatisticsViewBody extends StatefulWidget {
   const StatisticsViewBody({super.key});
@@ -33,16 +34,25 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Carbon Emission Report',
-          style: TextStyle(color: MyColors.kPrimaryColor, fontSize: 18, fontWeight: FontWeight.bold),
+        title: Text( // No longer const
+          l10n.carbonEmissionReportTitle, // Localized
+          style: const TextStyle(color: MyColors.kPrimaryColor, fontSize: 18, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
@@ -98,17 +108,17 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          _buildTabButton('Daily', 0),
-                          _buildTabButton('Monthly', 1),
-                          _buildTabButton('Yearly', 2),
+                          _buildTabButton(l10n.dailyTab, 0), // Localized
+                          _buildTabButton(l10n.monthlyTab, 1), // Localized
+                          _buildTabButton(l10n.yearlyTab, 2), // Localized
                         ],
                       ),
                       const SizedBox(height: 18),
-                      const Align(
+                      Align( // No longer const
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'Emission Trends',
-                          style: TextStyle(
+                          l10n.emissionTrendsTitle, // Localized
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: MyColors.kPrimaryColor,
@@ -123,7 +133,7 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: statistics.isEmpty
-                            ? const Center(child: Text("No data available"))
+                            ? Center(child: Text(l10n.noDataAvailable)) // Localized
                             : SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: SizedBox(
@@ -141,7 +151,7 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
                                           tooltipRoundedRadius: 8,
                                           getTooltipItem: (group, _, rod, __) {
                                             return BarTooltipItem(
-                                              '${rod.toY.toStringAsFixed(1)} kg',
+                                              '${rod.toY.toStringAsFixed(1)} ${l10n.kilogramAbbreviation}', // Localized
                                               const TextStyle(color: Colors.black87),
                                             );
                                           },
@@ -161,10 +171,19 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
                                               final index = value.toInt();
                                               if (index >= statistics.length) return const SizedBox();
                                               final barDate = stats[index].date;
+                                              // Format date based on selected tab (daily/monthly/yearly)
+                                              String formatString;
+                                              if (_currentStatsType == 'Daily') {
+                                                formatString = 'MM/dd';
+                                              } else if (_currentStatsType == 'Monthly') {
+                                                formatString = 'MMM yy';
+                                              } else { // Yearly
+                                                formatString = 'yyyy';
+                                              }
                                               return Padding(
                                                 padding: const EdgeInsets.only(top: 8.0),
                                                 child: Text(
-                                                  DateFormat('MM/dd').format(barDate),
+                                                  DateFormat(formatString).format(barDate),
                                                   style: const TextStyle(color: Colors.black54, fontSize: 11),
                                                 ),
                                               );
@@ -224,7 +243,18 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
       onTap: () {
         setState(() {
           _selectedTabIndex = index;
-          _currentStatsType = ['Daily', 'Monthly', 'Yearly'][index];
+          // _currentStatsType is already localized through the title parameter
+          // we pass to it, we just need to map it back to the English values for API calls
+          _currentStatsType = [AppLocalizations.of(context)!.dailyTab, AppLocalizations.of(context)!.monthlyTab, AppLocalizations.of(context)!.yearlyTab][index];
+
+          // Use the English values for API calls as expected by the backend
+          if (_currentStatsType == AppLocalizations.of(context)!.dailyTab) {
+            _currentStatsType = 'Daily';
+          } else if (_currentStatsType == AppLocalizations.of(context)!.monthlyTab) {
+            _currentStatsType = 'Monthly';
+          } else if (_currentStatsType == AppLocalizations.of(context)!.yearlyTab) {
+            _currentStatsType = 'Yearly';
+          }
         });
         context.read<HomeCubit>().fetchStatistics(_currentStatsType);
       },
@@ -236,7 +266,7 @@ class _StatisticsViewBodyState extends State<StatisticsViewBody> {
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
-          title,
+          title, // Already localized when passed to this method
           style: TextStyle(
             color: isSelected ? Colors.white : Colors.black87,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
