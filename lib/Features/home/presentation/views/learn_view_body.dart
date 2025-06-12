@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Core/utils/assets.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
+// Import the generated AppLocalizations class
+
 
 class LearnViewBody extends StatelessWidget {
   const LearnViewBody({super.key});
@@ -8,6 +11,8 @@ class LearnViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: MyColors.white,
@@ -20,9 +25,9 @@ class LearnViewBody extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Your Carbon Footprint',
-                    style: TextStyle(
+                  Text( // No longer const
+                    l10n.yourCarbonFootprintTitle, // Localized
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: MyColors.kPrimaryColor,
@@ -32,25 +37,22 @@ class LearnViewBody extends StatelessWidget {
                   _buildItem(
                     context,
                     image: AssetsData.questionMark, // Adjusted to match UI icon
-                    title: 'What It Is',
-                    description:
-                        'Your Carbon Footprint is the total amount of greenhouse gases you produce, including carbon dioxide and methane.',
+                    title: l10n.whatItIsTitle, // Localized
+                    description: l10n.whatItIsDescription, // Localized
                   ),
                   const SizedBox(height: 24),
                   _buildItem(
                     context,
                     image: AssetsData.benifits, // Adjusted to match UI icon
-                    title: 'Benefits',
-                    description:
-                        'Reducing your Carbon Footprint helps to slow climate change, conserve natural resources, and create a more sustainable future.',
+                    title: l10n.benefitsTitle, // Localized
+                    description: l10n.benefitsDescription, // Localized
                   ),
                   const SizedBox(height: 24),
                   _buildItem(
                     context,
                     image: AssetsData.co2, // Matches UI icon
-                    title: 'Ways to Reduce',
-                    description:
-                        'You can lower your footprint by saving energy, reducing waste, choosing sustainable transportation, and supporting eco-friendly products.',
+                    title: l10n.waysToReduceTitle, // Localized
+                    description: l10n.waysToReduceDescription, // Localized
                   ),
                   const SizedBox(height: 24),
                 ],
