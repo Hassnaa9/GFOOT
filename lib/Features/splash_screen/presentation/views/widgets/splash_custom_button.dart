@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/Features/login&registration/presentation/views/login_or_reg_view_body.dart';
+// Import the generated AppLocalizations class
+import 'package:graduation_project/app_localizations.dart';
+
 
 class CustomSwipeButton extends StatelessWidget {
   final double screenWidth,screenHeight;
@@ -7,6 +10,9 @@ class CustomSwipeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
+
     return GestureDetector(
       onVerticalDragEnd: (details) {
         if (details.primaryVelocity! < 0) {
@@ -29,22 +35,23 @@ class CustomSwipeButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(43),
             ),
           ),
-          const Column(
+          // Removed 'const' keyword because Text widget is no longer constant
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
+              const Icon( // Icon itself can remain const
                 Icons.arrow_upward,
                 color: Colors.white,
                 size: 25,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               CircleAvatar(
                 radius: 20,
                 backgroundColor: Colors.white,
                 child: Text(
-                  "GO",
-                  style: TextStyle(
+                  "GO", // This is an icon, not a localized string. Kept as is.
+                  style: const TextStyle(
                     fontWeight: FontWeight.w800,
                     color: Colors.black,
                   ),

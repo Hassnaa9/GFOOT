@@ -40,6 +40,13 @@
   "didntReceiveOtp": "لم تتلقَ الرمز؟",
   "resendOtp": "إعادة إرسال الرمز",
   "resendOtpCountdown": "إعادة إرسال الرمز ({seconds} ث)",
+  "@resendOtpCountdown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
 
   "forgotPasswordTitle": "هل نسيت كلمة المرور؟",
   "forgotPasswordHint": "لا تقلق! يحدث هذا. الرجاء إدخال عنوان بريدك الإلكتروني، وسنرسل رمز OTP إلى بريدك الإلكتروني.",
@@ -68,5 +75,212 @@
   "registerNowLink": "سجل الآن",
 
   "signInButton": "تسجيل الدخول",
-  "signUpButton": "التسجيل"
+  "signUpButton": "التسجيل",
+
+  "enterValidEmail": "الرجاء إدخال بريد إلكتروني صحيح",
+  "passwordMinLength": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+  "unknownErrorOccurred": "حدث خطأ غير معروف",
+  "emailAlreadyRegistered": "هذا البريد الإلكتروني مسجل بالفعل. يرجى استخدام بريد إلكتروني آخر.",
+  "registrationSuccessVerifyEmail": "تم التسجيل بنجاح! يرجى التحقق من بريدك الإلكتروني.",
+  "requiredField": "حقل مطلوب",
+  "passwordOneUppercase": "حرف كبير واحد مطلوب",
+  "passwordOneSpecialChar": "حرف خاص واحد مطلوب",
+  "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين",
+  "selectUserType": "اختر نوع المستخدم",
+  "pleaseSelectUserType": "الرجاء تحديد نوع المستخدم",
+  "invalidPhoneNumberExample": "رقم هاتف غير صالح (مثال: +20123456789)",
+  "emailVerifiedSuccessfully": "تم التحقق من البريد الإلكتروني بنجاح!",
+  "otpResentSuccessfully": "تم إعادة إرسال الرمز بنجاح",
+  "pleaseEnterValidOtp": "الرجاء إدخال رمز OTP صالح مكون من 6 أرقام",
+  "completeQuestionnaireMessage": "الرجاء إكمال الاستبيان لرؤية بصمتك الكربونية.",
+  "redirectingToLogin": "جارِ إعادة التوجيه إلى تسجيل الدخول...",
+  "errorPrefix": "خطأ",
+
+  "notificationsSection": "الإشعارات",
+  "enablePushNotifications": "تفعيل الإشعارات الفورية",
+  "appearanceSection": "المظهر",
+  "darkTheme": "الوضع الداكن",
+  "unitsSection": "الوحدات",
+  "useMetricUnits": "استخدام الوحدات المترية",
+  "useMetricUnitsSubtitle": "التبديل بين الوحدات المترية والإمبريالية",
+  "languageSection": "اللغة",
+  "toggleLanguage": "تبديل اللغة",
+  "accountSection": "الحساب",
+  "editProfile": "تعديل الملف الشخصي",
+  "logoutButton": "تسجيل الخروج",
+
+  "questionnaireBodyType": "🏋️‍♀️ ما هو نوع جسمك؟",
+  "bodyTypeObese": "⚖️ بدين",
+  "bodyTypeOverweight": "⚖️ زائد الوزن",
+  "bodyTypeUnderweight": "⚖️ ناقص الوزن",
+  "bodyTypeNormal": "⚖️ طبيعي",
+  "questionnaireGender": "👤 ما هو جنسك؟",
+  "genderFemale": "♀️ أنثى",
+  "genderMale": "♂️ ذكر",
+  "questionnaireDietType": "🍽️ ما هو نوع نظامك الغذائي؟",
+  "dietOmnivore": "🍖 آكل لحوم",
+  "dietVegetarian": "🥗 نباتي",
+  "dietVegan": "🌱 نباتي صرف",
+  "dietPescatarian": "🐟 نباتي بحري",
+  "questionnaireShowerFrequency": "🚿 كم مرة تستحم؟",
+  "showerTwiceDaily": "🕒 مرتين يوميًا",
+  "showerDaily": "📅 يوميًا",
+  "showerLessFrequently": "⏳ أقل تكرارًا",
+  "showerMoreFrequently": "⏰ أكثر تكرارًا",
+  "questionnaireHeatingSource": "🔥 ما هو مصدر التدفئة الرئيسي لمنزلك؟",
+  "heatingCoal": "🪨 فحم",
+  "heatingNaturalGas": "💨 غاز طبيعي",
+  "heatingWood": "🪵 خشب",
+  "heatingElectricity": "⚡ كهرباء",
+  "questionnaireTransportation": "🚗 ما هو وسيلة النقل الرئيسية الخاصة بك؟",
+  "transportPrivate": "🚘 خاص",
+  "transportPublic": "🚌 عام",
+  "transportWalkBicycle": "🚶‍♂️ مشي/دراجة",
+  "questionnaireVehicleType": "🚙 ما نوع المركبة التي تستخدمها؟",
+  "vehicleHybrid": "🔋 هجين",
+  "vehiclePetrol": "⛽ بنزين",
+  "vehicleDiesel": "🛢️ ديزل",
+  "vehicleLPG": "💧 غاز بترولي مسال",
+  "vehicleElectric": "⚡ كهربائي",
+  "vehicleNaN": "❓ غير معروف",
+  "questionnaireSocialActivity": "🎉 كم مرة تشارك في الأنشطة الاجتماعية؟",
+  "socialSometimes": "🤷‍♂️ أحيانًا",
+  "socialOften": "🥳 غالبًا",
+  "socialNever": "🚫 أبدًا",
+  "questionnaireMonthlyGrocery": "🛒 ما هو متوسط فاتورة البقالة الشهرية (بعملتك المحلية)؟",
+  "questionnaireAirTravel": "✈️ كم مرة سافرت بالطائرة؟",
+  "airTravelNever": "🚫 أبدًا",
+  "airTravelRarely": "🌟 نادرًا",
+  "airTravelFrequently": "🛫 غالبًا",
+  "airTravelVeryFrequently": "✈️ كثيرًا جدًا",
+  "questionnaireVehicleDistance": "🛣️ كم كيلومترًا تقود شهريًا؟",
+  "questionnaireWasteBagSize": "🗑️ ما هو حجم كيس القمامة الخاص بك؟",
+  "wasteBagMedium": "📏 متوسط",
+  "wasteBagSmall": "📏 صغير",
+  "wasteBagLarge": "📏 كبير",
+  "questionnaireWasteBagCount": "♻️ في المتوسط، كم عدد أكياس القمامة التي تستخدمها أسرتك أسبوعيًا؟",
+  "questionnaireTvPcHours": "📺 في المتوسط، كم ساعة تقضيها يوميًا في مشاهدة التلفزيون أو استخدام الكمبيوتر؟",
+  "questionnaireInternetHours": "🌐 في المتوسط، كم ساعة تقضيها على الإنترنت يوميًا؟",
+  "questionnaireNewClothes": "👕 في المتوسط، كم عدد الملابس الجديدة التي تشتريها شهريًا؟",
+  "questionnaireEnergyEfficiency": "💡 هل تبحث بنشاط عن الأجهزة الموفرة للطاقة؟",
+  "energyEfficiencyYes": "✅ نعم",
+  "energyEfficiencySometimes": "🤔 أحيانًا",
+  "energyEfficiencyNo": "❌ لا",
+  "questionnairePleaseAnswer": "الرجاء الإجابة على:",
+  "questionnairePleaseCorrect": "الرجاء التصحيح:",
+  "questionnaireMustBeNumber": "يجب أن يكون رقمًا صحيحًا",
+  "questionnaireHoursRange": "يجب أن يكون بين 0 و 24 ساعة",
+  "questionnairePositiveNumber": "يجب أن يكون رقمًا موجبًا",
+  "submitButton": "إرسال",
+  "enterValue": "أدخل القيمة",
+  "invalidNumber": "رقم غير صالح",
+  "permissionDeniedMessage": "تم رفض الإذن. يرجى تمكينه في الإعدادات.",
+  "errorPickingImageMessage": "خطأ في اختيار الصورة",
+  "errorSavingImageMessage": "خطأ في حفظ الصورة",
+  "editProfileTitle": "تعديل الملف الشخصي",
+  "fullNameLabel": "الاسم الكامل",
+  "addressLabel": "العنوان",
+  "dateOfBirthLabel": "تاريخ الميلاد",
+  "emailLabel": "البريد الإلكتروني",
+  "updateButton": "تحديث",
+  "profileUpdateSuccessMessage": "تم تحديث الملف الشخصي بنجاح!",
+  "profileUpdateFailedMessage": "فشل تحديث الملف الشخصي",
+  "cameraOption": "الكاميرا",
+  "galleryOption": "المعرض",
+  "notificationsTitle": "الإشعارات",
+  "noNotificationsYetMessage": "لا توجد إشعارات بعد!",
+  "dayAgo": "منذ يوم واحد",
+  "@dayAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "daysAgo": "منذ {days} أيام",
+  "@daysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "hourAgo": "منذ ساعة واحدة",
+  "@hourAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "منذ {hours} ساعات",
+  "@hoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "minuteAgo": "منذ دقيقة واحدة",
+  "@minuteAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesAgo": "منذ {minutes} دقائق",
+  "@minutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "justNow": "الآن",
+  "notificationLogActivityTitle": "سجل نشاطك اليومي",
+  "notificationLogActivityDescription": "لا تنس تسجيل سفرك ووجباتك لتتبع بصمتك الكربونية!",
+  "notificationGreatJobTitle": "عمل رائع!",
+  "notificationGreatJobDescription": "لقد خفضت بصمتك الكربونية بنسبة 5% هذا الأسبوع. استمر في ذلك!",
+  "notificationSustainableTipTitle": "نصيحة مستدامة",
+  "notificationSustainableTipDescription": "حاول المشي أو ركوب الدراجة بدلاً من القيادة لتقليل الانبعاثات.",
+  "notificationHighCarbonAlertTitle": "تنبيه كربون عالي!",
+  "notificationHighCarbonAlertDescription": "رحلتك الأخيرة زادت بصمتك الكربونية بشكل كبير. فكر في التعويض عن طريق إجراء مستدام.",
+  "notificationMilestoneAchievedTitle": "تم تحقيق إنجاز!",
+  "notificationMilestoneAchievedDescription": "تهانينا! لقد عادلت 1 طن من ثاني أكسيد الكربون من خلال خياراتك المستدامة هذا الشهر!",
+  "notificationEnergySavingTipTitle": "نصيحة لتوفير الطاقة",
+  "notificationEnergySavingTipDescription": "أطفئ الأنوار وافصل الأجهزة عندما لا تكون قيد الاستخدام لتقليل استهلاكك للطاقة.",
+  "notificationChallengeAcceptedTitle": "تم قبول التحدي!",
+  "notificationChallengeAcceptedDescription": "لقد انضممت إلى تحدي 'الاثنين الخالي من اللحوم'. سجل وجباتك النباتية لكسب النقاط!",
+  "notificationCommunityUpdateTitle": "تحديث المجتمع",
+  "notificationCommunityUpdateDescription": "مدينتك أطلقت للتو برنامج إعادة تدوير جديد. تحققه لتقليل النفايات!",
+  "notificationWaterConservationTipTitle": "نصيحة للحفاظ على المياه",
+  "notificationWaterConservationTipDescription": "قلل مدة استحمامك لتوفير المياه وتقليل تأثيرك البيئي.",
+  "notificationMonthlySummaryTitle": "ملخص شهري",
+  "notificationMonthlySummaryDescription": "بصمتك الكربونية لهذا الشهر هي 1.2 طن. اهدف إلى 1 طن الشهر المقبل بتغييرات صغيرة!",
+  "profileTitle": "الملف الشخصي",
+  "editMyAccount": "تعديل حسابي",
+  "helpCenter": "مركز المساعدة",
+  "emailPrefix": "البريد الإلكتروني",
+  "phonePrefix": "الهاتف",
+  "locationPrefix": "الموقع",
+  "notAvailable": "غير متاح",
+  "rankTitle": "الترتيب",
+  "loadingUser": "جارٍ تحميل المستخدم...",
+  "failedToLoadUser": "فشل تحميل المستخدم",
+  "retryButton": "إعادة المحاولة",
+  "userNamePlaceholder": "اسم المستخدم",
+  "cityRankTitle": "ترتيب المدينة",
+  "countryRankTitle": "ترتيب الدولة",
+  "globalRankTitle": "الترتيب العالمي",
+  "noRankingsAvailable": "لا توجد تصنيفات متاحة",
+  "yourEcoRecommendationsTitle": "توصياتك البيئية",
+  "noRecommendationsYetMessage": "لا توجد توصيات بعد!",
+  "carbonEmissionReportTitle": "تقرير انبعاثات الكربون",
+  "dailyTab": "يومي",
+  "monthlyTab": "شهري",
+  "yearlyTab": "سنوي",
+  "emissionTrendsTitle": "اتجاهات الانبعاثات",
+  "noDataAvailable": "لا توجد بيانات متاحة",
+  "kilogramAbbreviation": "كجم"
 }

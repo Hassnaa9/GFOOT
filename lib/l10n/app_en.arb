@@ -75,5 +75,213 @@
   "registerNowLink": "Register Now",
 
   "signInButton": "Sign In",
-  "signUpButton": "Sign Up"
+  "signUpButton": "Sign Up",
+
+  "enterValidEmail": "Please enter a valid email",
+  "passwordMinLength": "Password must be at least 8 characters",
+  "unknownErrorOccurred": "An unknown error occurred",
+  "emailAlreadyRegistered": "This email is already registered. Please use a different email.",
+  "registrationSuccessVerifyEmail": "Registration successful! Please verify your email.",
+  "requiredField": "Required field",
+  "passwordOneUppercase": "One uppercase letter required",
+  "passwordOneSpecialChar": "One special character required",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "selectUserType": "Select user type",
+  "pleaseSelectUserType": "Please select a user type",
+  "invalidPhoneNumberExample": "Invalid phone (e.g., +20123456789)",
+  "emailVerifiedSuccessfully": "Email verified successfully!",
+  "otpResentSuccessfully": "OTP resent successfully",
+  "pleaseEnterValidOtp": "Please enter a valid 6-digit OTP",
+  "completeQuestionnaireMessage": "Please complete the questionnaire to see your carbon footprint.",
+  "redirectingToLogin": "Redirecting to login...",
+  "errorPrefix": "Error",
+
+  "notificationsSection": "Notifications",
+  "enablePushNotifications": "Enable Push Notifications",
+  "appearanceSection": "Appearance",
+  "darkTheme": "Dark Theme",
+  "unitsSection": "Units",
+  "useMetricUnits": "Use Metric Units",
+  "useMetricUnitsSubtitle": "Switch between metric and imperial units",
+  "languageSection": "Language",
+  "toggleLanguage": "Toggle Language",
+  "accountSection": "Account",
+  "editProfile": "Edit Profile",
+  "logoutButton": "Logout",
+
+  "questionnaireBodyType": "🏋️‍♀️ What is your body type?",
+  "bodyTypeObese": "⚖️ Obese",
+  "bodyTypeOverweight": "⚖️ Overweight",
+  "bodyTypeUnderweight": "⚖️ Underweight",
+  "bodyTypeNormal": "⚖️ Normal",
+  "questionnaireGender": "👤 What is your gender?",
+  "genderFemale": "♀️ Female",
+  "genderMale": "♂️ Male",
+  "questionnaireDietType": "🍽️ What is your diet type?",
+  "dietOmnivore": "🍖 Omnivore",
+  "dietVegetarian": "🥗 Vegetarian",
+  "dietVegan": "🌱 Vegan",
+  "dietPescatarian": "🐟 Pescatarian",
+  "questionnaireShowerFrequency": "🚿 How frequently do you shower?",
+  "showerTwiceDaily": "🕒 Twice a day",
+  "showerDaily": "📅 Daily",
+  "showerLessFrequently": "⏳ Less frequently",
+  "showerMoreFrequently": "⏰ More frequently",
+  "questionnaireHeatingSource": "🔥 What is your home’s primary heating energy source?",
+  "heatingCoal": "🪨 Coal",
+  "heatingNaturalGas": "💨 Natural gas",
+  "heatingWood": "🪵 Wood",
+  "heatingElectricity": "⚡ Electricity",
+  "questionnaireTransportation": "🚗 What is your primary mode of transportation?",
+  "transportPrivate": "🚘 Private",
+  "transportPublic": "🚌 Public",
+  "transportWalkBicycle": "🚶‍♂️ Walk/Bicycle",
+  "questionnaireVehicleType": "🚙 What type of vehicle you use?",
+  "vehicleHybrid": "🔋 Hybrid",
+  "vehiclePetrol": "⛽ Petrol",
+  "vehicleDiesel": "🛢️ Diesel",
+  "vehicleLPG": "💧 LPG",
+  "vehicleElectric": "⚡ Electric",
+  "vehicleNaN": "❓ NaN",
+  "questionnaireSocialActivity": "🎉 How often do you participate in social activities?",
+  "socialSometimes": "🤷‍♂️ Sometimes",
+  "socialOften": "🥳 Often",
+  "socialNever": "🚫 Never",
+  "questionnaireMonthlyGrocery": "🛒 What is your average monthly grocery bill (in your local currency)?",
+  "questionnaireAirTravel": "✈️ How often did you travel by air?",
+  "airTravelNever": "🚫 Never",
+  "airTravelRarely": "🌟 Rarely",
+  "airTravelFrequently": "🛫 Frequently",
+  "airTravelVeryFrequently": "✈️ Very frequently",
+  "questionnaireVehicleDistance": "🛣️ How many kilometers do you drive per month?",
+  "questionnaireWasteBagSize": "🗑️ What is the size of your garbage bag?",
+  "wasteBagMedium": "📏 Medium",
+  "wasteBagSmall": "📏 Small",
+  "wasteBagLarge": "📏 Large",
+  "questionnaireWasteBagCount": "♻️ On average, how many garbage bags did your household use weekly?",
+  "questionnaireTvPcHours": "📺 On average, how many hours do you spend daily watching TV or using a PC?",
+  "questionnaireInternetHours": "🌐 On average, how many hours do you spend online daily?",
+  "questionnaireNewClothes": "👕 On average, how many new clothes do you buy per month?",
+  "questionnaireEnergyEfficiency": "💡 Do you actively seek out energy-efficient appliances?",
+  "energyEfficiencyYes": "✅ Yes",
+  "energyEfficiencySometimes": "🤔 Sometimes",
+  "energyEfficiencyNo": "❌ No",
+  "questionnairePleaseAnswer": "Please answer:",
+  "questionnairePleaseCorrect": "Please correct:",
+  "questionnaireMustBeNumber": "must be a valid number",
+  "questionnaireHoursRange": "Must be between 0 and 24 hours",
+  "questionnairePositiveNumber": "Must be a positive number",
+  "submitButton": "Submit",
+  "enterValue": "Enter value",
+  "invalidNumber": "Invalid number",
+
+  "permissionDeniedMessage": "Permission denied. Please enable it in settings.",
+  "errorPickingImageMessage": "Error picking image",
+  "errorSavingImageMessage": "Error saving image",
+  "editProfileTitle": "Edit Profile",
+  "fullNameLabel": "Full Name",
+  "addressLabel": "Address",
+  "dateOfBirthLabel": "Date of Birth",
+  "emailLabel": "Email",
+  "updateButton": "UPDATE",
+  "profileUpdateSuccessMessage": "Profile updated successfully!",
+  "profileUpdateFailedMessage": "Failed to update profile",
+  "cameraOption": "Camera",
+  "galleryOption": "Gallery",
+  "notificationsTitle": "Notifications",
+  "noNotificationsYetMessage": "No notifications yet!",
+  "dayAgo": "{days} day ago",
+  "@dayAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "daysAgo": "{days} days ago",
+  "@daysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "hourAgo": "{hours} hour ago",
+  "@hourAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{hours} hours ago",
+  "@hoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "minuteAgo": "{minutes} minute ago",
+  "@minuteAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesAgo": "{minutes} minutes ago",
+  "@minutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "justNow": "Just now",
+  "notificationLogActivityTitle": "Log Your Daily Activity",
+  "notificationLogActivityDescription": "Don't forget to log your travel and meals to track your carbon footprint!",
+  "notificationGreatJobTitle": "Great Job!",
+  "notificationGreatJobDescription": "You've reduced your carbon footprint by 5% this week. Keep it up!",
+  "notificationSustainableTipTitle": "Sustainable Tip",
+  "notificationSustainableTipDescription": "Try walking or biking instead of driving to reduce emissions.",
+  "notificationHighCarbonAlertTitle": "High Carbon Alert!",
+  "notificationHighCarbonAlertDescription": "Your recent flight has significantly increased your carbon footprint. Consider offsetting with a sustainable action.",
+  "notificationMilestoneAchievedTitle": "Milestone Achieved!",
+  "notificationMilestoneAchievedDescription": "Congratulations! You've offset 1 ton of CO2 through your sustainable choices this month!",
+  "notificationEnergySavingTipTitle": "Energy Saving Tip",
+  "notificationEnergySavingTipDescription": "Turn off lights and unplug devices when not in use to lower your energy consumption.",
+  "notificationChallengeAcceptedTitle": "Challenge Accepted!",
+  "notificationChallengeAcceptedDescription": "You've joined the 'Meatless Monday' challenge. Log your plant-based meals to earn points!",
+  "notificationCommunityUpdateTitle": "Community Update",
+  "notificationCommunityUpdateDescription": "Your city just launched a new recycling program. Check it out to reduce waste!",
+  "notificationWaterConservationTipTitle": "Water Conservation Tip",
+  "notificationWaterConservationTipDescription": "Shorten your showers to save water and reduce your environmental impact.",
+  "notificationMonthlySummaryTitle": "Monthly Summary",
+  "notificationMonthlySummaryDescription": "Your carbon footprint for this month is 1.2 tons. Aim for 1 ton next month with small changes!",
+  "profileTitle": "Profile",
+  "editMyAccount": "Edit My Account",
+  "helpCenter": "Help Center",
+  "emailPrefix": "email",
+  "phonePrefix": "phone",
+  "locationPrefix": "location",
+  "notAvailable": "N/A",
+  "rankTitle": "Rank",
+  "loadingUser": "Loading user...",
+  "failedToLoadUser": "Failed to load user",
+  "retryButton": "Retry",
+  "userNamePlaceholder": "User Name",
+  "cityRankTitle": "City Rank",
+  "countryRankTitle": "Country Rank",
+  "globalRankTitle": "Global Rank",
+  "noRankingsAvailable": "No Rankings Available",
+  "yourEcoRecommendationsTitle": "Your Eco Recommendations",
+  "noRecommendationsYetMessage": "No Recommendations yet!",
+  "carbonEmissionReportTitle": "Carbon Emission Report",
+  "dailyTab": "Daily",
+  "monthlyTab": "Monthly",
+  "yearlyTab": "Yearly",
+  "emissionTrendsTitle": "Emission Trends",
+  "noDataAvailable": "No data available",
+  "kilogramAbbreviation": "kg"
 }
