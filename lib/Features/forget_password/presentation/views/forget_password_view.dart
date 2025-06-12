@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_project/Features/forget_password/presentation/views/widgets/logo_with_title.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit_state.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
 import '../../../../Core/utils/assets.dart';
 
@@ -27,6 +28,8 @@ class _ForgetPasswordBodyState extends State<ForgetPasswordBody> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
 
     return BlocConsumer<AuthCubit, UserState>(
       listener: (context, state) {
@@ -39,9 +42,8 @@ class _ForgetPasswordBodyState extends State<ForgetPasswordBody> {
       builder: (context, state) {
         return LogoWithTitle(
           logo: AssetsData.forgotPassImg,
-          title: 'Forgot Password?',
-          subText:
-              "Don’t worry! It happens. Please enter your email address, and we will send the OTP to your email .",
+          title: l10n.forgotPasswordTitle, // Localized
+          subText: l10n.forgotPasswordHint, // Localized
           children: [
             Form(
               key: _formKey,
@@ -50,11 +52,11 @@ class _ForgetPasswordBodyState extends State<ForgetPasswordBody> {
                 height: screenHeight * .086,
                 child: TextFormField(
                   controller: _emailController,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your email',
+                  decoration: InputDecoration( // No longer const
+                    hintText: l10n.enterYourEmailHint, // Localized
                     filled: true,
-                    fillColor: Color(0xffE8ECF4),
-                    border: OutlineInputBorder(
+                    fillColor: const Color(0xffE8ECF4),
+                    border: const OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.all(Radius.circular(9)),
                     ),
@@ -62,10 +64,10 @@ class _ForgetPasswordBodyState extends State<ForgetPasswordBody> {
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return l10n.enterYourEmailHint; // Localized
                     }
                     if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                      return 'Please enter a valid email';
+                      return l10n.enterValidEmail; // Localized
                     }
                     return null;
                   },
@@ -95,7 +97,7 @@ class _ForgetPasswordBodyState extends State<ForgetPasswordBody> {
               ),
               child: state is SignInLoading
                   ? const CircularProgressIndicator(color: Colors.white)
-                  : const Text("Continue"),
+                  : Text(l10n.continueButton), // Localized
             ),
           ],
             );
