@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:graduation_project/Data/local/local_cubit.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_bloc/flutter_bloc.dart'; // Import flutter_bloc
+
+
 
 class SettingViewBody extends StatefulWidget {
   const SettingViewBody({super.key});
@@ -62,7 +67,7 @@ class _SettingsScreenState extends State<SettingViewBody>
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error loading settings: $e")),
+        SnackBar(content: Text("Error loading settings: $e")), // Kept for error clarity
       );
     }
   }
@@ -79,7 +84,7 @@ class _SettingsScreenState extends State<SettingViewBody>
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error saving settings: $e")),
+        SnackBar(content: Text("Error saving settings: $e")), // Kept for error clarity
       );
     }
   }
@@ -92,6 +97,9 @@ class _SettingsScreenState extends State<SettingViewBody>
 
   @override
   Widget build(BuildContext context) {
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xffF6F6F6),
       appBar: AppBar(
@@ -100,8 +108,8 @@ class _SettingsScreenState extends State<SettingViewBody>
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text("Settings",
-            style: TextStyle(
+        title: Text(l10n.navSettings, // Localized
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: MyColors.kPrimaryColor,
@@ -112,9 +120,9 @@ class _SettingsScreenState extends State<SettingViewBody>
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: ListView(
           children: [
-            _buildAnimatedSection("Notifications"),
+            _buildAnimatedSection(l10n.notificationsSection), // Localized
             _buildAnimatedSwitchTile(
-              title: "Enable Push Notifications",
+              title: l10n.enablePushNotifications, // Localized
               value: _notificationsEnabled,
               onChanged: (value) {
                 setState(() => _notificationsEnabled = value);
@@ -124,9 +132,9 @@ class _SettingsScreenState extends State<SettingViewBody>
             ),
             const SizedBox(height: 20),
 
-            _buildAnimatedSection("Appearance"),
+            _buildAnimatedSection(l10n.appearanceSection), // Localized
             _buildAnimatedSwitchTile(
-              title: "Dark Theme",
+              title: l10n.darkTheme, // Localized
               value: _darkThemeEnabled,
               onChanged: (value) {
                 setState(() => _darkThemeEnabled = value);
@@ -136,10 +144,10 @@ class _SettingsScreenState extends State<SettingViewBody>
             ),
             const SizedBox(height: 20),
 
-            _buildAnimatedSection("Units"),
+            _buildAnimatedSection(l10n.unitsSection), // Localized
             _buildAnimatedSwitchTile(
-              title: "Use Metric Units (kg CO2)",
-              subtitle: "Switch to imperial units (lbs CO2) if disabled",
+              title: l10n.useMetricUnits, // Localized
+              subtitle: l10n.useMetricUnitsSubtitle, // Localized
               value: _useMetricUnits,
               onChanged: (value) {
                 setState(() => _useMetricUnits = value);
@@ -149,14 +157,27 @@ class _SettingsScreenState extends State<SettingViewBody>
             ),
             const SizedBox(height: 20),
 
-            _buildAnimatedSection("Account"),
+            // NEW: Language Toggle Section
+            _buildAnimatedSection(l10n.languageSection), // Localized
             _buildAnimatedListTile(
-              title: "Edit Profile",
+              title: l10n.toggleLanguage, // Localized
+              icon: Icons.language,
+              onTap: () {
+                // Toggle the locale using the LocaleCubit
+                context.read<LocaleCubit>().toggleLocale();
+              },
+            ),
+            const SizedBox(height: 20),
+
+
+            _buildAnimatedSection(l10n.accountSection), // Localized
+            _buildAnimatedListTile(
+              title: l10n.editProfile, // Localized
               icon: Icons.person,
               onTap: () => Navigator.pushNamed(context, '/Profile'),
             ),
             _buildAnimatedListTile(
-              title: "Logout",
+              title: l10n.logoutButton, // Localized
               icon: Icons.logout,
               onTap: () {
                 Navigator.pushNamedAndRemoveUntil(
