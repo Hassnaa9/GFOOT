@@ -21,7 +21,7 @@ class LearnViewBody extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Carbon Footprint',
+                    'Your Carbon Footprint',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -31,26 +31,26 @@ class LearnViewBody extends StatelessWidget {
                   const SizedBox(height: 40),
                   _buildItem(
                     context,
-                    image: AssetsData.what_its_this,
-                    title: 'What It Is?',
+                    image: AssetsData.questionMark, // Adjusted to match UI icon
+                    title: 'What It Is',
                     description:
                         'Your Carbon Footprint is the total amount of greenhouse gases you produce, including carbon dioxide and methane.',
                   ),
                   const SizedBox(height: 24),
                   _buildItem(
                     context,
-                    image: AssetsData.benifits,
-                    title: 'Benefits of Reducing',
+                    image: AssetsData.benifits, // Adjusted to match UI icon
+                    title: 'Benefits',
                     description:
-                        'Reducing your Carbon Footprint helps slow climate change, conserve natural resources, and create a more sustainable future.',
+                        'Reducing your Carbon Footprint helps to slow climate change, conserve natural resources, and create a more sustainable future.',
                   ),
                   const SizedBox(height: 24),
                   _buildItem(
                     context,
-                    image: AssetsData.co2,
+                    image: AssetsData.co2, // Matches UI icon
                     title: 'Ways to Reduce',
                     description:
-                        'Lower your footprint by saving energy, reducing waste, choosing sustainable transportation, and supporting eco-friendly products.',
+                        'You can lower your footprint by saving energy, reducing waste, choosing sustainable transportation, and supporting eco-friendly products.',
                   ),
                   const SizedBox(height: 24),
                 ],
