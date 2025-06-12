@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:graduation_project/Features/forget_password/presentation/views/widgets/logo_with_title.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit.dart';
 import 'package:graduation_project/Features/login&registration/presentation/view_models/user_cubit/auth_cubit_state.dart';
+import 'package:graduation_project/app_localizations.dart';
 import 'package:graduation_project/constants.dart';
 import '../../../../Core/utils/assets.dart';
 
@@ -29,6 +30,8 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    // Get the localization instance
+    final l10n = AppLocalizations.of(context)!;
     final String email = ModalRoute.of(context)?.settings.arguments as String? ?? "";
 
     return BlocConsumer<AuthCubit, UserState>(
@@ -44,8 +47,8 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
       builder: (context, state) {
         return LogoWithTitle(
           logo: AssetsData.forgotPassImg,
-          title: 'Create New Password',
-          subText: 'Your new password must be unique from those previously used!',
+          title: l10n.createNewPasswordTitle, // Localized
+          subText: l10n.newPasswordUniqueHint, // Localized
           children: [
             Form(
               key: _formKey,
@@ -57,8 +60,8 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
                     child: TextFormField(
                       controller: _passwordController,
                       obscureText: !_isPasswordVisible,
-                      decoration: InputDecoration(
-                        hintText: 'Enter your password',
+                      decoration: InputDecoration( // No longer const
+                        hintText: l10n.enterYourPasswordHint, // Localized
                         filled: true,
                         fillColor: const Color(0xffE8ECF4),
                         border: const OutlineInputBorder(
@@ -76,9 +79,9 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Password cannot be empty';
+                          return l10n.requiredField; // Localized
                         } else if (value.length < 8) {
-                          return 'Password must be at least 8 characters';
+                          return l10n.passwordMinLength; // Localized
                         }
                         return null;
                       },
@@ -91,8 +94,8 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
                     child: TextFormField(
                       controller: _confirmPasswordController,
                       obscureText: !_isPasswordVisible,
-                      decoration: InputDecoration(
-                        hintText: 'Confirm your password',
+                      decoration: InputDecoration( // No longer const
+                        hintText: l10n.confirmYourPasswordHint, // Localized
                         filled: true,
                         fillColor: const Color(0xffE8ECF4),
                         border: const OutlineInputBorder(
@@ -110,7 +113,7 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
                       ),
                       validator: (value) {
                         if (value != _passwordController.text) {
-                          return 'Passwords do not match';
+                          return l10n.passwordsDoNotMatch; // Localized
                         }
                         return null;
                       },
@@ -139,7 +142,7 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
               ),
               child: state is SignInLoading
                   ? const CircularProgressIndicator(color: Colors.white)
-                  : const Text("Reset Password"),
+                  : Text(l10n.resetPasswordButton), // Localized
             ),
           ],
         );
