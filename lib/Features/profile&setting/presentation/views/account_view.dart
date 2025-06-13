@@ -172,10 +172,12 @@ class _EditProfileScreenState extends State<EditAccountViewBody>
   Widget build(BuildContext context) {
     // Get the localization instance
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context); // Access theme data
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor, // Theme-aware background
       appBar: AppBar(
-        backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor, // Theme-aware background
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),

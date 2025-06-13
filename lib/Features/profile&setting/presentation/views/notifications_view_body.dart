@@ -132,8 +132,10 @@ class _NotificationScreenState extends State<NotificationsViewBody>
   Widget build(BuildContext context) {
     // Get the localization instance
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context); // Access theme data
+
     return Scaffold(
-      backgroundColor:  Colors.white, // Light green background
+      backgroundColor: theme.scaffoldBackgroundColor, // Theme-aware background
       appBar: AppBar(
         backgroundColor:  Colors.white,
         elevation: 0,

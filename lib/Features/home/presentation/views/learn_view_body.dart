@@ -73,7 +73,7 @@ class LearnViewBody extends StatelessWidget {
 
     return Card(
       elevation: 2,
-      color: theme.cardTheme.color, // Theme-aware card color
+      // color: theme.cardTheme.color, // Theme-aware card color
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: const EdgeInsets.only(bottom: 16),
       child: Padding(
@@ -85,7 +85,7 @@ class LearnViewBody extends StatelessWidget {
               image,
               height: imageSize,
               width: imageSize,
-              color: theme.colorScheme.onSurface, // Theme-aware image tint
+              // color: theme.colorScheme.onSurface, // Theme-aware image tint
             ),
             const SizedBox(width: 24),
             Expanded(

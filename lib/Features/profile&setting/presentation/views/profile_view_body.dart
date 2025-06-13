@@ -41,6 +41,8 @@ class _ProfileViewBodyState extends State<ProfileViewBody> with RouteAware {
   Widget build(BuildContext context) {
     // Get the localization instance
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context); // Access theme data
+
     // Fetch user profile on initial load
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
@@ -48,9 +50,9 @@ class _ProfileViewBodyState extends State<ProfileViewBody> with RouteAware {
     });
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor, // Theme-aware background
       appBar: AppBar(
-        backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor, // Theme-aware background
         title: Text(l10n.profileTitle), // Localized
       ),
       body: BlocBuilder<AuthCubit, UserState>(
@@ -71,7 +73,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> with RouteAware {
                     user.displayName ?? l10n.notAvailable, // Localized
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xff1A1A1A),
+      backgroundColor: theme.scaffoldBackgroundColor, // Theme-aware background
                         ),
                   ),
                   const SizedBox(height: 4),
