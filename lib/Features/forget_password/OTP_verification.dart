@@ -49,9 +49,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
   @override
   Widget build(BuildContext context) {
     final String email = ModalRoute.of(context)?.settings.arguments as String? ?? "";
-
+    final theme = Theme.of(context); // Get the current theme
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor, // Theme-aware background
       body: BlocConsumer<AuthCubit, UserState>(
         listener: (context, state) {
           if (state is SignInFailure) {

@@ -9,7 +9,7 @@
 
   "yourCarbonFootprintTitle": "بصمتك الكربونية",
   "whatItIsTitle": "ما هي؟",
-  "whatItIsDescription": "بصمتك الكربونية هي إجمالي كمية غازات الدفيئة التي تنتجها، بما في ذلك ثاني أكسيد الكربون والميثان.",
+  "whatItIsDescription": "بصمتك الكربونية هي إجمالي كمية الغازات الدفيئة التي تنتجها، بما في ذلك ثاني أكسيد الكربون والميثان.",
   "benefitsTitle": "الفوائد",
   "benefitsDescription": "يساعد تقليل بصمتك الكربونية على إبطاء تغير المناخ، والحفاظ على الموارد الطبيعية، وإنشاء مستقبل أكثر استدامة.",
   "waysToReduceTitle": "طرق التخفيض",
@@ -29,7 +29,7 @@
   "backToLoginButton": "العودة لتسجيل الدخول",
 
   "createNewPasswordTitle": "إنشاء كلمة مرور جديدة",
-  "newPasswordUniqueHint": "يجب أن تكون كلمة المرور الجديدة فريدة عن تلك المستخدمة مسبقاً!",
+  "newPasswordUniqueHint": "يجب أن تكون كلمة المرور الجديدة فريدة عن تلك المستخدمة مسبقًا!",
   "enterYourPasswordHint": "أدخل كلمة المرور الخاصة بك",
   "confirmYourPasswordHint": "تأكيد كلمة المرور الخاصة بك",
   "resetPasswordButton": "إعادة تعيين كلمة المرور",

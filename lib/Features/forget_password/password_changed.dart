@@ -11,8 +11,9 @@ class PasswordChangedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    final theme = Theme.of(context); // Get the current theme
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor, // Theme-aware background
       body: LogoWithTitle(
         logo: AssetsData.jumpImg,
         title: "Password Changed!",
