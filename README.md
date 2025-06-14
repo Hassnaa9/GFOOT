@@ -13,11 +13,16 @@ Social Login: Sign in using Google or Facebook via Firebase authentication.
 Customizable Settings: Adjust notifications, theme preferences, and units (metric/imperial).
 also provide to him learn feature if he is a new user or didn't know what is the carbon footprint is 
 API Integration: Fetches real-time data to provide accurate carbon footprint calculations.
+The application support the both languages Arabic & English 
+also support light mode and dark mode
 
 here is a full demo to enjoy with our smoothy app :) 
 
 
-https://github.com/user-attachments/assets/1189c5eb-5d09-4799-82ee-1b9be23d5ca1
+
+https://github.com/user-attachments/assets/1e336e52-defa-4eb4-8514-29f4d0245835
+
+
 
 
 Prerequisites
